@@ -1,0 +1,37 @@
+.top-padding {margin-top:20px; padding-top:30px;}
+.hero-unit {margin:20px !important;}
+
+h2 {
+  margin-top:60px;
+  padding:5px;
+}
+
+p {
+  padding: 10px;
+}
+
+:target h2 {
+  border-radius: 4px;
+  background-color: #DFE6E9;
+}
+.txt-center { 
+  width:100%;
+  text-align:center !important; 
+  display:inline-block;
+  vertical-align:middle;
+}
+.txt-right { text-align:right !important; }
+div.current-project img { text-align: center !important; }
+a.btn-soc { padding-right:20px; }
+
+div.project-img-div img { 
+  max-height:350px;
+  display:block;
+  margin-left:auto;
+  margin-right:auto; 
+}
+
+div.portfolio-entry {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}

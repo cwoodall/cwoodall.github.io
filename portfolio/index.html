@@ -1,0 +1,66 @@
+---
+layout: default
+title: Chris J. Woodall - Portfolio
+---
+
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="hero-unit header" style="background-color:#DFE6E9;">
+  <div class="row-fluid">
+   	<h1>Chris Woodall's Portfolio</h1>
+  </div>
+</div> <!-- /header -->
+
+{% for tag in site.portfolio_tags %}  {% assign tag_section = 0 %}
+<div class="row-fluid portfolio-section">
+	{% for entry in site.categories.portfolio %} {% if entry.tags contains tag %}
+		{% if tag_section == 0 %}
+		<h1>{{tag}}</h1> {% assign tag_section = 1 %}
+		{% endif %}
+		
+		<div class="row-fluid portfolio-entry">
+			<div class="span3 portfolio-img-div" >
+				<img src="{{entry.image}}" alt="{{entry.title}}" style="" />
+			</div>
+			<div class="span8 portfolio-desc-div">
+				<h3 class="portfolio-name" style="margin:0 0 0 0;">
+					{{entry.title}}
+				</h3>
+				<div class="portfolio-desc">
+					{{entry.content | markdownize}}
+				</div>
+
+				{% if entry.partners %}
+				<div class="portfolio-partners">
+					<p>Partners: 
+					{% for partner in entry.partners %}
+						{{partner}}{% if forloop.rindex0 > 0 %}, {%endif%}
+					{% endfor %}
+				</p>
+				</div>
+				{%endif%}
+				<div class="portfolio-links btn-group txt-center">
+
+					{% if entry.documentation %}
+					<a class="btn" href="{{entry.documentation}}">
+						Documentation
+					</a>
+					{% endif %}
+
+					{% if entry.source %}
+					<a class="btn" href="{{entry.source}}">
+						Source
+					</a>
+					{% endif %}
+
+					{% if entry.video %}
+					<a class="btn" href="{{entry.video}}">
+						Video
+					</a>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+	{%endif%}{%endfor%}
+</div>
+{% endfor %}

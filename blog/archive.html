@@ -1,0 +1,36 @@
+---
+layout: default
+title: Chris J. Woodall - Blog
+---
+
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="hero-unit header" style="background-color:#DFE6E9;">
+  <div class="row-fluid">
+   	<h1>Chris Woodall's Blog - Archive</h1>
+  </div>
+</div> <!-- /header -->
+
+<div class="row-fluid blog-section">
+	{% for entry in site.categories.blog limit:10%}
+		<div class="row-fluid blog-entry " style="padding:5px; background-color:#{% cycle 'fff', 'eee' %}">
+			<div class="span3" >
+				<h4 style="margin:0 0 0 0;"><a href="{{site.url}}/{{entry.url}}" class="blog-name" style="margin:0 0 0 0;">
+					{{entry.title}}
+				</a></h4>
+			</div>
+			<div class="span2" >
+				Author: {{entry.author}}
+			</div>
+			<div class="span2" >
+				Date: {{entry.date | date_to_string}}
+			</div>
+			<div class="span4">{% if entry.content contains "<!-- more -->" %}
+    				{{ entry.content | split:"<!-- more -->" | first % }}
+ 				{% else %}
+ 					{{ entry.content | strip_html | truncatewords:100 }} ...
+  				{% endif %}
+  			</div>
+		</div>
+	{%endfor%}
+
+</div>

@@ -1,0 +1,84 @@
+CHRISTOPHER J. WOODALL
+Phone #: Available on request
+E-mail: chris.j.woodall@gmail.com
+Website: http://www.cjwoodall.com
+Project Blog: http://www.happyrobotlabs.com
+Address: Available on request
+
+SUMMARY
+=======
+
+- Junior in Electrical Engineering at Boston University
+- Programming Languages: C, C++, Verilog, VHDL, Python, and MATLAB
+- Lab bench skills with oscilloscopes, function generators, power supplies and SMT soldering.
+- PCB Layout and Schematic Capture with EAGLE, KiCAD and OrCAD.
+
+- Skills include C and C++ for Embedded Systems; Verilog and VHDL for FPGA Design; Python; MATLAB; PCB Layout and Schematic Capture using EAGLE, and KiCAD; and soldering (SMT).
+
+lsEDUCATION
+=========
+
+Junior B.S. in Electrical Engineering, Expected May 2014
+Boston University, Boston, MA
+- Current GPA is a 3.77 on a 4.0 scale
+- Relevant Coursework: Digital Signal Processing, Electromagnetic Systems, Signals and System, Intro Electronics, Intro to Logic Design, Software Engineering, VLSI, 
+- Current Courswork: Algorithms, Control Systems, Analog Electronics and Embedded Systems
+
+EXPERIENCE
+==========
+
+Student Engineering Technician, January 2011-Present
+Boston University Design Facility, Boston, MA
+- FPGA-based designs with Xilinx Studio using VHDL and Verilog.
+- PCB layout and schematic capture using ExpressPCB, OrCAD and KiCAD.
+- Testing using multimeters, signal generators and Oocilloscopes.
+- Surface mount (SMT) soldering, and light machining.
+- Running and Designing for Electronics Outreach Programs
+
+Electronics and Data Acquisition Lead, July 2012-Present
+Boston University Rocket Propulsion Group
+- Testing and designing electronics for data acquisition and control systems for a hybrid rocket engine.
+- Organizing a team of electrical and computer engineers to complete tasks in a stringent deadline.
+
+Vice President, May 2012-Present
+Boston University Information Lab and Design Space (BUILDS)
+- BUILDS is a student run collaborative workspace on campus
+- Responsibilities include: organizing hack-a-thons, running meetings and maintaining our electronic test equipment.
+
+ACTIVITIES
+==========
+
+Soldering Teacher at Mini-Makerfaire Somerville Soldering Workshop
+
+Participant in Artisan Asylum's Hovercraft Design Challenge, 2012
+
+Participant in New England College Hack-a-thon, 2011
+
+PROJECTS
+========
+
+Firestarter: Measurement and Igniter Board
+- Takes two channels of pressure transducer data from combustion chamber and NO2 tank.
+- Fires e-matches to preheat the fuel grain and open NO2 valve to begin combustion.
+
+Artemis Synthesizer: A Music Synthesizer Kit
+- A piano-like music synthesizer and sequencer for an outreach program.
+- 25 kits were successfully assembled.
+- Included a light sensor for uploading new sequences and waveforms from a custom website.
+
+BUILDSbot 12 Ounce: A Line Following Robot
+- Using the Arduino development board as a platform created a basic line following robot. Utilized AVR-C C++
+
+LED Cube Controlled By NES Controller
+- 4x4x4 LED Cube where you could navigate and draw patterns using an NES Controller
+- Utilized an Arduino Uno as a development platform.
+
+NOMIS: A Simon-like Memory Game
+- Utilized a ATtiny85 microcontroller from Atmel. Written using the AVR-C toolchain.
+
+FPGA Piano
+- Final Project for EC311 (Introduction to Logic Design).
+- FPGA based piano synthesizer using Pulse Width Modulation for sound  production.
+ 
+Open 7400 Drum Machine
+- A Drum Machine built from discrete logic ICs for a contest run by Dangerous Prototypes. Won in the 3rd place bracket.

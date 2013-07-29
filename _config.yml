@@ -3,4 +3,7 @@ pygments: true
 description: "Student, Electrical Engineer and General Tinkerer"
 base_url: localhost:4000
 portfolio_tags: ['electronics', 'software', 'music', 'mechanical', 'other']
-url: "http://localhost:4000"
+url: "http://cjwoodall.com"
+exclude: Makefile /assets/img/glyphicons
+ftp_host: happyrobotlabs.com
+ftp_dir: /public_html/cjwoodall/

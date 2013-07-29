@@ -1,0 +1,42 @@
+--
+layout: default
+title: Chris J. Woodall - Blog
+---
+
+{% include header.html %}
+
+<div class="row-fluid blog-section">
+	{% for entry in site.categories.blog limit:10 %}
+		<div class="row-fluid blog-entry">
+			<div class="row-fluid blog-entry-title">
+				<div class="span6">
+					<a href="{{site.url}}/{{entry.url}}" class="blog-name" style="margin:0 0 0 0;"><h3 class="blog-name" style="margin:0 0 0 0;">
+						{{entry.title}}
+					</h3></a>
+				</div>
+				<div class="span6 ">
+					<p class="txt-right">Written by {{entry.author}} on {{entry.date | date_to_string}}</p>
+				</div>
+			</div>
+			{% if entry.image %}
+			<div class="row-fluid txt-center blog-img-div" >
+				<img src="{{entry.image}}" alt="{{entry.title}}" style="height:200px"/>
+			</div>
+			{%endif%}
+			<div class="row-fluid blog-desc">
+				{% if entry.content contains "<!-- more -->" %}
+    				{{ entry.content | split:"<!-- more -->" | first % }}
+ 				{% else %}
+ 					{{ entry.content | strip_html | truncatewords:100 }} ...
+  				{% endif %}
+
+  				<p class="txt-center"><a class="btn btn-primary"href="{{site.url}}/{{entry.url}}"> Read More </a></p>
+			</div>
+			<hr />
+		</div>
+	{%endfor%}
+
+	<a class="btn txt-center" href="{{site.url}}/blog/archive.html">
+		Continue to Archive
+	</a>
+</div>

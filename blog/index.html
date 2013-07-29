@@ -3,15 +3,11 @@ layout: default
 title: Chris J. Woodall - Blog
 ---
 
-<!-- Main hero unit for a primary marketing message or call to action -->
-<div class="hero-unit header" style="background-color:#DFE6E9;">
-  <div class="row-fluid">
-   	<h1>Chris Woodall's Blog</h1>
-  </div>
-</div> <!-- /header -->
+{% include header.html %}
 
-<div class="row-fluid blog-section">
-	{% for entry in site.categories.blog limit:10%}
+<div class="row-fluid">
+<div class="span8 blog-section">
+	{% for entry in site.categories.blog limit:10 %}
 		<div class="row-fluid blog-entry">
 			<div class="row-fluid blog-entry-title">
 				<div class="span6">
@@ -23,25 +19,33 @@ title: Chris J. Woodall - Blog
 					<p class="txt-right">Written by {{entry.author}} on {{entry.date | date_to_string}}</p>
 				</div>
 			</div>
-			{% if entry.image %}
-			<div class="row-fluid txt-center blog-img-div" >
-				<img src="{{entry.image}}" alt="{{entry.title}}" style="height:200px"/>
-			</div>
-			{%endif%}
-			<div class="row-fluid blog-desc">
-				{% if entry.content contains "<!-- more -->" %}
-    				{{ entry.content | split:"<!-- more -->" | first % }}
- 				{% else %}
- 					{{ entry.content | strip_html | truncatewords:100 }} ...
-  				{% endif %}
+			<div class="row-fluid">
+				{% if entry.image %}
+				<div class="span3 blog-img-div" >
+					<img src="{{entry.image}}" alt="{{entry.title}}"/>
+				</div>
+				{%endif%}
+				<div class="span9 blog-desc">
+					{% if entry.content contains "<!-- more -->" %}
+    					{{ entry.content | split:"<!-- more -->" | first % }}
+	 				{% else %}
+ 						{{ entry.content | strip_html | truncatewords:100 }} ...
+	  				{% endif %}
 
-  				<p class="txt-center"><a class="btn btn-primary"href="{{site.url}}/{{entry.url}}"> Read More </a></p>
+  					<div class="text-center"><a class="btn btn-primary"href="{{site.url}}/{{entry.url}}"> Read More </a></div>
+  				</div>
 			</div>
 			<hr />
 		</div>
 	{%endfor%}
 
-	<a class="btn txt-center" href="{{site.url}}/blog/archive.html">
+	<div class="text-center">
+		<a class="btn" href="{{site.url}}/blog/archive.html">
 		Continue to Archive
-	</a>
+		</a>
+	</div>
+</div>
+<div class="span4 well">
+	{%include sidebar.html%}
+</div>
 </div>

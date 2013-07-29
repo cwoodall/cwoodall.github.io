@@ -1,5 +1,5 @@
 .top-padding {margin-top:20px; padding-top:30px;}
-.hero-unit {margin:20px !important;}
+.hero-unit {background-color:#DFE6E9; padding:20px !important;}
 
 h2 {
   margin-top:60px;
@@ -35,3 +35,38 @@ div.portfolio-entry {
   margin-bottom: 10px;
   margin-top: 10px;
 }
+
+.portfolio-img-grid {  }  
+
+.portfolio-img-grid-entry:hover .portfolio-img-grid-entry-info { 
+  opacity            : .7;
+  filter             : alpha(opacity=70);
+}  
+
+.portfolio-img-grid-entry-info {
+  color: white;
+position:absolute; 
+  top      : 0;
+  right    : 0;
+  left     : 0;
+  height   : 100%;
+  z-index  : 2;
+  margin:0;
+    margin-left:10px;
+
+  padding-left: 5px;
+      background         : #222;
+    border             : 1px solid black;
+    opacity            : 0;
+    filter             : alpha(opacity=0);
+    -webkit-transition : opacity 0.25s linear;
+    -moz-transition    : opacity 0.25s linear;
+    -ms-transition     : opacity 0.25s linear;
+    -o-transition      : opacity 0.25s linear;
+    transition         : opacity 0.25s linear;
+}
+
+.portfolio-img-grid-entry { margin: 0px !important;
+  padding-left:10px;
+position : relative;
+    display  : inline-block;}

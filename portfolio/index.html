@@ -7,13 +7,13 @@ title: Chris J. Woodall - Portfolio
 
 <div class="row-fluid">
 <div class="span8">
-	<div class="row-fluid portfolio-img-grid">
+	<div class="row-fluid portfolio-img-grid mobile-hide">
 		{% for entry in site.categories.portfolio %}
 			<div class="span3 portfolio-img-grid-entry">
 				
 				<a  class="" href="#portfolio_{{entry.id}}">
 					<div class="img-rounded portfolio-img-grid-entry-info" style="">
-					<h5>{{entry.title}}</h5>
+					<p>{{entry.title}}</p>
 
 					<p class="text-right">Click for more &raquo;</p>
 					</div>
@@ -33,8 +33,33 @@ title: Chris J. Woodall - Portfolio
 		{% endif %}
 		
 		<div id="portfolio_{{entry.id}}" class="row-fluid portfolio-entry">
-			<div class="span5 portfolio-img-div" >
-				<img src="{{entry.image}}" alt="{{entry.title}}" style="" />
+			<div class="span5 well portfolio-img-div" >
+				<div class="row-fluid">
+					<img src="{{entry.image}}" alt="{{entry.title}}" class="img-rounded" />
+				</div>
+				<div class="row-fluid">
+					<div class="portfolio-links btn-group txt-center" style="margin-top:20px">
+
+						{% if entry.documentation %}
+						<a class="btn btn-primary btn-small" href="{{entry.documentation}}" target="_blank">
+							Documentation
+						</a>
+						{% endif %}
+
+						{% if entry.source %}
+						<a class="btn btn-primary btn-small" href="{{entry.source}}" target="_blank">
+							Source
+						</a>
+						{% endif %}
+
+						{% if entry.video %}
+						<a class="btn btn-primary btn-small" href="{{entry.video}}" target="_blank">
+							Video
+						</a>
+						{% endif %}
+					</div>
+				</div>
+
 			</div>
 			<div class="span7 portfolio-desc-div">
 				<div class="row-fluid">
@@ -61,27 +86,6 @@ title: Chris J. Woodall - Portfolio
 				</p>
 				</div>
 				{%endif%}
-				<div class="portfolio-links btn-group txt-center">
-
-					{% if entry.documentation %}
-					<a class="btn" href="{{entry.documentation}}">
-						Documentation
-					</a>
-					{% endif %}
-
-					{% if entry.source %}
-					<a class="btn" href="{{entry.source}}">
-						Source
-					</a>
-					{% endif %}
-
-					{% if entry.video %}
-					<a class="btn" href="{{entry.video}}">
-						Video
-					</a>
-					{% endif %}
-
-				</div>
 			</div>
 		</div>
 						<hr />

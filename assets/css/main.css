@@ -32,8 +32,9 @@ div.project-img-div img {
 }
 
 div.portfolio-entry {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   margin-top: 10px;
+
 }
 
 .portfolio-img-grid {  }  
@@ -66,7 +67,14 @@ position:absolute;
     transition         : opacity 0.25s linear;
 }
 
-.portfolio-img-grid-entry { margin: 0px !important;
+.portfolio-img-grid-entry { margin: 0px 0px 10px 0px!important;
   padding-left:10px;
 position : relative;
     display  : inline-block;}
+
+@media screen and (max-width: 480px)
+{
+
+.mobile-hide{ display:none; }
+
+}

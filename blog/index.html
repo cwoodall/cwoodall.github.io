@@ -3,15 +3,16 @@ layout: default
 title: Chris J. Woodall - Blog
 ---
 
-{% include header.html %}
-
 <div class="row-fluid">
+<div class="span2">
+</div>
+
 <div class="span8 blog-section">
 	{% for entry in site.categories.blog limit:10 %}
 		<div class="row-fluid blog-entry">
 			<div class="row-fluid blog-entry-title">
 				<div class="span6">
-					<a href="{{site.url}}/{{entry.url}}" class="blog-name" style="margin:0 0 0 0;"><h3 class="blog-name" style="margin:0 0 0 0;">
+					<a href="{{site.url}}{{entry.url}}" class="blog-name" style="margin:0 0 0 0;"><h3 class="blog-name" style="margin:0 0 0 0;">
 						{{entry.title}}
 					</h3></a>
 				</div>
@@ -45,7 +46,6 @@ title: Chris J. Woodall - Blog
 		</a>
 	</div>
 </div>
-<div class="span4 well">
-	{%include sidebar.html%}
+<div class="span2">
 </div>
 </div>

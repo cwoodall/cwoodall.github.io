@@ -1,22 +1,13 @@
 .top-padding {margin-top:20px; padding-top:30px;}
 .hero-unit {background-color:#DFE6E9; padding:20px !important;}
 
-h2 {
-  margin-top:60px;
-  padding:5px;
-}
-
 p {
   padding: 10px;
 }
 
-:target h2 {
-  border-radius: 4px;
-  background-color: #DFE6E9;
-}
-.txt-center { 
+.txt-center {
   width:100%;
-  text-align:center !important; 
+  text-align:center !important;
   display:inline-block;
   vertical-align:middle;
 }
@@ -24,11 +15,11 @@ p {
 div.current-project img { text-align: center !important; }
 a.btn-soc { padding-right:20px; }
 
-div.project-img-div img { 
+div.project-img-div img {
   max-height:350px;
   display:block;
   margin-left:auto;
-  margin-right:auto; 
+  margin-right:auto;
 }
 
 div.portfolio-entry {
@@ -37,16 +28,16 @@ div.portfolio-entry {
 
 }
 
-.portfolio-img-grid {  }  
+.portfolio-img-grid {  }
 
-.portfolio-img-grid-entry:hover .portfolio-img-grid-entry-info { 
+.portfolio-img-grid-entry:hover .portfolio-img-grid-entry-info {
   opacity            : .7;
   filter             : alpha(opacity=70);
-}  
+}
 
 .portfolio-img-grid-entry-info {
   color: white;
-position:absolute; 
+position:absolute;
   top      : 0;
   right    : 0;
   left     : 0;
@@ -67,10 +58,25 @@ position:absolute;
     transition         : opacity 0.25s linear;
 }
 
-.portfolio-img-grid-entry { margin: 0px 0px 10px 0px!important;
+.my-footer {
+  background-color: black;
+  -webkit-border-radius: 0 0 0px 0px !important;
+     -moz-border-radius: 0 0 0px 0px !important;
+          border-radius: 0 0 0px 0px !important;
+
+  -webkit-box-shadow: 0px 500px 0px 500px #000 !important;
+     -moz-box-shadow: 0px 500px 0px 500px #000 !important;
+          box-shadow: 0px 500px 0px 500px #000 !important;
+
+  color: #666;
+}
+
+.portfolio-img-grid-entry {
+  margin: 0px 0px 10px 0px !important;
   padding-left:10px;
-position : relative;
-    display  : inline-block;}
+  position : relative;
+  display  : inline-block;
+}
 
 @media screen and (max-width: 480px)
 {

@@ -34,7 +34,7 @@ title: Chris J. Woodall - Home
 			<ul>
 			{% for entry in site.categories.portfolio limit:4 %}
 					<li>
-							<a href="{{site.url}}{{entry.url}}">
+							<a href="{{site.url}}/portfolio/#portfolio_{{entry.id}}">
 								{{entry.title}}
 							</a>
 					</li>

@@ -1,9 +1,9 @@
 name: "Christopher Woodall"
 pygments: true
 description: "Embedded Systems Engineer, Musician and Rock Climber"
-base_url: http://localhost:4000
+base_url: http://cwoodall.com
 portfolio_tags: ['electronics', 'robotics', 'web_design','software', 'music', 'mechanical', 'other']
-url: "http://localhost:4000"
+url: "http://cwoodall.com"
 exclude: ["Makefile"]
 ftp_host: happyrobotlabs.com
 ftp_dir: /public_html/cjwoodall/

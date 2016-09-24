@@ -1,5 +1,0 @@
-posts_dir: _posts/portfolio
-img_dir: assets/img/projects
-author: "Chris Woodall"
-default_layout: "post" 
-editor: "/usr/local/bin/sublime"

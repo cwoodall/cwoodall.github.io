@@ -7,3 +7,6 @@ url: "http://cwoodall.com"
 exclude: ["Makefile"]
 ftp_host: happyrobotlabs.com
 ftp_dir: /public_html/cjwoodall/
+paginate: 5
+paginate_path: "/reading/page:num/"
+gems: [jekyll-watch, jekyll-assets, jekyll-paginate]

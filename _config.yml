@@ -4,9 +4,14 @@ description: "Embedded Systems Engineer, Musician and Rock Climber"
 base_url: http://cwoodall.com
 portfolio_tags: ['electronics', 'robotics', 'web_design','software', 'music', 'mechanical', 'other']
 url: "http://cwoodall.com"
-exclude: ["Makefile"]
+exclude:
+  - "Makefile"
+  - "Gemfile"
+  - "Gemfile.lock"
+  - ".gitignore"
+  - "README.md"
+  - ".ruby-version"
+  - ".git"
 ftp_host: happyrobotlabs.com
 ftp_dir: /public_html/cjwoodall/
-paginate: 5
-paginate_path: "/reading/page:num/"
 gems: [jekyll-watch, jekyll-assets, jekyll-paginate]

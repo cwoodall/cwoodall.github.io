@@ -2,3 +2,6 @@ _site
 *~
 Makefile
 .gitignore
+*.lock
+.DS_Store
+**/.DS_Store

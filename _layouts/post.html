@@ -3,27 +3,20 @@ layout: default
 ---
 
 <div class="row-fluid">
-	<div class="span2">
-	</div>
+	<h3 style="margin:0" class="txt-center">{{ page.title }}</h3></div>
+</div>
 
-	<div class="span8">
-		<div class="row-fluid">
-			<div class="span8"><h2 style="margin:0">{{ page.title }}</h2></div>
-		</div>
+<div class="row-fluid">
+		<h6 style="margin:0" class="meta txt-center">{{ page.date | date_to_string }} by {{page.author}}</h6>
+</div>
+<hr/>
 
-		<div class="row-fluid">
-			<p style="margin:0" class="meta pull-right">{{ page.date | date_to_string }} by {{page.author}}</p>
-		</div>
-		{% if page.image %}
-		<div class="row-fluid txt-center blog-img-div" >
-			<img src="{{page.image}}" alt="{{page.title}}" style="max-height:200px; margin: 0 auto;"/>
-		</div>
-		{%endif%}
+{% if page.image %}
+<div class="row-fluid txt-center blog-img-div" >
+	<img src="{{page.image}}" alt="{{page.title}}" style="max-height:400px; margin: 0 auto;"/>
+</div>
+{%endif%}
 
-		<div class="row-fluid post">
-		 <p>{{ content }}</p>
-		</div>
-	</div>
-	<div class="span2">
-	</div>
+<div class="row-fluid post">
+ <p>{{ content }}</p>
 </div>

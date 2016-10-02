@@ -13,6 +13,4 @@ exclude:
   - "README.md"
   - ".ruby-version"
   - ".git"
-ftp_host: happyrobotlabs.com
-ftp_dir: /public_html/cjwoodall/
 gems: [jekyll-watch, jekyll-assets, jekyll-paginate]

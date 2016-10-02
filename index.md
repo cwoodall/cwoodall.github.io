@@ -1,6 +1,7 @@
 ---
-layout: home
+layout: default
 title: Christopher Woodall - Home
+header: true
 ---
 
 ## Who am I?

@@ -1,5 +1,6 @@
 name: "Christopher Woodall"
-pygments: true
+markdown: kramdown
+highlighter: rouge
 description: "Embedded Systems Engineer, Musician and Rock Climber"
 base_url: http://cwoodall.com
 portfolio_tags: ['electronics', 'robotics', 'web_design','software', 'music', 'mechanical', 'other']

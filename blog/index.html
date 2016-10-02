@@ -19,17 +19,20 @@ title: Christopher Woodall - Blog
 				<div class="span3 blog-img-div" >
 					<img src="{{entry.image}}" alt="{{entry.title}}"/>
 				</div>
-				{%endif%}
 				<div class="span9 blog-desc">
+				{% else %}
+				<div class="span12 blog-desc">
+				{%endif%}
 					{% if entry.content contains "<!-- more -->" %}
-    					{{ entry.content | split:"<!-- more -->" | first % }}
+    					{{ entry.content | split:"<!-- more -->" | first }}
 	 				{% else %}
- 						{{ entry.content | strip_html | truncatewords:100 }} ...
-	  				{% endif %}
+ 						{{ entry.content | strip_html | truncatewords:100 }}
+  				{% endif %}
 
-  					<div class="text-center"><a class="btn btn-primary"href="{{entry.url}}"> Read More </a></div>
   				</div>
 			</div>
+			<div class="text-center"><a class="btn btn-primary"href="{{entry.url}}"> Read More </a></div>
+
 			<hr />
 		</div>
 	{%endfor%}

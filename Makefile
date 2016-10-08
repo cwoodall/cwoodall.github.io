@@ -7,4 +7,4 @@ test:
 	bundle exec htmlproofer ./_site
 
 deploy:
-	sshpass -p "$PASS" rsync -r _site/* $(DEPLOY_URL)
+	rsync -r _site/* $(DEPLOY_URL)

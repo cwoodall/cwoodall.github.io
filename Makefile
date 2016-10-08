@@ -1,5 +1,10 @@
+all: build test
+
 build:
 	jekyll build
 
-deploy: build
-	rsync -r _site/* happyrob@happyrobotlabs.com:~/public_html/cjwoodall/
+test:
+	bundle exec htmlproofer ./_site
+
+deploy:
+	sshpass -p "$PASS" rsync -r _site/* $(DEPLOY_URL)

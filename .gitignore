@@ -1,6 +1,6 @@
 _site
 *~
-Makefile
+.env_vars
 .gitignore
 *.lock
 .DS_Store

@@ -17,5 +17,4 @@ hardware store.
 
 <!-- more -->
 
-
-<img src="/assets/img/posts/2013-07-07-attach-things-to-your-bike-with-p-clamps/01.jpg" width="300px" />
+![Attach Things To Your Bike With P Clamps](/assets/img/posts/2013-07-07-attach-things-to-your-bike-with-p-clamps/01.jpg)

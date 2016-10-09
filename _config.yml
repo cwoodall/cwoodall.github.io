@@ -14,6 +14,5 @@ exclude:
   - ".ruby-version"
   - ".git"
   - "vendor"
-  - "_drafts"
   - ".env_vars"
 gems: [jekyll-watch, jekyll-assets, jekyll-paginate]

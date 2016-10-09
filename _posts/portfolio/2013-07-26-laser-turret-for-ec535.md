@@ -6,7 +6,7 @@ categories: portfolio
 tag: electronics
 image: /assets/img/projects/laser-turret/laser-turret.jpg
 documentation: /assets/pdf/laser-turret-doc.pdf
-source: https://github.com/cwoodall/ec535-laser-turret
+# source: https://github.com/cwoodall/ec535-laser-turret
 video: http://www.youtube.com/watch?v=L1tBLELajWU
 partners: ["Jenny Hoac", "Jonah Lou"]
 id: 1

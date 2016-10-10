@@ -455,7 +455,7 @@ handling, but what what about errors that are not so cut and dry as: is there
 something or is there nothing? That is where `Result<T, E>` comes in!
 Stay tuned for an implementation of `Result<T, E>`!
 
-[policy-pattern]:
+[policy-pattern]: http://en.wikipedia.org/wiki/Policy-based_design
 [safebool]: https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Safe_bool
 [github]: https://github.com/cwoodall/cpp-option
 [rust]: http://rust-lang.org

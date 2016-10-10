@@ -5,7 +5,7 @@ title: "Seizing The Enigma by David Kahn"
 date: 2016-10-10 12:39
 comments: false
 categories: reading
-image:
+image: http://t1.gstatic.com/images?q=tbn:ANd9GcRF29eAf2ZH9tsTICkpsdPHOThPyAzvq5BGp9kmV87-3kIb6UWj
 ---
 
 Daniel Kahn's _Seizing The Enigma_ is the story of the _ENIGMA_ machine, a

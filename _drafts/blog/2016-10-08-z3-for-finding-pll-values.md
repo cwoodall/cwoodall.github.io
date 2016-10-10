@@ -1,3 +1,12 @@
+---
+layout: post
+author: Chris Woodall
+title: "You Might Want To Sit Down: How Sarcastic Documentation Can Be Negative"
+date: 2016-10-08 16:00
+comments: true
+categories: blog
+---
+
 ``` c++
 from z3 import *
 f_in = Int('f_in')

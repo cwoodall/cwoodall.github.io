@@ -7,9 +7,11 @@ title: Christopher Woodall - Reading
 		<div class="row-fluid blog-entry">
 			<div class="row-fluid blog-entry-title">
 				<div class="span9">
-			       <h3 class="blog-name" style="margin:0 0 0 0;">
-						{{entry.title}}
-					</h3>
+			       <a href="{{entry.url}}" class="blog-name">
+							 <h3 class="blog-name" style="margin:0 0 0 0;">
+								 {{entry.title}}
+							</h3>
+						</a>
 				</div>
 				<div class="span3">
 					<p class="txt-right">Finished on {{entry.date | date_to_string}}</p>
@@ -27,3 +29,6 @@ title: Christopher Woodall - Reading
 			<hr />
 		</div>
 	{%endfor%}
+<div class="text-center row-fluid">
+	<a class="btn" href="feed.xml">Subscribe To Reading (rss)</a>
+</div>

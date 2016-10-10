@@ -11,7 +11,7 @@ image: /assets/img/books/tdd-embedded-c.jpg
 This is a book I heard about through a friend of mine, as well as, through the
 [embedded.fm](http://embedded.fm/) embedded systems podcast. It is a well thought
 out introduction to TDD in an environment where there is a strong reluctance to
-adopt new techniques, and improve code readability, provability and testability.
+adopt new techniques, and improve code readability, provability and test-ability.
 Grenning does a great job at making the sale that TDD is ultimately worth it and
 then executes through examples how to test code from scratch, how to add test harnessing
 to legacy code, and ultimately how to design code so that it can be tested. To developers

@@ -5,15 +5,14 @@ title: Christopher Woodall - Portfolio
 
 	<div class="row-fluid portfolio-img-grid mobile-hide">
 		{% for entry in site.categories.portfolio %}
-			<div class="span3 portfolio-img-grid-entry">
-
+			<div class="span4 portfolio-img-grid-entry">
 				<a  class="" href="#portfolio_{{entry.id}}">
 					<div class="img-rounded portfolio-img-grid-entry-info" style="">
-					<p>{{entry.title}}</p>
+						<p>{{entry.title}}</p>
 
-					<p class="text-right">Click for more &raquo;</p>
+						<p class="text-right">Click for more &raquo;</p>
 					</div>
-					<img class="img-rounded" src="{{entry.image}}" alt="{{entry.title}}" />
+					<img class="img-rounded" src="{{entry.image}}" alt="{{entry.title}}" style="height: auto"/>
 				</a>
 
 			</div>
@@ -84,9 +83,14 @@ title: Christopher Woodall - Portfolio
 				{%endif%}
 			</div>
 		</div>
-				<hr />
+						<hr />
 
 	{%endif%}{%endfor%}
 
 </div>
 {% endfor %}
+</div>
+
+<div class="span2">
+</div>
+</div>

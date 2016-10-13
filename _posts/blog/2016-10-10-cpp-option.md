@@ -32,7 +32,7 @@ a brittle version of the `Option<T>` type, where checking is not enforced and
 carries a high penalty. For example, for a "safe" divide operator we might do
 the following:
 
-```
+``` c++
 int *divide(int a, int b) {
   if (b==0) {
     return nullptr;
@@ -152,7 +152,7 @@ The full, and evolving, implementation can be found
 tests. So lets see some code, the code below implements a basic `Option<T>`
 type with minimal functionality.
 
-```c++
+``` c++
 struct Nothing {};
 
 template <typename T>
@@ -196,7 +196,7 @@ a custom type to be used in boolean operations, without it being able to be
 compared against non-boolean types in this way (since by default almost all
 types can be compared as `bool` types in C/C++). For example:
 
-```c++
+``` c++
 Option<float> foo = Nothing();
 if (!foo) {
   puts("Nothing\n"); // This will run

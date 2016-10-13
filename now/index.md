@@ -10,7 +10,7 @@ and outside at Farley, Crow Hill and in N. Conway. Hiking has been a growing int
 for me and I hope to snag a few more peaks before winter and do some winter hiking.
 
 Recently I went through some of my older music and found some cool stuff! You should
-check out what I [posted](/music.html).
+check out what I [posted](/music).
 
 ### My priorities are:
 

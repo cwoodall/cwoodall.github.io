@@ -20,7 +20,7 @@ to work on the ideas that float through their minds. I also maintain a curated
 [Github](http://www.github.com/cwoodall).
 
 When I am not tinkering or working I am climbing rocks,
-[playing the mandolin](/music.html), or
+[playing the mandolin](/music), or
 [reading](/reading)
 
 ## Latest Articles

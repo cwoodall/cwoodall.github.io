@@ -8,7 +8,7 @@ categories: reading
 image: /assets/img/books/tdd-embedded-c.jpg
 ---
 
-This is a book I heard about through a friend of mine, as well as, through the
+[_Test Driven Development for Embedded C_](http://amzn.to/2e2lBTn) by [James Grenning](http://blog.wingman-sw.com/) is a book I heard about through a friend of mine, as well as, through the
 [embedded.fm](http://embedded.fm/) embedded systems podcast. It is a well thought
 out introduction to TDD in an environment where there is a strong reluctance to
 adopt new techniques, and improve code readability, provability and test-ability.

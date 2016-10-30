@@ -8,7 +8,7 @@ categories: reading
 image: https://images-na.ssl-images-amazon.com/images/I/51-mXyZ8nVL.jpg
 ---
 
-*The Diamond Age by Neal Stephenson* inspects some interesting topics in nano-technology,
+[*The Diamond Age*](http://amzn.to/2eS6Bcr) by Neal Stephenson inspects some interesting topics in nano-technology,
 tribal societies, and in many ways is a spiritual successor to Snow Crash in that the
 general structure of the world is similar. Personally I enjoyed the portion of the book
 about the Young Lady's Illustrated Primer and Nell, which explores what can happen

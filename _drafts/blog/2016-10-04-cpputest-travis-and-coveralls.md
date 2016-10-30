@@ -1,7 +1,7 @@
 ---
 layout: post
 author: Chris Woodall
-title: "Unit Testing, and CI with C++ and Travis"
+title: "Unit Testing &amp; CI with C++ and Travis"
 date: 2016-10-04 18:02
 comments: true
 categories: blog

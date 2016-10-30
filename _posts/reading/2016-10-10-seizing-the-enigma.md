@@ -8,7 +8,7 @@ categories: reading
 image: http://t1.gstatic.com/images?q=tbn:ANd9GcRF29eAf2ZH9tsTICkpsdPHOThPyAzvq5BGp9kmV87-3kIb6UWj
 ---
 
-Daniel Kahn's _Seizing The Enigma_ is the story of the _ENIGMA_ machine, a
+Daniel Kahn's [_Seizing The Enigma_](http://amzn.to/2eoZ6Jx) is the story of the _ENIGMA_ machine, a
 electro-mechanical cipher system used by the German's during WWII, and _ULTRA_
 the British code breaking effort of the _ENIGMA_ (and other Axis encodings and
 encipherments). Daniel Kahn is a leading historian of cryptographic history and

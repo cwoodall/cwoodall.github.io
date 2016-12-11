@@ -40,12 +40,12 @@ variables. This will become important later.
 ## Adding Unit Tests with cpputest
 
 - [cpputest support][cpputest]
-  - Why CPPUTEST instead of GTEST?
-    1. Familiarity (for me)
-    2. Embedded systems development and goals
-  - custom build and install script
-    - [custom scripts travis][travis-ci-custom]
-    - see `get-cpputest.sh`
+ - Why CPPUTEST instead of GTEST?
+  1. Familiarity (for me)
+  2. Embedded systems development and goals
+ - custom build and install script
+  - [custom scripts travis][travis-ci-custom]
+  - see `get-cpputest.sh`
 
 ## Adding Code Coverage with Coveralls.io
 

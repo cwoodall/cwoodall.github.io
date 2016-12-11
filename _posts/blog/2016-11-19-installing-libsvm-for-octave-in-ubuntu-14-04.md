@@ -1,8 +1,8 @@
 ---
 layout: post
 author: Chris Woodall
-title: "Installing and Using `libsvm` From Within GNU Octave"
-date: 2016-11-20 10:00
+title: "Installing libsvm For Use With GNU Octave In Ubuntu 14.04"
+date: 2016-11-19 20:00
 comments: true
 categories: blog
 #image:
@@ -12,62 +12,62 @@ For week 7 of the [Coursera][coursera] [Machine Learning][coursera-ml] course we
 learned about [Support Vector Machines (SVM)][svm-wiki]. SVMs are a useful and
 powerful tools for solving classification problems. They can be tailored to
 solve complicated classification boundaries, and don't suffer from some of the
-down sides of optimizing [neural networks][nn-wiki]. In the course, one of the
-example problems is using the SVM to classify spam emails. A SVM implementation
-written in MATLAB/Octave is used, but later on it is recommended to use a more
-powerful and optimized SVM implemented called [libsvm][libsvm]. Getting this
-working with Octave on Ubuntu 14.04 was rather straightforward, but I did not
-find any instructions. Read on for a quick walkthrough for `libsvm`
-installation.
+down sides of optimizing [neural networks][nn-wiki]. One of the
+example problems uses an SVM to classify spam emails. A SVM implementation
+written in MATLAB/Octave is used, but for further work [libsvm][libsvm] (or
+another SVM library) is recommended. To get `libsvm` working with Octave in
+Ubuntu 14.04 there are a few steps that are not obvious. I did not find very
+many instructions so I compiled the steps I followed to get a stable Octave
+environment with `libsvm`. Read on for details.
 
 <!-- more -->
 
 ### Installation
 
-First you will need to have Octave installed and also install `liboctave-dev`
-which will install the octave header files which are needed to compile the
-`libsvm` bindings. So from a terminal:
+Before starting you will need a working installation of Octave (I used 3.8.1)
+which can be installed using `apt` if you are on Ubuntu 14.04. You will
+also need the `liboctave-dev` package:
 
 ```
-sudo apt-get install octave liboctave-dev
+$ sudo apt-get install octave liboctave-dev
 ```
 
-Now, you should navigate to a directory you want to keep the compiled `libsvm`
-in. This will become the home of `libsvm` where we will download it. I use the
-[Github][libsvm-github] repository for `libsvm`, but you can also use the
-[source release][lib-svm-link]:
+Now, you should navigate to the directory you want to keep `libsvm`
+in. This directory should not change. I used the [Github][libsvm-github]
+repository of `libsvm`, but you can also use the [source release][lib-svm-link]
+for a stable release:
 
 ```
-git clone https://github.com/cjlin1/libsvm.git
+$ git clone https://github.com/cjlin1/libsvm.git
 ```
 
-Next make the C library:
+Next make the C library and the Octave/Matlab library (note `>>>` indicates
+the Octave shell):
+
 
 ```
-cd libsvm
-make
-```
-
-And finally the Octave/Matlab library (note `>>>` indicates typing into the
-Octave shell):
-
-```
-cd matlab
-octave
+$ cd libsvm
+$ make
+$ cd matlab
+$ octave
 >>> make
 ```
 
-Finally you need to add it to your Octave path I suggest the following method,
-which will add it permanently to your Octave distribution:
+Finally, you need to add the directory you made `libsvm` in to your Octave path.
+To do this you can use the `addpath()` function in Octave, followed by the
+`savepath()` function. When you add the path it should be an absolute path, so
+that it always works. The `pwd` Octave function will return the current
+directory we are in. So after running `make` from within Octave I suggest using
+the commands below:
 
 ```
->>> libsvm_dir = pwd;
->>> addpath(libsvm_dir)
+>>> addpath(pwd())
 >>> savepath()
 ```
 
-Congratulations, you should be able to get the help information for `svmtrain`
-and `svmpredict` now.
+Congratulations, you have installed `lisvm` and added it to your path. You
+should be able to run `svmtrain` and `svmpredict`. You should be able to get
+the help information for `svmtrain`:
 
 ```
 >>> svmtrain
@@ -103,7 +103,7 @@ libsvm_options:
 [coursera]: http://coursera.com/
 [coursera-ml]: https://www.coursera.org/learn/machine-learning/home
 [svm-wiki]: https://en.wikipedia.org/wiki/Support_vector_machine
-[nn-wiki]: https://en.wikipedia.org/wiki/Artificial_neural_network1
+[nn-wiki]: https://en.wikipedia.org/wiki/Artificial_neural_network
 [libsvm]: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 [libsvm-github]: http://www.csie.ntu.edu.tw/~cjlin/cgi-bin/libsvm.cgi?+http://www.csie.ntu.edu.tw/~cjlin/libsvm+tar.gz
 [lib-svm-link]: https://github.com/cjlin1/libsvm

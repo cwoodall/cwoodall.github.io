@@ -2,17 +2,17 @@
 layout: post
 author: Chris Woodall
 title: "Thoughts On the Coursera Machine Learning Course"
-date: 2016-12-11 12:00
+date: 2016-12-18 12:00
 comments: true
 categories: blog
-image: /assets/posts/2016-12-18-thoughts-on-coursera-machine-learning/coursera-logo.png
+image: /assets/img/posts/2016-12-18-thoughts-on-coursera-machine-learning/coursera-logo.png
 ---
 
 I completed my first [Coursera][coursera] course, which was
-the "[Machine Learning][ml-course]" with [Andrew Ng][andrew-ng] from
+"[Machine Learning][ml-course]" with [Andrew Ng][andrew-ng] from
 [Stanford University][stanford]. The course was well
 taught and concentrates on building a solid base for applying
-[Machine Learning][ml-wiki] to a variety of problems. Andrew Ng uses examples
+Machine Learning to a variety of problems. Andrew Ng uses examples
 motivated by real-world problems to show how you might apply the algorithms
 taught. I highly recommend the course if you are looking to take a MOOC and have
 an interest in machine learning. I learnt a lot, but still need to apply the
@@ -80,7 +80,9 @@ Since this worked out so well for me, I am planning on taking the Coursera
 [Crytopgraphy I](https://www.coursera.org/learn/crypto) course.
 
 [coursera]: https://www.coursera.org/
-[ml-course]:
-[ml-wiki]: https://www.coursera.org/learn/machine-learning
+
+[ml-course]: https://www.coursera.org/learn/machine-learning
+
 [andrew-ng]: http://www.andrewng.org/
+
 [stanford]: https://www.stanford.edu/

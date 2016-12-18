@@ -2,10 +2,10 @@
 layout: post
 author: Chris Woodall
 title: "Thoughts On the Coursera Machine Learning Course"
-date: 2016-12-11 18:02
+date: 2016-12-11 12:00
 comments: true
 categories: blog
-#image:
+image: /assets/posts/2016-12-18-thoughts-on-coursera-machine-learning/coursera-logo.png
 ---
 
 I completed my first [Coursera][coursera] course, which was
@@ -46,12 +46,12 @@ homework and then give up. This time around I followed a different approach. I
 paced myself to do the course in the suggested time. I set up a basic schedule
 for each week before I started and tried to take charge of my own education.
 Since I made the commitment to do a finite amount of work per week, it became
-much easier to do. More importantly, I now had a good way to prioritize the
+much easier to do. More importantly, I now had a good way to contextualize the
 course against the rest of my life. If I was between a last minute coffee
 meetup, or doing my course work on Sunday the coursework could now win in my
 mind.
 
-I listed a few other tips below:
+I listed some other tips below:
 
 1. Watch all the lectures before doing the quizzes or homeworks, even if you
    know the content. I found little bits of insight on content I already knew
@@ -79,8 +79,8 @@ I have been using to further my understanding of Machine Learning:
 Since this worked out so well for me, I am planning on taking the Coursera
 [Crytopgraphy I](https://www.coursera.org/learn/crypto) course.
 
-[coursera]: http://foo.com
-[ml-course]: http://foo.com
-[ml-wiki]: http://foo.com
-[andrew-ng]: http://foo.com
-[stanford]: http://foo.com
+[coursera]: https://www.coursera.org/
+[ml-course]:
+[ml-wiki]: https://www.coursera.org/learn/machine-learning
+[andrew-ng]: http://www.andrewng.org/
+[stanford]: https://www.stanford.edu/

@@ -21,10 +21,11 @@ title: Christopher Woodall - Blog
 		</div>
 		{%endif%}
 		<div class="span12 blog-desc">
-			{% if entry.content contains "
-			<!-- more -->" %} {{ entry.content | split:"
-			<!-- more -->" | first }} {% else %} {{ entry.content | strip_html | truncatewords:100 }} {% endif %}
-
+			{% if entry.content contains "<!-- more -->" %}
+				{{ entry.content | split:"<!-- more -->" | first }}
+			{% else %}
+				{{ entry.content | strip_html | truncatewords:100 }}
+			{% endif %}
 		</div>
 		<div class="text-center"><a class="btn btn-primary" href="{{entry.url}}"> Read More </a></div>
 

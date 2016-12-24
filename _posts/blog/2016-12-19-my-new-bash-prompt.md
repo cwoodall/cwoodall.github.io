@@ -40,4 +40,8 @@ you want to use it.
 
 <!-- more -->
 
+Here is a demonstration video:
+
+![Video of the bash prompt](/assets/img/posts/bash-prompt-video.gif)
+
 <script src="https://gist.github.com/cwoodall/4c277b89a47d970f5a0c4fe59b434f07.js"></script>

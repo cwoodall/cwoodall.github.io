@@ -55,7 +55,7 @@ $ make_gif.sh -h
 ```
 
 This was my first time using the _POSIX_ `getopts` which made it pretty easy to
-add new options to the script. I far preffer the style of
+add new options to the script. I far prefer the style of
 [clap-rs](https://github.com/kbknapp/clap-rs) (for Rust), or
 [click](http://click.pocoo.org/5/) for Python.
 

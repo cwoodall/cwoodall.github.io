@@ -10,7 +10,7 @@ image: /assets/img/posts/test-rust-led-blink.gif
 
 I started making some `.gif`s to embed in documentation and my notes as I
 develop **[Rusty Nail][rusty-nail]**. I always have to lookup how to
-convert the images to `gif`s. Everytime I am also concerned with how big the
+convert the images to `gif`s. Every time I am also concerned with how big the
 `.gif`s are so after doing some looking around I made a little script which
 uses `ffmpeg`, `convert`, and `gifsicle` (with `giflossy`) to take an input
 `mp4`, `webm`, or any video that ffmpeg can decode.
@@ -63,7 +63,7 @@ add new options to the script. I far prefer the style of
 
 While `gif`s are a pretty useful format for adding video content to
 documentation. I realize that the `.webm` format might be a better alternative,
-in the long run. With less effort you can get higher compression rates and
+in the long run. With less effort, you can get higher compression rates and
 smaller file sizes, all with better quality and the option for integrating
 audio.
 

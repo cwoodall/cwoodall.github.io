@@ -2,7 +2,7 @@
 layout: post
 author: Chris Woodall
 title: "Beyond The Vertical by Layton Kor"
-date: 2016-06-26 15:05
+date: 2017-06-26 15:05
 comments: false
 categories: reading
 image: https://images-na.ssl-images-amazon.com/images/I/51EHKUedjxL._SX403_BO1,204,203,200_.jpg

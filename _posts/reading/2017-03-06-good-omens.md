@@ -5,7 +5,7 @@ title: "Good Omens by Terry Pratchett and Neil Gaiman"
 date: 2017-03-06 15:05
 comments: false
 categories: reading
-image:
+image: https://images-na.ssl-images-amazon.com/images/I/51PusbHqTEL.jpg
 ---
 
 _[Good Omens]_ is a collaboration between [Terry Pratchett] and [Neil Gaiman]

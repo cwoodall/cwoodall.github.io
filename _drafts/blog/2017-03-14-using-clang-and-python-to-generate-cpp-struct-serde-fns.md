@@ -20,7 +20,7 @@ functions by hand, but whenever a serialized `struct` or `class` was
 changed, there were a few hard to detect issues and mistakes which might arise. As an example of writing these functions, lets write an
 example function for the following `struct Foo`:
 
-```
+```c++
 struct Foo {
   uint8_t bar1;
   float   bar2;
@@ -29,7 +29,7 @@ struct Foo {
 
 Will have the following function.
 
-```
+```c++
 bool my_serialization(serialization_writer *writer, Foo const &data) {
   // Add a map of length 2 to the serialization
   writer->add_map(2);
@@ -65,7 +65,7 @@ to `serde()` will provide different serialization templates to apply to
 the `struct`. So using the struct above, the following should generate
 the same output.
 
-```
+```c++
 //+serde(my_serialization)
 struct Foo {
   uint8_t bar1;

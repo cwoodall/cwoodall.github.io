@@ -102,5 +102,6 @@ need to pick up the pace again!
 To see the code I used to generate these graphs please see this 
 [iPython Notebook](https://gist.github.com/cwoodall/9cc9133ad628ea14aabb165f82b7702e).
 I utilized python, pandas, trello and matplotlib (with the wonderful 
-fivethirtyeight style) to make these graphs! I hope you find Trello useful if not
+fivethirtyeight style) to make these graphs! I might coever this in more depth
+in a future posting. I hope you find Trello useful if not
 for your reading list then for something else.

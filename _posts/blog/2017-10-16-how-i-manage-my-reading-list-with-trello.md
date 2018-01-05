@@ -71,7 +71,7 @@ my list and will scrub the `Short List`, or move books from the `Long List` to
 One of the biggest benefits is that the Trello document is so flexible and lets me
 manage things how I see fit. Initially this seems a little bit silly; but having
 that control and freedom has made the book list much more engaging for me. 
-Also, the Trello APIq allows me to write various scripts for analyzing my 
+Also, the Trello API allows me to write various scripts for analyzing my 
 reading habits and the reading list gives me another data list to play around
 with. For example I can plot the number of books I have read each month since I
 started using Trello to track my book reading:

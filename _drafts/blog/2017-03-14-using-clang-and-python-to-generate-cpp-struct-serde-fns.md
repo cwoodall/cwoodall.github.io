@@ -1,33 +1,54 @@
 ---
 layout: post
 author: Chris Woodall
-title: "Generate C++ Serializationg Functions Using libclang and Python"
+title: "Reflection in C++ to Generate Serializable Structs Using libclang and Python"
 comments: true
 categories: blog
 #image:
 ---
 
-Recently, I was writing a set of serialization (and deserialization)
-functions in C++ for a large set of structs. Each of these
-serialization functions has the same basic form which requires the
-programmer to manually count the number of fields and then provide the
-names of the fields for serialization. All of the primitive data type
-serializations were written already with a set of overloaded
-function calls (for type such as: `int`, `float`, `const char *`,
-`std::array<T>`, etc.). So all that needed to be handled was the
-structure of the data to be serialized. I had been writing these
-functions by hand, but whenever a serialized `struct` or `class` was
-changed, there were a few hard to detect issues and mistakes which might arise. As an example of writing these functions, lets write an
-example function for the following `struct Foo`:
+I have recently found myself writing a bunch of serialization (and 
+deserialization) functions in C++ for some very basic structs, and 
+classes. Each of these serialization functions has the same basic 
+form which is basically a series of function calls to convert 
+some data of some type into it's msgpack representation. As the
+number of structs grows this becomes tedious and hard to upgrade. Also,
+there are a few points where programmer error can result in major hard
+to detect problems, if the ordering is wrong, or the number of fields
+is wrong, then all bets are off. I will be the first to admit that
+Google Protobufs basically solves this problem entirely by describing
+the transfer messages, and datatypes in its own language and then 
+compiling the target representation.
+
+Inspired by my recent usage of [rust] I decided to see if I could create
+the equivalent of rust's `#[derive()]` syntax for applying  procedural
+macros to a struct. You can see my experiment on [github].
+
+<!-- more -->
+
+I found myself reaching for `libclang` and its python wrapper. I flirted
+with the idea of doing this in Rust or Haskell; however, I work fastest
+in Python and this started out as a problem I was trying to solve for 
+work, so if it could not be done fast it was not useful. I did eventually
+abandoned it as a work project because it complicated the build
+process too much, and I figured it would become hard to maintain in its
+own right in the future. Additionally, I used a python library called
+cog, which makes it pretty easy to inline some python into C++ comments
+and execute those actions it is actually pretty slick.
+
+So with my toolchain in hand I ventured off into the world of AST 
+parsing with libclang. So first, I have a very simple problem to
+deal with. All of my structs basically look like this:
 
 ```c++
+//+serde(MySerializer)
 struct Foo {
   uint8_t bar1;
   float   bar2;
 }
 ```
 
-Will have the following function.
+And generate functions looking like this:
 
 ```c++
 bool my_serialization(serialization_writer *writer, Foo const &data) {
@@ -46,52 +67,79 @@ bool my_serialization(serialization_writer *writer, Foo const &data) {
 }
 ```
 
-As it turns out generating functions like this using macros is not
-possible, since you would need a recursive macro, and templates are
-also not up to the job. Rust style macros which can parse and generate
-code based on the Abstract Syntax Tree (AST) would be, but this not a
-native feature of C or C++. However, what if we could add it? Luckily
-with `libclang` it's rather easy to generate and walk through the
-Abstract Syntax Tree of a C++ file and it has official python bindings.
+Note, the recursive use of overloaded `my_serialization()` functions, this
+little design choice makes our code generation very easy, by making C++ do
+some of the heavy lifting for us, we don't even need to worry about types.
+For more complicated types we just need to make sure a `my_serialization()`
+is implemented for them and we are off to the races. From a simple view
+all I need to do is:
 
-<!-- more -->
-
-## Setting up the Solution
-
-We will add a comment `//+serde(<names of serde generators>)` infront of
-each `struct` or `class` we want serialized. We will call this a decorator. This will act as a flag
-for our AST parser to extract the `struct` and its fields. The arguments
-to `serde()` will provide different serialization templates to apply to
-the `struct`. So using the struct above, the following should generate
-the same output.
-
-```c++
-//+serde(my_serialization)
-struct Foo {
-  uint8_t bar1;
-  float   bar2;
-}
-```
-
-We want to extract:
-
-1. The name of the `struct` or `class`
-2. The fields of the struct including:
+1. Find the structs marked for deriving the serializers.
+2. Obtain the structs name (and namespace).
+3. Get all of the struct or classes public fields.
   - The fields name ('bar1')
   - The fields type ('uint8_t')
   - The access specifier (`public`, `protected`, or `private`)
-3. Namespaces and class nesting.
+4. Create the serializer from a template. It is just the same thing
+   over and over again.
+
+Also, you can't just generating functions like this using macro. There
+are ways to get close, but since you would need a recursive macro, it is
+practically impossible. You could probably do something involving run time
+reflection, or cleverness; however I wanted these to be generated at compile
+time for my needs.
+
+We will add a comment `//+serde(<names of serde generators>)` infront of
+each `struct` or `class` we want serialized. This will act as a flag for 
+our AST parser to extract the `struct` and its  fields. The arguments to 
+`serde()` will provide different serialization templates to apply to
+the `struct`. 
 
 ## Finding the decorators
 
-Searching for comments using `libclang` requires us to parse through all of the tokens, rather than the cursors which relate to nodes in the AST. This is because comments are striped out from the AST, but with some constraints a token can be associated to a cursor (which is what is desired for parsing the struct for its name and field information). The process looks like this:
+Searching for comments using `libclang` requires us to parse through all of the tokens, rather than the cursors which relate to nodes in the AST. This is because comments are striped out from the AST. At first I thought this was going to be problematic; however with some constraints a token can be associated to a cursor. The token just contains information of the individual pieces of the program, while the
+cursors are actually in the syntax tree. The tokens might be:
+
+```
+COMMENT: //+serde(MySerializer)
+KEYWORD: struct 
+IDENTIFIER: Foo 
+PUNCTUATION: {
+IDENTIFIER: uint8_t 
+IDENTIFIER: bar1
+PUNCTUATION: ;
+KEYWORD: float
+IDENTIFIER: bar2
+PUNCTUATION: ;
+PUNCTUATION: }
+```
+
+While the cursors is tree oriented and more useful for actual reflection:
+
+```
+STRUCTDECL: Foo
+  - FIELD: 
+    - TYPE: uint8_t
+    - NAME: bar1
+    - VISIBILITY: public 
+  - FIELD: 
+    - TYPE: float
+    - NAME: bar2
+    - VISIBILITY: public
+```
+
+So to find all of the `//+serde()` tags and get all of the information we need the
+process is:
 
 1. Get a `TranslationalUnit` from `libclang` for the entire file being parsed.
-2. Iterate through all of the tokens in the file, looking for `COMMENTS` which match the decorator string
-3. Continue iterating through the tokens until a token with a matching cursor which specifies a STRUCT or CLASS declaration is found
+2. Iterate through all of the tokens in the file, looking for `COMMENTS` which match the decorator string.
+3. Continue iterating through the tokens until a token with a matching cursor which specifies a STRUCT or CLASS declaration is found.
+   (The first struct or class after the `//+serde()` will be parsed).
 4. Walk through the AST for that struct or class to extract the types, names and access specifiers.
-  - It is also useful to walk up from the struct declaration to the root node to find all of the namespaces the struct may be inside of.
-5. Repeat steps 2 to 4 until there are no more tokens left.
+5. Walk up from the struct declaration to the root node to find all of the namespaces the struct may be inside of.
+5. Repeat steps 2 to 4 until there are no more tokens left in the file.
+
+So for some basic code:
 
 ```python
 from serde_type import *
@@ -105,7 +153,7 @@ def get_current_scope(cursor):
     Get the current scope of the current cursor.
 
     For example:
-    ```
+    
     namespace A {
     namespace B {
 
@@ -115,7 +163,6 @@ def get_current_scope(cursor):
 
     }
     }
-    ```
 
     will return: ["A", "B", "C"] and can be joined to be "A::B::C"
 
@@ -185,7 +232,8 @@ def find_serializable_types(tu, match_str="//\+serde\(([A-Za-z\s,_]*)\)"):
 
 ### Getting libclang to recognize std library types
 
-There are a couple of tricks to actually get `libclang` to find the standard library (and your own library files) so that it will recognize non primitive types.
+There are a couple of tricks to actually get `libclang` to find the standard library (and your own library files) so that it will recognize non primitive types. Basically this is just making sure you invoke clang, with the proper paths to import your types. Otherwise,
+the cursors will get all messed up and a bunch of errors will be thrown.
 
 ```python
 def get_clang_TranslationUnit(path="t.cpp", in_args=[], in_str="", options=0):
@@ -223,9 +271,22 @@ def get_clang_TranslationUnit(path="t.cpp", in_args=[], in_str="", options=0):
 
 ## The Serde Engine
 
+At this point we have all of the data we need and all we need to do is hand
+it to something to generate our serializers for us. For this I created a 
+registry of classes which implement functions for creating serializers and
+deserializers. This is also where cog comes in. A basic example is one which
+prints out the struct. The best place to see this in action is in [example-01](https://github.com/cwoodall/cpp-serde-gen/edit/master/examples/example-01.cpp.cog)
+
 ## Conclusion
 
-## Next Steps
+This was a fun experiment, dealing with the C++ AST was a new experience for me. Though
+it was rather simple, it opened up my mind to a whole world of metaprogramming and analytics
+I did not previously think about. Eventually I decided this project, was more dangerous than
+it was worth. All it would take is one person not to understand it for it to cause a lot of
+issues, so I eventually dropped it. However, I do think there is value in knowing how to
+work with `libclang`, because you can generate some very powerful analytical tools and linters
+which could help an organization with very specific needs. I could also see the benefits in
+compile time reflection like this; however, I think the maintenance burden would be very high.
 
 [github]: https://github.com/cwoodall/cpp-serde-gen
 [rust]: https://rustlang.com

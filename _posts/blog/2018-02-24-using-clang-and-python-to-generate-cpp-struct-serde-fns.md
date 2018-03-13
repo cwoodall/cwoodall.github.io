@@ -289,4 +289,4 @@ which could help an organization with very specific needs. I could also see the 
 compile time reflection like this; however, I think the maintenance burden would be very high.
 
 [github]: https://github.com/cwoodall/cpp-serde-gen
-[rust]: https://rustlang.com
+[rust]: https://www.rust-lang.org/en-US/

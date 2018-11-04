@@ -1,7 +1,7 @@
 name: "Christopher Woodall"
 markdown: kramdown
 highlighter: rouge
-description: "Embedded Systems Engineer, Musician and Rock Climber"
+description: "Embedded Software Engineer and Rock Climber"
 base_url: http://cwoodall.com
 portfolio_tags: ['electronics', 'robotics', 'web_design','software', 'music', 'mechanical', 'other']
 url: "http://cwoodall.com"
@@ -15,4 +15,4 @@ exclude:
   - ".git"
   - "vendor"
   - ".env_vars"
-gems: [jekyll-watch, jekyll-assets, jekyll-paginate]
+packages: [jekyll-watch, jekyll-assets, jekyll-paginate]

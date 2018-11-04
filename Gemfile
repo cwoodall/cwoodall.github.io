@@ -9,6 +9,7 @@ end
 gem "kramdown"
 gem "rouge"
 gem "jekyll"
+gem "liquid"
 
 group :test do
   gem "html-proofer"

@@ -7,7 +7,7 @@ header: true
 ## Who am I?
 
 
-I am an electrical and embedded systems engineer, rock climber, musician and a life
+I am an electrical and embedded software engineer, rock climber, musician and a life
 long learner. Currently I work in the sprouting robotics industry in the Boston,
 Massachusetts area, but am a New York native.
 

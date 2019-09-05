@@ -4,22 +4,20 @@ title: Christopher Woodall - Now
 ---
 ## What am I doing _now_?
 
-The rock climbing season has been over for a while now and I have been focusing my weekends on ice climbing and skiing. I skiied for the first time
-New Years weekend and have really been enjoying it and want to get better. I started falling a lot, but am now far more comfortable. I am also gearing up for rock season and plan to start a training cycle soon to prepare for a trip to Red Rocks, NV in April.
+What a year so far! I had an awesome ice season way back in the beginning of 2019, started a new job at Apricity, and spent a month traveling/working in Seattle, WA, Bend, OR and Canmore, AB, Canada. I  went on my first backpacking trip to the Alpine Lakes wilderness and followed that up immediately with a trip to the Bugaboos in the Canadian Rockies as my first basecamping alpine climbing trip. It was exciting and beautiful!
 
-As for my personal projects, I got a lot of work done on [Flicker Lights](https://github.com/cwoodall/flicker-lights) and [Rusty Nail](http://cwoodall.com/rusty-nail) and moved my website to GitHub Pages hosting. I have been enjoying Rust and am working with the Boston Embedded Systems meetup to introduce more people to Rust on Embedded Systems.
+I have been toying with a few different ideas for personal projects. I will update more on these as
+I commit to and develop them. I also finished up hooking up my friend Emmett's bed to Amazon Alexa.
 
 ### My priorities are:
 
-- Working as an Embedded Systems Engineer at Barrett Technology, focusing on communications inside of our robot `burt`.
+- Working as an Embedded Systems Engineer at Apricity. Focusing on improving our software development
+  processes and performing some software archeaology on legacy code. Working on my refactoring and
+  legacy code tweaking skills.
 - Thinking about how to share my personal projects most effectively (influenced by
   [Share Your Work]() and [Derek Sivers]()).
-- Finishing an LED project for a tap dance my significant other is working on, caled [flicker-lights](https://github.com/cwoodall/flicker-lights). I hope to write up some more when
-	the time allows.
-- Working on [rusty-nail](http://cwoodall.com/rusty-nail) which is a barbot powered by Rust.
-- Helping establish the [Boston Embedded Systems Meetup](https://www.meetup.com/Boston-Embedded-Systems-Meetup/) with [Isaac Gutekunst](https://www.linkedin.com/in/isaachg)! Join us!
-- Learning how to ski!
-- Thinking about how to use my skillset to preserve human rights in our new reality and build a better future for all. This admittedly has been causing some anxiety.
+- Trail running and training for a half marathon!
+- Training my climbing so that I can send a few more 10s on trad before the end of the season.
 
 ### Quotes On My Mind
 
@@ -34,4 +32,4 @@ and
 >
 > &mdash; [__Alain de Botton__](http://alaindebotton.com/)
 
-__Updated__: Feb, 2017
+__Updated__: August, 2019

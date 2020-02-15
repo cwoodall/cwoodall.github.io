@@ -4,32 +4,29 @@ title: Christopher Woodall - Now
 ---
 ## What am I doing _now_?
 
-What a year so far! I had an awesome ice season way back in the beginning of 2019, started a new job at Apricity, and spent a month traveling/working in Seattle, WA, Bend, OR and Canmore, AB, Canada. I  went on my first backpacking trip to the Alpine Lakes wilderness and followed that up immediately with a trip to the Bugaboos in the Canadian Rockies as my first basecamping alpine climbing trip. It was exciting and beautiful!
+Reflecting on 2019, it was a crazy year with a lot to learn on a personal level.
 
-I have been toying with a few different ideas for personal projects. I will update more on these as
-I commit to and develop them. I also finished up hooking up my friend Emmett's bed to Amazon Alexa.
+I am now in Burlington, VT working at BETA Technologies on the future of electric aviation! My main focus is on inverters for controlling motors. This is taking up most of my time.
+
+I have been meditating daily (using a combination of Unified Mindfulness and Sam Harris' Waking Up app), trying to do daily creative acts (water colors, music, programming, etc), and when I can going to yoga. Climbing has taken a little bit of a back seat at the moment, but I want to set some good goals to drive forward my climbing performance. I have realized how deep and meaningful climbing is to me. One of my biggest goals right now is preparing for a 10 day mediation retreat.
 
 ### My priorities are:
 
-- Working as an Embedded Systems Engineer at Apricity. Focusing on improving our software development
-  processes and performing some software archeaology on legacy code. Working on my refactoring and
-  legacy code tweaking skills.
-- Thinking about how to share my personal projects most effectively (influenced by
-  [Share Your Work]() and [Derek Sivers]()).
-- Trail running and training for a half marathon!
-- Training my climbing so that I can send a few more 10s on trad before the end of the season.
+- Learning all I can about motors!
+- Getting on a few WI4's before the ice season ends!
+-
+-
 
 ### Quotes On My Mind
 
-> Don't show your lunch or your latte show your work.
+> The mountains are calling & I must go & I will work on while I can, studying incessantly.
 >
-> &mdash; [__Austin Kleon__](http://austinkleon.com/)
+> &mdash; __John Muir__
 
 and
 
-> Any one who isn't embarrassed of who they were last year probably isn't learning
-> enough.
+> Contemplate the marvel that is existence, and rejoice that you are able to do so. I feel I have the right to tell you this because as I am inscribing these words, I am doing the same.
 >
-> &mdash; [__Alain de Botton__](http://alaindebotton.com/)
+> &mdash; __Ted Chiang__
 
-__Updated__: August, 2019
+__Updated__: Feb, 2020

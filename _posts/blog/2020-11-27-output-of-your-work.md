@@ -29,10 +29,10 @@ It is being process-oriented. In some ways this reminds me of the following exce
 
 >  You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions. Never consider yourself to be the cause of the results of your activities, nor be attached to inaction. 
 > - [Bhagavad Gita: Chapter 2, Verse 47](https://www.holy-bhagavad-gita.org/chapter/2/verse/47)
-
+w
 
 It would be misleading to say that this is so cut and dry. If you now focus only on process, then maybe you wont ever make anything. Sometimes there are great pressures placed on us to produce output so that we can continue. These moments, maybe, have the most to teach us about process orientation. In technology development, it is my belief that these moments create technical debt, but also create great leaps forward. Once again, maybe the technical debt, the messyness, the understanding of the mistakes made is the truely valuable output of your work.
 
 It has been my experience that it is tempting to look back at this as a failure of procedure, or a bad thing. However, the actions earned you a spot at the table, the right to play, and now you have information available! Information can be processed to knowledge, and maybe someday become organizational wisdom!
 
-So I ask you to occasionally reflect on your work, and ask: **What is the output of my work.**
+So I ask you to occasionally reflect on your work, and ask: **What is the output of my work?**

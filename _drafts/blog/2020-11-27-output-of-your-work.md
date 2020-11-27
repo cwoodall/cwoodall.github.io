@@ -11,7 +11,7 @@ categories: blog
 A few years ago, while in the middle of a big product release, I turned to a co-worker and asked them: 
 __What is the output of your work?__
 
-This sounds like a silly question, but I found it to be a little enlightening. Here we were, stressed out about
+This sounds like a silly question, but I found it to be enlightening to reflect on. Here we were, stressed out about
 making something. However, what we were really doing was producing the documentation, the knowledge, and the confidence 
 in the product we were making. It is easy to get lost in the idea that what you produce is the
 gizmo, gadget, or the most tactile result of your actions. In some ways it is tempting to think that if you paint you produce a

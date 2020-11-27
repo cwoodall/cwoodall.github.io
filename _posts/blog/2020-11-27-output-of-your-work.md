@@ -21,9 +21,7 @@ that output.
 
 <!-- more -->
 
-<center>
 ![Work, Knowledge and Wisdom](/assets/img/posts/output-of-your-work/flow-graph.drawio.png)
-</center>
 
 In many ways worrying and working solely towards the physical outputs, is seeking rewards. While searching
 for the knowledge and wisdom inherent in the activities of work, compling it to create knowledge (that

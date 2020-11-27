@@ -24,7 +24,7 @@ If you focus only on the final goal, and reward, you might miss the experience o
 
 
 To find beauty in the facts, the failures, the successes of your actions.
-It is being process-oriented. In some ways this reminds me of the following excerpt from the **Bhagavad Gita**:
+It is being process-oriented. In some ways this reminds me of the following excerpt from the [*Bhagavad Gita*][0]:
 
 >  You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions. Never consider yourself to be the cause of the results of your activities, nor be attached to inaction. 
 > - [Bhagavad Gita: Chapter 2, Verse 47][0]

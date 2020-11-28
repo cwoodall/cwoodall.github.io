@@ -1,8 +1,0 @@
-_site
-*~
-.env_vars
-.gitignore
-*.lock
-.DS_Store
-**/.DS_Store
-*.lock

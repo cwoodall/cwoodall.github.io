@@ -1,265 +1,145 @@
-<!DOCTYPE html>
-<html><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <title>Using Z3 to Find Clock Configurations Values for ARM Cortex Microcontrollers</title>
-    <meta name="description" content="Emebedded Software Engineer">
-    <meta name="author" content='Chris Woodall'>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-
-    
-    <link rel="stylesheet" href="/sass/researcher.min.css">
-
-    
-        <link rel="icon" type="image/ico" href="/favicon.ico">
-    
-
-    
-        
-    
-</head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "\\[", right: "\\]", display: true},
-                {left: "$", right: "$", display: false},
-                {left: "\\(", right: "\\)", display: false}
-            ]
-        });
-    });
-</script>
-
-    <body><div class="container mt-5">
-    <nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
-        <a class="navbar-brand mx-0 mr-sm-auto" href="/">Chris Woodall</a>
-        <div class="navbar-nav flex-row flex-wrap justify-content-center">
-            
-                
-                
-                    <a class="nav-item nav-link" href="/now">
-                        Now
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/posts">
-                        Blog
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/climbing">
-                        Climb
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/music">
-                        Music
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/projects">
-                        Projects
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/reading">
-                        Read
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/resume.pdf">
-                        Resume
-                    </a>
-                    
-                
-            
-        </div>
-    </nav>
-</div>
-<hr>
-<div id="content">
-<div class="container">
-    <h1 align="center">Using Z3 to Find Clock Configurations Values for ARM Cortex Microcontrollers</h1>
-    <div align="center">Chris Woodall | 2016-11-06</div>
-
-    <img src="" />
-
-    <p></p>
-    <p>A few weeks ago I was setting up multiple embedded systems using the <a href="http://nxp.com">NXP</a>
-<a href="https://cache.nxp.com/files/microcontrollers/doc/data_sheet/K64P144M120SF5.pdf">Kinetis K64F12</a> family of microcontrollers. Do to an oversight
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Using Z3 to Find Clock Configurations Values for ARM Cortex Microcontrollers</title><meta name=description content="Emebedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.css><link rel=icon type=image/ico href=/favicon.ico></head><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css integrity=sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js integrity=sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4 crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js integrity=sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa crossorigin=anonymous onload=renderMathInElement(document.body);></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\[",right:"\\]",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false}]});});</script><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/posts>Blog</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/climbing>Climb</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/music>Music</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/projects>Projects</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/reading>Read</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Using Z3 to Find Clock Configurations Values for ARM Cortex Microcontrollers</h1><div align=center>Chris Woodall | 2016-11-06</div><img src><p></p><p>A few weeks ago I was setting up multiple embedded systems using the <a href=http://nxp.com>NXP</a>
+<a href=https://cache.nxp.com/files/microcontrollers/doc/data_sheet/K64P144M120SF5.pdf>Kinetis K64F12</a> family of microcontrollers. Do to an oversight
 a few of the different systems had different input clock frequencies, but all
 were intended to work at the same output clock frequency. This is not a major
 issue and the ARM Cortex-M4 processors are designed to solve this issue using
-a <a href="https://en.wikipedia.org/wiki/Phase-locked_loop">phase-locked loop (PLL)</a>. A PLL can take a clock, of one frequency
+a <a href=https://en.wikipedia.org/wiki/Phase-locked_loop>phase-locked loop (PLL)</a>. A PLL can take a clock, of one frequency
 and output a rather clean clock of another frequency; however, it must be properly
 configured. My problem now was a configuration, and mathematics problem. The
-parameters are calculated using the following equation:</p>
-<p>$f_{out} = VDIV * \frac{f_{in}}{PRDIV}$, where $VDIV$ and $PRDIV$ are the parameters needed for the configuration. and $f_{in}$ and $f_{out}$ are your input and output frequency which you know ahead of time.</p>
-<p>A solution to this equation is straightforward but requires a little bit of guessing,
+parameters are calculated using the following equation:</p><p>$f_{out} = VDIV * \frac{f_{in}}{PRDIV}$, where $VDIV$ and $PRDIV$ are the parameters needed for the configuration. and $f_{in}$ and $f_{out}$ are your input and output frequency which you know ahead of time.</p><p>A solution to this equation is straightforward but requires a little bit of guessing,
 and also checking your answers against a series of constraints specified in the
-<a href="http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf">datasheet</a>. The details of this equation and its related constraints
+<a href=http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf>datasheet</a>. The details of this equation and its related constraints
 will be approached later. I wanted to automate this task so in
-the future I could just adjust these values without having to dig out the <a href="http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf">datasheet</a>
+the future I could just adjust these values without having to dig out the <a href=http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf>datasheet</a>
 and do the math again. Also to possibly automate making the clock configuration code
-to prevent me from being the only person who understood how to configure the clocks.</p>
-<p>What is someone who loves automation to do? Well, you could solve the equation
-directly. However, <a href="https://endless-turtles.com/">Michael Abed</a> introduced me to a program and
-library called <a href="https://github.com/Z3Prover/z3">Z3</a> which is a constraints solver from
-<a href="https://www.microsoft.com/en-us/research/">Microsoft Research</a> which I found interesting and wanted to do a
+to prevent me from being the only person who understood how to configure the clocks.</p><p>What is someone who loves automation to do? Well, you could solve the equation
+directly. However, <a href=https://endless-turtles.com/>Michael Abed</a> introduced me to a program and
+library called <a href=https://github.com/Z3Prover/z3>Z3</a> which is a constraints solver from
+<a href=https://www.microsoft.com/en-us/research/>Microsoft Research</a> which I found interesting and wanted to do a
 simple project with since I thought it might be useful in the future. Also, this
 problem is well-suited as it can take a series of equations and constraints and
 search the solution space rather trivially easily. Also, it has a way of deciding
 if no solution is possible. So I decided
-to use the <a href="https://github.com/Z3Prover/z3">Z3</a> python bindings to create a python library, with a command line
+to use the <a href=https://github.com/Z3Prover/z3>Z3</a> python bindings to create a python library, with a command line
 tool and a web API for solving this problem. This is most certainly overkill, but
 considering how easily it all went together I would do it again to solve similar
-problems.</p>
-<p>You can see the code on <a href="https://github.com/cwoodall/k64-pll-calculator">GitHub</a> and also play with see the resulting
-<a href="http://k64-pll-calculator.herokuapp.com/">website and API demo</a>. But read on for more details!</p>
-<h2 id="constraining-the-problem">Constraining The Problem</h2>
-<p>Z3 is a constraint solver, so the constraints needs to be specified in a way that Z3 can understand and used. For those who want to follow along at home I created an <a href="https://github.com/cwoodall/k64-pll-calculator/blob/master/extras/notebook.ipynb">ipython notebook</a>. To get started with it you will need to install the <a href="https://github.com/Z3Prover/z3">Z3</a> python package:</p>
-<pre><code>$ sudo pip install z3-solver
-</code></pre><p>The first step is to specify the parameters we will be dealing with. Looking at the equation above and the <a href="http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf">datasheet</a> the parameters can be determined to be <code>f_in</code>, <code>f_out</code>, <code>d</code> ($PRDIV$) and <code>m</code> ($VDIV$) which can all be constrained to the set of Integers. The <code>z3.Int()</code> type will handle this.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> z3 <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+problems.</p><p>You can see the code on <a href=https://github.com/cwoodall/k64-pll-calculator>GitHub</a> and also play with see the resulting
+<a href=http://k64-pll-calculator.herokuapp.com/>website and API demo</a>. But read on for more details!</p><h2 id=constraining-the-problem>Constraining The Problem</h2><p>Z3 is a constraint solver, so the constraints needs to be specified in a way that Z3 can understand and used. For those who want to follow along at home I created an <a href=https://github.com/cwoodall/k64-pll-calculator/blob/master/extras/notebook.ipynb>ipython notebook</a>. To get started with it you will need to install the <a href=https://github.com/Z3Prover/z3>Z3</a> python package:</p><pre><code>$ sudo pip install z3-solver
+</code></pre><p>The first step is to specify the parameters we will be dealing with. Looking at the equation above and the <a href=http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf>datasheet</a> the parameters can be determined to be <code>f_in</code>, <code>f_out</code>, <code>d</code> ($PRDIV$) and <code>m</code> ($VDIV$) which can all be constrained to the set of Integers. The <code>z3.Int()</code> type will handle this.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> z3 <span style=color:#f92672>import</span> <span style=color:#f92672>*</span>
 
-<span style="color:#75715e"># Lets create a dictionary of all of our parameters.</span>
-<span style="color:#75715e"># Where:</span>
-<span style="color:#75715e">#    - f_in: Input Frequency</span>
-<span style="color:#75715e">#    - f_out: Output Frequency</span>
-<span style="color:#75715e">#    - d: PRDIV from datasheet. This is the division term</span>
-<span style="color:#75715e">#    - m: VDIV from datasheet. This is the multiply term</span>
-params <span style="color:#f92672">=</span> {k: Int(k) <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> [<span style="color:#e6db74">&#39;f_in&#39;</span>, <span style="color:#e6db74">&#39;f_out&#39;</span>, <span style="color:#e6db74">&#39;d&#39;</span>, <span style="color:#e6db74">&#39;m&#39;</span>]}
+<span style=color:#75715e># Lets create a dictionary of all of our parameters.</span>
+<span style=color:#75715e># Where:</span>
+<span style=color:#75715e>#    - f_in: Input Frequency</span>
+<span style=color:#75715e>#    - f_out: Output Frequency</span>
+<span style=color:#75715e>#    - d: PRDIV from datasheet. This is the division term</span>
+<span style=color:#75715e>#    - m: VDIV from datasheet. This is the multiply term</span>
+params <span style=color:#f92672>=</span> {k: Int(k) <span style=color:#66d9ef>for</span> k <span style=color:#f92672>in</span> [<span style=color:#e6db74>&#39;f_in&#39;</span>, <span style=color:#e6db74>&#39;f_out&#39;</span>, <span style=color:#e6db74>&#39;d&#39;</span>, <span style=color:#e6db74>&#39;m&#39;</span>]}
 </code></pre></div><p>Now that the model parameters have been determined and appropriately constrained
 to the Integer space, the remaining constraints need to be set. To do this an
 array of &ldquo;facts&rdquo; will be created which will tell Z3 about our solution space.
 This will include our equation for <code>f_out</code> in terms of <code>f_in</code>, <code>d</code> and <code>m</code>, but
 there are also other constraints to make the values valid. These are found in the
-<a href="http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf">datasheet</a> for the K64F12 family on pages 589 and 590, and come in the
+<a href=http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf>datasheet</a> for the K64F12 family on pages 589 and 590, and come in the
 form of ranges for <code>d</code> and <code>m</code>. The most important performance based constraint is
 formed around <code>f_in / d</code> which determines the frequency of the input to the phase-locked
 loops (PLL) multiplier stage. The facts are easy to write now. It is important to note
-that the parameters are used to specify the constraints:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Lets look at the datasheet and define some constraints on value ranges</span>
-<span style="color:#75715e"># The range tuples are in the format (lower_bound, upper_bound)</span>
-divide_range <span style="color:#f92672">=</span> (<span style="color:#ae81ff">2e6</span>, <span style="color:#ae81ff">4e6</span>) <span style="color:#75715e"># From K64F12 datasheet page 589</span>
-d_range <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">25</span>)         <span style="color:#75715e"># From K64F12 datasheet page 589</span>
-m_range <span style="color:#f92672">=</span> (<span style="color:#ae81ff">24</span>, <span style="color:#ae81ff">55</span>)        <span style="color:#75715e"># From K64F12 datasheet page 590</span>
+that the parameters are used to specify the constraints:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Lets look at the datasheet and define some constraints on value ranges</span>
+<span style=color:#75715e># The range tuples are in the format (lower_bound, upper_bound)</span>
+divide_range <span style=color:#f92672>=</span> (<span style=color:#ae81ff>2e6</span>, <span style=color:#ae81ff>4e6</span>) <span style=color:#75715e># From K64F12 datasheet page 589</span>
+d_range <span style=color:#f92672>=</span> (<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>25</span>)         <span style=color:#75715e># From K64F12 datasheet page 589</span>
+m_range <span style=color:#f92672>=</span> (<span style=color:#ae81ff>24</span>, <span style=color:#ae81ff>55</span>)        <span style=color:#75715e># From K64F12 datasheet page 590</span>
 
-<span style="color:#75715e"># Get the input and output frequency as user inputs.</span>
-<span style="color:#75715e"># This is a quick and dirty handling of the inputs.</span>
-freq_in <span style="color:#f92672">=</span> <span style="color:#ae81ff">25e6</span>
-freq_out <span style="color:#f92672">=</span> <span style="color:#ae81ff">120e6</span>
+<span style=color:#75715e># Get the input and output frequency as user inputs.</span>
+<span style=color:#75715e># This is a quick and dirty handling of the inputs.</span>
+freq_in <span style=color:#f92672>=</span> <span style=color:#ae81ff>25e6</span>
+freq_out <span style=color:#f92672>=</span> <span style=color:#ae81ff>120e6</span>
 
-<span style="color:#75715e"># Now we can constrain the equation with the &#34;facts&#34; we know</span>
-facts <span style="color:#f92672">=</span> [
-    <span style="color:#75715e"># define</span>
-    params[<span style="color:#e6db74">&#39;f_in&#39;</span>] <span style="color:#f92672">==</span> freq_in,
-    params[<span style="color:#e6db74">&#39;f_out&#39;</span>] <span style="color:#f92672">==</span> freq_out,
+<span style=color:#75715e># Now we can constrain the equation with the &#34;facts&#34; we know</span>
+facts <span style=color:#f92672>=</span> [
+    <span style=color:#75715e># define</span>
+    params[<span style=color:#e6db74>&#39;f_in&#39;</span>] <span style=color:#f92672>==</span> freq_in,
+    params[<span style=color:#e6db74>&#39;f_out&#39;</span>] <span style=color:#f92672>==</span> freq_out,
 
-    <span style="color:#75715e"># Setup the equation which uses PRDIV (d) and VDIV (m)</span>
-    <span style="color:#75715e"># This equation is set up from the K64 datasheet</span>
-    params[<span style="color:#e6db74">&#39;f_out&#39;</span>] <span style="color:#f92672">==</span> (params[<span style="color:#e6db74">&#39;f_in&#39;</span>] <span style="color:#f92672">/</span> params[<span style="color:#e6db74">&#39;d&#39;</span>]) <span style="color:#f92672">*</span> params[<span style="color:#e6db74">&#39;m&#39;</span>],
+    <span style=color:#75715e># Setup the equation which uses PRDIV (d) and VDIV (m)</span>
+    <span style=color:#75715e># This equation is set up from the K64 datasheet</span>
+    params[<span style=color:#e6db74>&#39;f_out&#39;</span>] <span style=color:#f92672>==</span> (params[<span style=color:#e6db74>&#39;f_in&#39;</span>] <span style=color:#f92672>/</span> params[<span style=color:#e6db74>&#39;d&#39;</span>]) <span style=color:#f92672>*</span> params[<span style=color:#e6db74>&#39;m&#39;</span>],
 
-    <span style="color:#75715e"># From K64 datasheet page 589</span>
-    params[<span style="color:#e6db74">&#39;f_in&#39;</span>] <span style="color:#f92672">/</span> params[<span style="color:#e6db74">&#39;d&#39;</span>] <span style="color:#f92672">&gt;=</span> divide_range[<span style="color:#ae81ff">0</span>],
-    params[<span style="color:#e6db74">&#39;f_in&#39;</span>] <span style="color:#f92672">/</span> params[<span style="color:#e6db74">&#39;d&#39;</span>] <span style="color:#f92672">&lt;=</span> divide_range[<span style="color:#ae81ff">1</span>],
+    <span style=color:#75715e># From K64 datasheet page 589</span>
+    params[<span style=color:#e6db74>&#39;f_in&#39;</span>] <span style=color:#f92672>/</span> params[<span style=color:#e6db74>&#39;d&#39;</span>] <span style=color:#f92672>&gt;=</span> divide_range[<span style=color:#ae81ff>0</span>],
+    params[<span style=color:#e6db74>&#39;f_in&#39;</span>] <span style=color:#f92672>/</span> params[<span style=color:#e6db74>&#39;d&#39;</span>] <span style=color:#f92672>&lt;=</span> divide_range[<span style=color:#ae81ff>1</span>],
 
-    <span style="color:#75715e"># From K64 datasheet page 589</span>
-    params[<span style="color:#e6db74">&#39;d&#39;</span>] <span style="color:#f92672">&gt;=</span> d_range[<span style="color:#ae81ff">0</span>],  
-    params[<span style="color:#e6db74">&#39;d&#39;</span>] <span style="color:#f92672">&lt;=</span> d_range[<span style="color:#ae81ff">1</span>],
+    <span style=color:#75715e># From K64 datasheet page 589</span>
+    params[<span style=color:#e6db74>&#39;d&#39;</span>] <span style=color:#f92672>&gt;=</span> d_range[<span style=color:#ae81ff>0</span>],  
+    params[<span style=color:#e6db74>&#39;d&#39;</span>] <span style=color:#f92672>&lt;=</span> d_range[<span style=color:#ae81ff>1</span>],
 
-    <span style="color:#75715e"># From K64 datasheet page 590</span>
-    params[<span style="color:#e6db74">&#39;m&#39;</span>] <span style="color:#f92672">&gt;=</span> m_range[<span style="color:#ae81ff">0</span>],  
-    params[<span style="color:#e6db74">&#39;m&#39;</span>] <span style="color:#f92672">&lt;=</span> m_range[<span style="color:#ae81ff">1</span>]]
-</code></pre></div><p>Now the <code>z3.solve()</code> function can be used to solve the model:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># To print out the results</span>
-model <span style="color:#f92672">=</span> solve(facts)
-</code></pre></div><p>Which results in:</p>
-<pre><code>[d = 10, m = 48, f_out = 120000000, f_in = 25000000]
+    <span style=color:#75715e># From K64 datasheet page 590</span>
+    params[<span style=color:#e6db74>&#39;m&#39;</span>] <span style=color:#f92672>&gt;=</span> m_range[<span style=color:#ae81ff>0</span>],  
+    params[<span style=color:#e6db74>&#39;m&#39;</span>] <span style=color:#f92672>&lt;=</span> m_range[<span style=color:#ae81ff>1</span>]]
+</code></pre></div><p>Now the <code>z3.solve()</code> function can be used to solve the model:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># To print out the results</span>
+model <span style=color:#f92672>=</span> solve(facts)
+</code></pre></div><p>Which results in:</p><pre><code>[d = 10, m = 48, f_out = 120000000, f_in = 25000000]
 </code></pre><p>Now it would be great to be able to take the newly found model parameter values and use them.
-So let&rsquo;s print out the model directly to see what we have:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># But the model returns none</span>
-<span style="color:#66d9ef">print</span> model
-</code></pre></div><p>Yielding a resounding:</p>
-<pre><code>None
-</code></pre><p>Oh no&hellip; It turns out that convenient <code>solve()</code> function does not return the model,
+So let&rsquo;s print out the model directly to see what we have:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># But the model returns none</span>
+<span style=color:#66d9ef>print</span> model
+</code></pre></div><p>Yielding a resounding:</p><pre><code>None
+</code></pre><p>Oh no&mldr; It turns out that convenient <code>solve()</code> function does not return the model,
 it just prints out the results to <em>STDIO</em>. To me this was not obvious at all.
-What do we do instead? We use the <a href="https://github.com/Z3Prover/z3">Z3</a> <a href="https://z3prover.github.io/api/html/classz3py_1_1_solver.html"><code>Solver</code> class</a>,
+What do we do instead? We use the <a href=https://github.com/Z3Prover/z3>Z3</a> <a href=https://z3prover.github.io/api/html/classz3py_1_1_solver.html><code>Solver</code> class</a>,
 which is much more versatile. However, for this particular case I wrote a
 function <code>solve_return_model()</code>, which acts like the <code>solve()</code> function but
 returns the solved model instead of printing it, or an <code>Z3Exception</code> if there is
-no constrained solution:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#This method is defined in k64_pll_calculator/util.py</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">solve_return_model</span>(fact_list):
-    <span style="color:#e6db74">&#34;&#34;&#34;
-</span><span style="color:#e6db74">    The default z3.solve() method prints to the screen. This uses the basis of
-</span><span style="color:#e6db74">    that function to take a list of facts, add it to a solver and then return
-</span><span style="color:#e6db74">    a z3 model with a solution.
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">    Relies on exceptions raised by calling s.mode() on an invalid model.
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">    @param a list of z3 facts and constraints
-</span><span style="color:#e6db74">    @return A valid z3 model
-</span><span style="color:#e6db74">    @raises Z3Exception
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-    s <span style="color:#f92672">=</span> Solver()
-    s<span style="color:#f92672">.</span>add(<span style="color:#f92672">*</span>fact_list)
-    r <span style="color:#f92672">=</span> s<span style="color:#f92672">.</span>check()
-    <span style="color:#66d9ef">if</span> r <span style="color:#f92672">==</span> unsat:
-        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;no solution&#34;</span>)
-    <span style="color:#66d9ef">elif</span> r <span style="color:#f92672">==</span> unknown:
-        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;failed to solve&#34;</span>)
+no constrained solution:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e>#This method is defined in k64_pll_calculator/util.py</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>solve_return_model</span>(fact_list):
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    The default z3.solve() method prints to the screen. This uses the basis of
+</span><span style=color:#e6db74>    that function to take a list of facts, add it to a solver and then return
+</span><span style=color:#e6db74>    a z3 model with a solution.
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    Relies on exceptions raised by calling s.mode() on an invalid model.
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    @param a list of z3 facts and constraints
+</span><span style=color:#e6db74>    @return A valid z3 model
+</span><span style=color:#e6db74>    @raises Z3Exception
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    s <span style=color:#f92672>=</span> Solver()
+    s<span style=color:#f92672>.</span>add(<span style=color:#f92672>*</span>fact_list)
+    r <span style=color:#f92672>=</span> s<span style=color:#f92672>.</span>check()
+    <span style=color:#66d9ef>if</span> r <span style=color:#f92672>==</span> unsat:
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;no solution&#34;</span>)
+    <span style=color:#66d9ef>elif</span> r <span style=color:#f92672>==</span> unknown:
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;failed to solve&#34;</span>)
 
-    <span style="color:#66d9ef">return</span> s<span style="color:#f92672">.</span>model()
+    <span style=color:#66d9ef>return</span> s<span style=color:#f92672>.</span>model()
 
-model <span style="color:#f92672">=</span> solve_return_model(facts)
+model <span style=color:#f92672>=</span> solve_return_model(facts)
 
-<span style="color:#66d9ef">print</span>(model)
-</code></pre></div><p>So now we can print the model out:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">[d <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>, m <span style="color:#f92672">=</span> <span style="color:#ae81ff">48</span>, f_out <span style="color:#f92672">=</span> <span style="color:#ae81ff">120000000</span>, f_in <span style="color:#f92672">=</span> <span style="color:#ae81ff">25000000</span>]
-</code></pre></div><p>And we can access our individual parameters:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Now we can play with the model: f_in == {}&#34;</span><span style="color:#f92672">.</span>format(model[params[<span style="color:#e6db74">&#39;f_in&#39;</span>]]))
-</code></pre></div><p>Outputting:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">Now we can play with the model: f_in <span style="color:#f92672">==</span> <span style="color:#ae81ff">25000000</span>
+<span style=color:#66d9ef>print</span>(model)
+</code></pre></div><p>So now we can print the model out:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>[d <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>, m <span style=color:#f92672>=</span> <span style=color:#ae81ff>48</span>, f_out <span style=color:#f92672>=</span> <span style=color:#ae81ff>120000000</span>, f_in <span style=color:#f92672>=</span> <span style=color:#ae81ff>25000000</span>]
+</code></pre></div><p>And we can access our individual parameters:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Now we can play with the model: f_in == {}&#34;</span><span style=color:#f92672>.</span>format(model[params[<span style=color:#e6db74>&#39;f_in&#39;</span>]]))
+</code></pre></div><p>Outputting:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>Now we can play with the model: f_in <span style=color:#f92672>==</span> <span style=color:#ae81ff>25000000</span>
 </code></pre></div><p>Once a solution for $PRDIV$ and $VDIV$ has been found those values can be reported
 and modified as needed. In this particular case they still need to be modified
-to be in the actually bit-wise representation from the <a href="http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf">datasheet</a> (p 589).
+to be in the actually bit-wise representation from the <a href=http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf>datasheet</a> (p 589).
 One idea I had was to feed these values into a clock configuration struct so I could
-generate my clock configuration header files directly.</p>
-<h2 id="dressing-up-the-solution">Dressing Up The Solution</h2>
-<p>Once I finished learning about <a href="https://github.com/Z3Prover/z3">Z3</a> I decided to wrap the results up into two
+generate my clock configuration header files directly.</p><h2 id=dressing-up-the-solution>Dressing Up The Solution</h2><p>Once I finished learning about <a href=https://github.com/Z3Prover/z3>Z3</a> I decided to wrap the results up into two
 applications. The first was a CLI application which uses a library called
-<a href="http://click.pocoo.org/">click</a> which is a:</p>
-<blockquote>
-<p>Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.</p>
-</blockquote>
-<p>Usage is simple:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ k64_pll_calculator --help
-Usage: k64_pll_calculator <span style="color:#f92672">[</span>OPTIONS<span style="color:#f92672">]</span>
+<a href=http://click.pocoo.org/>click</a> which is a:</p><blockquote><p>Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.</p></blockquote><p>Usage is simple:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ k64_pll_calculator --help
+Usage: k64_pll_calculator <span style=color:#f92672>[</span>OPTIONS<span style=color:#f92672>]</span>
 
   Simple program which takes an input frequency and an output frequency and
-  returns the PRDIV and vdiv necessary <span style="color:#66d9ef">for</span> the pll in the freescale k64
+  returns the PRDIV and vdiv necessary <span style=color:#66d9ef>for</span> the pll in the freescale k64
   processors
 
 Options:
@@ -270,59 +150,39 @@ Options:
   --help                Show this message and exit.
 
 $ k64_pll_calculator -i 25e6 -o 120e6
-<span style="color:#f92672">[</span>d <span style="color:#f92672">=</span> 10, m <span style="color:#f92672">=</span> 48, f_out <span style="color:#f92672">=</span> 120000000, f_in <span style="color:#f92672">=</span> 25000000<span style="color:#f92672">]</span>
+<span style=color:#f92672>[</span>d <span style=color:#f92672>=</span> 10, m <span style=color:#f92672>=</span> 48, f_out <span style=color:#f92672>=</span> 120000000, f_in <span style=color:#f92672>=</span> 25000000<span style=color:#f92672>]</span>
 
 $ k64_pll_calculator -i 1e6 -o 120e6
 No results found.
 </code></pre></div><p>And more importantly it was very easy to throw together. I have found
-<a href="http://click.pocoo.org/">click</a> to be very easy to use and have been using it for more complicated
-command line applications.</p>
-<p>The other interface I made was for the <a href="http://k64-pll-calculator.herokuapp.com/">web demo</a> which uses <a href="http://flask.pocoo.org/">flask</a>
-to create an API endpoint at <code>/solve</code>. I then used <a href="http://heroku.com">heroku</a> to
-host it and a little bit of old school <a href="https://jquery.com">jQuery</a> to make the
+<a href=http://click.pocoo.org/>click</a> to be very easy to use and have been using it for more complicated
+command line applications.</p><p>The other interface I made was for the <a href=http://k64-pll-calculator.herokuapp.com/>web demo</a> which uses <a href=http://flask.pocoo.org/>flask</a>
+to create an API endpoint at <code>/solve</code>. I then used <a href=http://heroku.com>heroku</a> to
+host it and a little bit of old school <a href=https://jquery.com>jQuery</a> to make the
 form asynchronous. You can use the end point with HTTP <code>GET</code> requests and query
-strings as follows, returning JSON:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl <span style="color:#e6db74">&#34;http://k64-pll-calculator.herokuapp.com/solve?fin=20e6&amp;fout=80e6&#34;</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;payload&#34;</span>: {
-    <span style="color:#f92672">&#34;d&#34;</span>: <span style="color:#e6db74">&#34;8&#34;</span>,
-    <span style="color:#f92672">&#34;f_in&#34;</span>: <span style="color:#e6db74">&#34;20000000&#34;</span>,
-    <span style="color:#f92672">&#34;f_out&#34;</span>: <span style="color:#e6db74">&#34;80000000&#34;</span>,
-    <span style="color:#f92672">&#34;m&#34;</span>: <span style="color:#e6db74">&#34;32&#34;</span>
+strings as follows, returning JSON:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ curl <span style=color:#e6db74>&#34;http://k64-pll-calculator.herokuapp.com/solve?fin=20e6&amp;fout=80e6&#34;</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;payload&#34;</span>: {
+    <span style=color:#f92672>&#34;d&#34;</span>: <span style=color:#e6db74>&#34;8&#34;</span>,
+    <span style=color:#f92672>&#34;f_in&#34;</span>: <span style=color:#e6db74>&#34;20000000&#34;</span>,
+    <span style=color:#f92672>&#34;f_out&#34;</span>: <span style=color:#e6db74>&#34;80000000&#34;</span>,
+    <span style=color:#f92672>&#34;m&#34;</span>: <span style=color:#e6db74>&#34;32&#34;</span>
   },
-  <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>
+  <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;success&#34;</span>
 }
-</code></pre></div><p>In the case where the model has no solution:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl <span style="color:#e6db74">&#34;http://k64-pll-calculator.herokuapp.com/solve?fin=1e6&amp;fout=80e6&#34;</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;payload&#34;</span>: {
-    <span style="color:#f92672">&#34;error&#34;</span>: <span style="color:#e6db74">&#34;model is not available&#34;</span>
+</code></pre></div><p>In the case where the model has no solution:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ curl <span style=color:#e6db74>&#34;http://k64-pll-calculator.herokuapp.com/solve?fin=1e6&amp;fout=80e6&#34;</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;payload&#34;</span>: {
+    <span style=color:#f92672>&#34;error&#34;</span>: <span style=color:#e6db74>&#34;model is not available&#34;</span>
   },
-  <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;error&#34;</span>
+  <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;error&#34;</span>
 }
-</code></pre></div><p>And here is a little <em>.gif</em> example of the <a href="http://k64-pll-calculator.herokuapp.com/">demo</a> in action.</p>
-<p><a href="http://k64-pll-calculator.herokuapp.com/"><img src="/img/posts/k64-pll-calculator-web-example.gif" alt="K64 PLL Calculator Demo"></a></p>
-<h2 id="conclusion">Conclusion</h2>
-<p>This was a fun distraction of a project. I got acquainted with a powerful tool
-<a href="https://github.com/Z3Prover/z3">Z3</a> and also spent some time with python unit testing, <a href="http://click.pocoo.org/">click</a>, <a href="http://flask.pocoo.org/">flask</a>
+</code></pre></div><p>And here is a little <em>.gif</em> example of the <a href=http://k64-pll-calculator.herokuapp.com/>demo</a> in action.</p><p><a href=http://k64-pll-calculator.herokuapp.com/><img src=/img/posts/k64-pll-calculator-web-example.gif alt="K64 PLL Calculator Demo"></a></p><h2 id=conclusion>Conclusion</h2><p>This was a fun distraction of a project. I got acquainted with a powerful tool
+<a href=https://github.com/Z3Prover/z3>Z3</a> and also spent some time with python unit testing, <a href=http://click.pocoo.org/>click</a>, <a href=http://flask.pocoo.org/>flask</a>
 and dusting off some of my JavaScript skills (which made me want to update my
-skill set in that region). I am mostly excited about future applications of <a href="https://github.com/Z3Prover/z3">Z3</a>
+skill set in that region). I am mostly excited about future applications of <a href=https://github.com/Z3Prover/z3>Z3</a>
 to my work, as it seems that many embedded systems problems and configuration problems
 follow a similar template, which is they are constraint solving problems. This particular
 problem was easy enough to do by hand, but I can think of many other cases where using
 Z3 to solve a problem off-target, and putting the final model parameters onto the
-embedded system could yield a high performance, low footprint solution.</p>
-<p>Go forth and constrain your problems!</p>
-<p>Please checkout the code on <a href="https://github.com/cwoodall/k64-pll-calculator">GitHub</a>!</p>
-</div>
-
-        </div><div id="footer" class="mb-5">
-    
-        <hr>
-        <div class="container text-center">
-            <a href="https://github.com/ojroques/hugo-researcher"><small>By Chris Woodall</small></a>
-        </div>
-    
-</div>
-</body>
-</html>
+embedded system could yield a high performance, low footprint solution.</p><p>Go forth and constrain your problems!</p><p>Please checkout the code on <a href=https://github.com/cwoodall/k64-pll-calculator>GitHub</a>!</p></div></div><div id=footer class=mb-5><hr><div class="container text-center"><a href=https://github.com/ojroques/hugo-researcher><small>By Chris Woodall</small></a></div></div></body></html>

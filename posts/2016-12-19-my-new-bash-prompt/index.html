@@ -1,134 +1,26 @@
-<!DOCTYPE html>
-<html><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <title>My New Bash Prompt: Exit Codes, Unicode and Git Branches</title>
-    <meta name="description" content="Emebedded Software Engineer">
-    <meta name="author" content='Chris Woodall'>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-
-    
-    <link rel="stylesheet" href="/sass/researcher.min.css">
-
-    
-        <link rel="icon" type="image/ico" href="/favicon.ico">
-    
-
-    
-        
-    
-</head>
-
-    <body><div class="container mt-5">
-    <nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
-        <a class="navbar-brand mx-0 mr-sm-auto" href="/">Chris Woodall</a>
-        <div class="navbar-nav flex-row flex-wrap justify-content-center">
-            
-                
-                
-                    <a class="nav-item nav-link" href="/now">
-                        Now
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/posts">
-                        Blog
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/climbing">
-                        Climb
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/music">
-                        Music
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/projects">
-                        Projects
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/reading">
-                        Read
-                    </a>
-                    
-                        <span class="nav-item navbar-text mx-1">/</span>
-                    
-                
-                    <a class="nav-item nav-link" href="/resume.pdf">
-                        Resume
-                    </a>
-                    
-                
-            
-        </div>
-    </nav>
-</div>
-<hr>
-<div id="content">
-<div class="container">
-    <h1 align="center">My New Bash Prompt: Exit Codes, Unicode and Git Branches</h1>
-    <div align="center">Chris Woodall | 2016-12-19</div>
-
-    <img src="/img/posts/bash-prompt.png" />
-
-    <p></p>
-    <p>I decided to customize my bash prompt. I initially started off with
-the following requirements:</p>
-<ol>
-<li>It should be two lines! I have found that having the input and my prompt on
-one line is not enough space most of the time.</li>
-<li>I want to see my current git branch, and also if there are any uncommitted
-changes in the current branch.</li>
-<li>I want to see my username, host name and current directory.</li>
-<li>The current directory should be truncated so that it shows the 4 closest
-directories in the path.</li>
-<li>The status if the previous command should be show in some way.</li>
-</ol>
-<p>After some work I came up with the prompt shown above. I am excited to keep
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>My New Bash Prompt: Exit Codes, Unicode and Git Branches</title><meta name=description content="Emebedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.css><link rel=icon type=image/ico href=/favicon.ico></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/posts>Blog</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/climbing>Climb</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/music>Music</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/projects>Projects</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/reading>Read</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>My New Bash Prompt: Exit Codes, Unicode and Git Branches</h1><div align=center>Chris Woodall | 2016-12-19</div><img src=/img/posts/bash-prompt.png><p></p><p>I decided to customize my bash prompt. I initially started off with
+the following requirements:</p><ol><li>It should be two lines! I have found that having the input and my prompt on
+one line is not enough space most of the time.</li><li>I want to see my current git branch, and also if there are any uncommitted
+changes in the current branch.</li><li>I want to see my username, host name and current directory.</li><li>The current directory should be truncated so that it shows the 4 closest
+directories in the path.</li><li>The status if the previous command should be show in some way.</li></ol><p>After some work I came up with the prompt shown above. I am excited to keep
 using it and customizing it, I am also happy that I decided to use unicode in
 the prompt. I have been avoiding unicode in general, but
-<a href="http://www.rustlang.com">Rust</a> has convinced me that I should try to accept
-unicode into my life more readily!</p>
-<p>After going through the process, here are sometake aways:</p>
-<ol>
-<li><code>printf</code> supports unicode more reliably than echo. I had some trouble
-getting echo to do what I want to do</li>
-<li>I always forget this one. Bash functions are never what I think they are.
-They  are  scripts you can define inside of a script. I
-always seem to find this causing problems for me.</li>
-</ol>
-<p>I hope you enjoy! Below is the code for my prompt! Put it into you
+<a href=http://www.rustlang.com>Rust</a> has convinced me that I should try to accept
+unicode into my life more readily!</p><p>After going through the process, here are sometake aways:</p><ol><li><code>printf</code> supports unicode more reliably than echo. I had some trouble
+getting echo to do what I want to do</li><li>I always forget this one. Bash functions are never what I think they are.
+They are scripts you can define inside of a script. I
+always seem to find this causing problems for me.</li></ol><p>I hope you enjoy! Below is the code for my prompt! Put it into you
 <code>.profile</code>, <code>.bash_profile</code> or <code>.bashrc</code> file depending on your preference. If
-you want to use it.</p>
-<p>Here is a demonstration video:</p>
-<p><img src="/img/posts/bash-prompt-video.gif" alt="Video of the bash prompt"></p>
-<script src="https://gist.github.com/cwoodall/4c277b89a47d970f5a0c4fe59b434f07.js"></script>
-</div>
-
-        </div><div id="footer" class="mb-5">
-    
-        <hr>
-        <div class="container text-center">
-            <a href="https://github.com/ojroques/hugo-researcher"><small>By Chris Woodall</small></a>
-        </div>
-    
-</div>
-</body>
-</html>
+you want to use it.</p><p>Here is a demonstration video:</p><p><img src=/img/posts/bash-prompt-video.gif alt="Video of the bash prompt"></p><script src=https://gist.github.com/cwoodall/4c277b89a47d970f5a0c4fe59b434f07.js></script></div></div><div id=footer class=mb-5><hr><div class="container text-center"><a href=https://github.com/ojroques/hugo-researcher><small>By Chris Woodall</small></a></div></div></body></html>

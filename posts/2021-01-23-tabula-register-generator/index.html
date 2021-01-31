@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Generating Register Maps from PDFs</title><meta name=description content="Emebedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.css><style>img{max-width:100%}</style><link rel=icon type=image/ico href=/favicon.ico><script src=https://unpkg.com/mermaid@8.2.3/dist/mermaid.min.js></script></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/posts>Blog</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/climbing>Climb</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/music>Music</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/projects>Projects</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/reading>Read</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Generating Register Maps from PDFs</h1><div align=center>Chris Woodall | 2021-01-23</div><img src><br><p>While integrating the <a href=https://www.analog.com/media/en/technical-documentation/data-sheets/AD7124-4.pdf>AD7124</a> into a new firmware design I became frustrated that the PDF tables could not be easily copy-pasted out of to create machine parse-able tables
+for a generator for the register map. With so many registers on board, with lots of configuration bits this was a little frustrating. I started to do the task manually,
+building up the register maps, register structures, and serialization functions by hand. After getting some basic functionality I realized I needed to configure almost
+all of the registers on the device. So as a result I went on a search for <a href="https://www.google.com/search?q=pdf+table+extraction">&ldquo;pdf table extraction&rdquo;</a> and eventually found <a href=https://tabula.technology/>Tabula</a>.</p><p>The front end <a href=https://tabula.technology/>tabula</a> is sadly not actively maintained anymore (last official release was &ldquo;June 4, 2018&rdquo;); however I found it to work reasonably well on the tables in the <a href=https://www.analog.com/media/en/technical-documentation/data-sheets/AD7124-4.pdf>AD7124</a> datasheet. The command line application does seem to be updated, and may be interesting for a repeatable solution (<a href=https://github.com/tabulapdf/tabula-java>https://github.com/tabulapdf/tabula-java</a>) and even has <a href=https://github.com/chezou/tabula-py>python bindings</a></p><center><div class=mermaid>graph TB;
+A[Get PDF] --> B(Open In Tabula and Export CSV files)
+B --> C(Separate out Registers, Fields, and Clean Up)
+C --> D[Run Autogenerator]</div></center></div></div><div id=footer class=mb-5><hr><div class="container text-center"><a href=https://github.com/ojroques/hugo-researcher><small>By Chris Woodall</small></a></div></div></body></html>

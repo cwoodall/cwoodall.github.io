@@ -2,15 +2,15 @@
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/posts>Blog</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/climbing>Climb</a>
+<a class="nav-item nav-link" href=/reading>Read</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/generative-art-studio>Digital Art</a>
+<a class="nav-item nav-link" href=/generative-art-studio>Art</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/climbing>Climb</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/music>Music</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/projects>Projects</a>
-<span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/reading>Read</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Automating Musescore 3.6 PDF and MP3 Generation Using Github Actions</h1><div align=center>Chris Woodall | 2021-03-28</div><img src=/img/posts/2021-03-28-musescore-3.6-github-action/banner.png><br><p>Back in the day, I used to use <a href=https://www.avid.com/sibelius>Sibelius</a> and <a href=https://www.finalemusic.com/>Finale</a> for music composition, and engraving. <a href=https://musescore.org>MuseScore 3.6</a> is an open-source, cross-platform music composition tool that fits right in there with the other two. Considering that it is free it punches above its weight class. I first found out about MuseScore when I watched a <a href="https://www.youtube.com/watch?v=4hZxo96x48A">review of its interface by Tantacrul</a> who ripped the UI to shreds. I thought that this would be the end of it for me, however, I later found out that after this video was made Tantacrul joined the MuseScore team as a project manager on the UI team, and with 3.6 it seems like they have already started to fix a lot of the underlying issues (and I found it to be a joy to work in).</p><p>So when I wanted to write down some transcriptions and exercises for mandolin I decided to use MuseScore. Since I am a massive nerd I made this into a <a href=https://github.com/cwoodall/scores>git repository</a> using their <code>.xml</code> based <code>.mscx</code> (<code>.musicxml</code>) files to track changes over time. Continuing on the massive nerd path I thought it would be interesting to use the <a href=https://musescore.org/en/handbook/3/command-line-options#Convert_a_score_to_PDF_from_the_command_line>command-line arguments</a> and job files to create pdfs and mp3s on push, build-server style, then add the resulting files to the repository to share easily.</p><p><strong>Why would you want to do this?</strong> If you are tracking versions and you want distributable files to be continuously updated and created for you. An alternative would be to tag releases and upload the results
 to those tags.</p><p>To do this I used <a href=https://github.com/features/actions>Github Actions</a>, made a Makefile which I tested locally for scanning for all <code>.mscx</code> and <code>.mscz</code> files to make <code>.mp3</code> and <code>.pdf</code> files. After that, I decided to add basic support for using <code>.json</code> job files as input.</p><h3 id=installing-musescore-36>Installing MuseScore 3.6</h3><p>To install MuseScore 3.6 I used the flatpak release under Ubuntu 20.04:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo apt install flatpak

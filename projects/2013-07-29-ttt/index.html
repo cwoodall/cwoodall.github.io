@@ -2,14 +2,14 @@
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/posts>Blog</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/climbing>Climb</a>
+<a class="nav-item nav-link" href=/reading>Read</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/generative-art-studio>Digital Art</a>
+<a class="nav-item nav-link" href=/generative-art-studio>Art</a>
+<span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/climbing>Climb</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/music>Music</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/projects>Projects</a>
-<span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/reading>Read</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>TTT: TTC TTS Tester for CMS and G minus 2</h1><div align=center>Chris Woodall | 2013-06-30</div><img src=/img/projects/ttt/ttt.jpg><br><p>The TTT is a piece of test equipment design for <a href=http://cms.web.cern.ch/>CMS</a> through the <a href=http://edf.bu.edu>BU Electronic Design Facility</a> (EDF). Its main function is to generate L1A (Level-1 Accept) trigger events and stream them to another piece of equipment and listen to that piece of equipment to see if its buffer is full.</p><p>The TTT runs a <a href=http://xilinx.com/>Xilinx</a> Spartan-6 FPGA, with an Ethernet MAC I wrote, and communicates with a PC using a protocol called <a href=https://svnweb.cern.ch/trac/cactus/wiki>IPBus</a>. This allows for configurations to be set, such as, running off of an external clock. The board to board communications are done over a fiber optic interface and the Spartan-6 chip decodes an 80MHz BiPhase Mark Coded datastream which multiplexes two datastreams together.</p><p>Eric Hazen wrote the VHDL for the internal trigger simulator and Charlie Hill wrote the initial software for interfacing with the TTT over IPBus from a computer.</p></div></div><div id=footer class=mb-5><hr><div class="container text-center"><a href=https://github.com/ojroques/hugo-researcher><small>Built with Hugo and the Hugo Researcher Theme</small></a></div></div></body></html>

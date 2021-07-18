@@ -4,6 +4,8 @@
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/climbing>Climb</a>
 <span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/generative-art-studio>Digital Art</a>
+<span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/music>Music</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/projects>Projects</a>
@@ -90,7 +92,7 @@ PUNCTUATION: }
 </code></pre><p>So to find all of the <code>//+serde()</code> tags and get all of the information we need the
 process is:</p><ol><li>Get a <code>TranslationalUnit</code> from <code>libclang</code> for the entire file being parsed.</li><li>Iterate through all of the tokens in the file, looking for <code>COMMENTS</code> which match the decorator string.</li><li>Continue iterating through the tokens until a token with a matching cursor which specifies a STRUCT or CLASS declaration is found.
 (The first struct or class after the <code>//+serde()</code> will be parsed).</li><li>Walk through the AST for that struct or class to extract the types, names and access specifiers.</li><li>Walk up from the struct declaration to the root node to find all of the namespaces the struct may be inside of.</li><li>Repeat steps 2 to 4 until there are no more tokens left in the file.</li></ol><p>So for some basic code:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> serde_type <span style=color:#f92672>import</span> <span style=color:#f92672>*</span>
-<span style=color:#f92672>import</span> clang.cindex <span style=color:#f92672>as</span> cl
+<span style=color:#f92672>import</span> clang.cindex <span style=color:#66d9ef>as</span> cl
 <span style=color:#f92672>from</span> ctypes.util <span style=color:#f92672>import</span> find_library
 <span style=color:#f92672>import</span> ccsyspath
 <span style=color:#f92672>import</span> re
@@ -147,7 +149,7 @@ process is:</p><ol><li>Get a <code>TranslationalUnit</code> from <code>libclang<
 
     tokens <span style=color:#f92672>=</span> tu<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>get_tokens()
 
-    found <span style=color:#f92672>=</span> False
+    found <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
     serializables <span style=color:#f92672>=</span> []
     serdes <span style=color:#f92672>=</span> []
     <span style=color:#75715e># iterate through all tokens, looking for the match_str in a comment. If</span>
@@ -167,12 +169,12 @@ process is:</p><ol><li>Get a <code>TranslationalUnit</code> from <code>libclang<
                                      field<span style=color:#f92672>.</span>access_specifier<span style=color:#f92672>.</span>name) <span style=color:#66d9ef>for</span> field <span style=color:#f92672>in</span> cursor<span style=color:#f92672>.</span>type<span style=color:#f92672>.</span>get_fields()]
                 serializables<span style=color:#f92672>.</span>append(SerdeRecord(name, fields, serdes))
                 <span style=color:#75715e># Start searching for more comments.</span>
-                found <span style=color:#f92672>=</span> False
+                found <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
                 <span style=color:#75715e># Clear the list of registered serdes for this Record.</span>
                 serdes <span style=color:#f92672>=</span> []
         <span style=color:#66d9ef>elif</span> (token<span style=color:#f92672>.</span>kind <span style=color:#f92672>==</span> cl<span style=color:#f92672>.</span>TokenKind<span style=color:#f92672>.</span>COMMENT) <span style=color:#f92672>and</span> match:
             serdes <span style=color:#f92672>=</span> [x<span style=color:#f92672>.</span>strip() <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> match<span style=color:#f92672>.</span>groups()[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34;,&#34;</span>)]
-            found <span style=color:#f92672>=</span> True  <span style=color:#75715e># Start looking for the struct/class declaration</span>
+            found <span style=color:#f92672>=</span> <span style=color:#66d9ef>True</span>  <span style=color:#75715e># Start looking for the struct/class declaration</span>
 
     <span style=color:#66d9ef>return</span> serializables
 </code></pre></div><h3 id=getting-libclang-to-recognize-std-library-types>Getting libclang to recognize std library types</h3><p>There are a couple of tricks to actually get <code>libclang</code> to find the standard library (and your own library files) so that it will recognize non primitive types. Basically this is just making sure you invoke clang, with the proper paths to import your types. Otherwise,
@@ -201,7 +203,7 @@ the cursors will get all messed up and a bunch of errors will be thrown.</p><div
     <span style=color:#75715e># Create a clang index to parse into</span>
     index <span style=color:#f92672>=</span> cl<span style=color:#f92672>.</span>Index<span style=color:#f92672>.</span>create()
 
-    unsaved_files <span style=color:#f92672>=</span> None
+    unsaved_files <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
     <span style=color:#75715e># If we are parsing from a string instead</span>
     <span style=color:#66d9ef>if</span> in_str:
         unsaved_files <span style=color:#f92672>=</span> [(path, in_str)]

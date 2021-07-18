@@ -4,6 +4,8 @@
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/climbing>Climb</a>
 <span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/generative-art-studio>Digital Art</a>
+<span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/music>Music</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/projects>Projects</a>
@@ -92,7 +94,7 @@ model <span style=color:#f92672>=</span> solve(facts)
 </code></pre></div><p>Which results in:</p><pre><code>[d = 10, m = 48, f_out = 120000000, f_in = 25000000]
 </code></pre><p>Now it would be great to be able to take the newly found model parameter values and use them.
 So let&rsquo;s print out the model directly to see what we have:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># But the model returns none</span>
-<span style=color:#66d9ef>print</span> model
+print model
 </code></pre></div><p>Yielding a resounding:</p><pre><code>None
 </code></pre><p>Oh no&mldr; It turns out that convenient <code>solve()</code> function does not return the model,
 it just prints out the results to <em>STDIO</em>. To me this was not obvious at all.
@@ -117,17 +119,17 @@ no constrained solution:</p><div class=highlight><pre style=color:#f8f8f2;backgr
     s<span style=color:#f92672>.</span>add(<span style=color:#f92672>*</span>fact_list)
     r <span style=color:#f92672>=</span> s<span style=color:#f92672>.</span>check()
     <span style=color:#66d9ef>if</span> r <span style=color:#f92672>==</span> unsat:
-        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;no solution&#34;</span>)
+        print(<span style=color:#e6db74>&#34;no solution&#34;</span>)
     <span style=color:#66d9ef>elif</span> r <span style=color:#f92672>==</span> unknown:
-        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;failed to solve&#34;</span>)
+        print(<span style=color:#e6db74>&#34;failed to solve&#34;</span>)
 
     <span style=color:#66d9ef>return</span> s<span style=color:#f92672>.</span>model()
 
 model <span style=color:#f92672>=</span> solve_return_model(facts)
 
-<span style=color:#66d9ef>print</span>(model)
+print(model)
 </code></pre></div><p>So now we can print the model out:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>[d <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>, m <span style=color:#f92672>=</span> <span style=color:#ae81ff>48</span>, f_out <span style=color:#f92672>=</span> <span style=color:#ae81ff>120000000</span>, f_in <span style=color:#f92672>=</span> <span style=color:#ae81ff>25000000</span>]
-</code></pre></div><p>And we can access our individual parameters:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Now we can play with the model: f_in == {}&#34;</span><span style=color:#f92672>.</span>format(model[params[<span style=color:#e6db74>&#39;f_in&#39;</span>]]))
+</code></pre></div><p>And we can access our individual parameters:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>print(<span style=color:#e6db74>&#34;Now we can play with the model: f_in == </span><span style=color:#e6db74>{}</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>format(model[params[<span style=color:#e6db74>&#39;f_in&#39;</span>]]))
 </code></pre></div><p>Outputting:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>Now we can play with the model: f_in <span style=color:#f92672>==</span> <span style=color:#ae81ff>25000000</span>
 </code></pre></div><p>Once a solution for $PRDIV$ and $VDIV$ has been found those values can be reported
 and modified as needed. In this particular case they still need to be modified

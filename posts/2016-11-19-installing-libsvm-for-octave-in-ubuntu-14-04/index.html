@@ -1,18 +1,61 @@
-<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Installing libsvm For Use With GNU Octave In Ubuntu 14.04</title><meta name=description content="Embedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.css><style>img{max-width:100%}</style><link rel=icon type=image/ico href=/favicon.ico></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>Installing libsvm For Use With GNU Octave In Ubuntu 14.04</title>
+<meta name=description content="Embedded Software Engineer">
+<meta name=author content="Chris Woodall">
+<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous>
+<link rel=stylesheet href=/sass/researcher.min.css>
+<style>img{max-width:100%}</style>
+<link rel=icon type=image/ico href=/favicon.ico>
+</head>
+<body><div class="container mt-5">
+<nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
+<a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a>
+<div class="navbar-nav flex-row flex-wrap justify-content-center">
+<a class="nav-item nav-link" href=/now>
+Now
+</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/posts>Blog</a>
+<a class="nav-item nav-link" href=/posts>
+Blog
+</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/reading>Read</a>
+<a class="nav-item nav-link" href=/reading>
+Read
+</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/generative-art-studio>Art</a>
+<a class="nav-item nav-link" href=/generative-art-studio>
+Art
+</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/climbing>Climb</a>
+<a class="nav-item nav-link" href=/climbing>
+Climb
+</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/music>Music</a>
+<a class="nav-item nav-link" href=/music>
+Music
+</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/projects>Projects</a>
+<a class="nav-item nav-link" href=/projects>
+Projects
+</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Installing libsvm For Use With GNU Octave In Ubuntu 14.04</h1><div align=center>Chris Woodall | 2016-11-19</div><img src><br><p>For week 7 of the <a href=http://coursera.com/>Coursera</a> <a href=https://www.coursera.org/learn/machine-learning/home>Machine Learning</a> course we
+<a class="nav-item nav-link" href=/resume.pdf>
+Resume
+</a>
+</div>
+</nav>
+</div>
+<hr>
+<div id=content>
+<div class=container>
+<h1 align=center>Installing libsvm For Use With GNU Octave In Ubuntu 14.04</h1>
+<div align=center>Chris Woodall | 2016-11-19</div>
+<img src>
+<br>
+<p>For week 7 of the <a href=http://coursera.com/>Coursera</a> <a href=https://www.coursera.org/learn/machine-learning/home>Machine Learning</a> course we
 learned about <a href=https://en.wikipedia.org/wiki/Support_vector_machine>Support Vector Machines (SVM)</a>. SVMs are a useful and
 powerful tools for solving classification problems. They can be tailored to
 solve complicated classification boundaries, and don&rsquo;t suffer from some of the
@@ -22,15 +65,20 @@ written in MATLAB/Octave is used, but for further work <a href=http://www.csie.n
 another SVM library) is recommended. To get <code>libsvm</code> working with Octave in
 Ubuntu 14.04 there are a few steps that are not obvious. I did not find very
 many instructions so I compiled the steps I followed to get a stable Octave
-environment with <code>libsvm</code>. Read on for details.</p><h3 id=installation>Installation</h3><p>Before starting you will need a working installation of Octave (I used 3.8.1)
+environment with <code>libsvm</code>. Read on for details.</p>
+<h3 id=installation>Installation</h3>
+<p>Before starting you will need a working installation of Octave (I used 3.8.1)
 which can be installed using <code>apt</code> if you are on Ubuntu 14.04. You will
-also need the <code>liboctave-dev</code> package:</p><pre><code>$ sudo apt-get install octave liboctave-dev
+also need the <code>liboctave-dev</code> package:</p>
+<pre tabindex=0><code>$ sudo apt-get install octave liboctave-dev
 </code></pre><p>Now, you should navigate to the directory you want to keep <code>libsvm</code>
 in. This directory should not change. I used the <a href=http://www.csie.ntu.edu.tw/~cjlin/cgi-bin/libsvm.cgi?+http://www.csie.ntu.edu.tw/~cjlin/libsvm+tar.gz>Github</a>
 repository of <code>libsvm</code>, but you can also use the <a href=https://github.com/cjlin1/libsvm>source release</a>
-for a stable release:</p><pre><code>$ git clone https://github.com/cjlin1/libsvm.git
+for a stable release:</p>
+<pre tabindex=0><code>$ git clone https://github.com/cjlin1/libsvm.git
 </code></pre><p>Next make the C library and the Octave/Matlab library (note <code>>>></code> indicates
-the Octave shell):</p><pre><code>$ cd libsvm
+the Octave shell):</p>
+<pre tabindex=0><code>$ cd libsvm
 $ make
 $ cd matlab
 $ octave
@@ -40,11 +88,13 @@ To do this you can use the <code>addpath()</code> function in Octave, followed b
 <code>savepath()</code> function. When you add the path it should be an absolute path, so
 that it always works. The <code>pwd</code> Octave function will return the current
 directory we are in. So after running <code>make</code> from within Octave I suggest using
-the commands below:</p><pre><code>&gt;&gt;&gt; addpath(pwd())
+the commands below:</p>
+<pre tabindex=0><code>&gt;&gt;&gt; addpath(pwd())
 &gt;&gt;&gt; savepath()
 </code></pre><p>Congratulations, you have installed <code>lisvm</code> and added it to your path. You
 should be able to run <code>svmtrain</code> and <code>svmpredict</code>. You should be able to get
-the help information for <code>svmtrain</code>:</p><pre><code>&gt;&gt;&gt; svmtrain
+the help information for <code>svmtrain</code>:</p>
+<pre tabindex=0><code>&gt;&gt;&gt; svmtrain
 Usage: model = svmtrain(training_label_vector, training_instance_matrix, 'libsvm_options');
 libsvm_options:
 -s svm_type : set type of SVM (default 0)
@@ -72,4 +122,13 @@ libsvm_options:
 -wi weight : set the parameter C of class i to weight*C, for C-SVC (default 1)
 -v n : n-fold cross validation mode
 -q : quiet mode (no outputs)
-</code></pre></div></div><div id=footer class=mb-5><hr><div class="container text-center"><a href=https://github.com/ojroques/hugo-researcher><small>Built with Hugo and the Hugo Researcher Theme</small></a></div></div></body></html>
+</code></pre>
+</div>
+</div><div id=footer class=mb-5>
+<hr>
+<div class="container text-center">
+<a href=https://github.com/ojroques/hugo-researcher><small>Built with Hugo and the Hugo Researcher Theme</small></a>
+</div>
+</div>
+</body>
+</html>

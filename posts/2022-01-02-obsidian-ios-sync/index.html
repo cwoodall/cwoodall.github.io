@@ -56,13 +56,14 @@ Resume
 <div align=center>Chris Woodall | 2022-01-02</div>
 <img src=/img/posts/2022-01-02-obsidian-ios-sync.md/banner.png>
 <br>
-<p>Obsidian is a wonderful note taking too, but until mid 2021 there was no official mobile application. I use git to host my Obsidian vault&rsquo;s and github to create websites from them. However, on iOS there is no native support for using git to sync your notes. I found a free method which uses <a href=https://holzschu.github.io/a-Shell_iOS><strong>a-shell</strong></a> which can be semi-automated after initial setup using iOS shortcuts. There are two other methods that are well documented on the <a href=https://forum.obsidian.md>Obsidian forum</a>:</p>
+<p>Obsidian is a wonderful note-taking too, but until mid-2021 there was no official mobile application. I use git to host my Obsidian vaults, and github to store them and sometimes create websites from them using a GitHub Action, GitHub Pages and Neuron. This is how I host my <a href=https://cwoodall.com/generative-art-studio/>Generative Art Studio</a> page. However, on iOS there is no native support for using git to sync your notes. You can use iCloud, or Obsidian Sync. I have no issues with paying for either of these services, but I wanted to be able to keep my current workflow, but extend it to mobile.</p>
+<p>I developed a free method using <a href=https://holzschu.github.io/a-Shell_iOS><strong>a-shell</strong></a>, which can be automated, after initial setup, using iOS Shortcuts. There are two other methods that are well documented on the <a href=https://forum.obsidian.md>Obsidian forum</a>:</p>
 <ul>
 <li><a href=https://forum.obsidian.md/t/mobile-setting-up-ios-git-based-syncing-with-mobile-app-using-working-copy/16499>WorkingCopy</a>: WorkingCopy is a paid application, which runs</li>
 <li><a href=https://forum.obsidian.md/t/mobile-sync-with-git-on-ios-for-free-using-ish/20861/8>iSH</a>: iSH runs an alpine linux container, and this method works. However, it does not have shortcut access, so you would need to launch the application and run git manually.</li>
 </ul>
-<p>This method uses <a href=https://holzschu.github.io/a-Shell_iOS><strong>a-shell</strong></a>, which uses webAssembly for many of it&rsquo;s executables, which allows it to be more flexible, this has support for python, lua, javascript, C and C++, and most importantly git, using lg2.</p>
-<p>To set this up:</p>
+<p>This method uses <a href=https://holzschu.github.io/a-Shell_iOS><strong>a-shell</strong></a>, which uses webAssembly for many of it&rsquo;s executables, which allows it to be more flexible, this has support for python, lua, javascript, C and C++, and most importantly git, using lg2. The main benefit is it is free (iSH is also free), and it is natively scriptable using Shortcuts (which iSH is not).</p>
+<p>So let&rsquo;s get started.</p>
 <h3 id=install-the-software>Install the software</h3>
 <ol>
 <li>Install <a href=https://apps.apple.com/us/app/obsidian-connected-notes/id1557175442>Obsidian from the AppStore</a> and launch it.</li>
@@ -99,8 +100,8 @@ lg2 add .
 lg2 commit -m <span style=color:#e6db74>&#34;update: {{date}}&#34;</span>
 lg2 push
 </code></pre></div><img src=/img/posts/2022-01-02-obsidian-ios-sync.md/shortcut-sync.png width=200px>
-<p>So long as you keep a strict discipline of pulling before making changes, and pushing changes from your Linux, Mac and Windows Obsidian instances this setup is pretty stable. It is a little additional step to manually sync. If you end up with merge conflicts you will need to manually resolve them using <code>lg2</code>.</p>
-<p>Here is an example of using these shortcuts in action:</p>
+<p>So long as you keep a strict discipline of pulling before making changes, and pushing changes from your Linux, Mac and Windows Obsidian instances frequently, this setup is pretty stable. It is a little additional step to manually trigger the sync shortcuts, when compared to a solution like Obsidian Sync, or iCloud which are all passive. If you end up with merge conflicts you will need to manually resolve them using <code>lg2</code>. This can be tricky because it diverges from <code>git</code> sometimes, and I found the documentation sparse.</p>
+<p>Here is an example of the shortcuts in action:</p>
 <p><embed src="/img/posts/2022-01-02-obsidian-ios-sync.md/2022-01-02 18-06-40.mp4" autostart=false height=300 width=100%></emb></p>
 </div>
 </div><div id=footer class=mb-5>

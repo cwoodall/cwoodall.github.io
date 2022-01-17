@@ -73,15 +73,22 @@ Resume
 <ol>
 <li>Launch a-shell.</li>
 <li>Mount the Obsidian directory you will be doing your work within. This will be the Obsidian folder : <code>pickFolder</code>
-<embed src="/img/posts/2022-01-02-obsidian-ios-sync.md/2022-01-02 18-03-48.mp4" autostart=false height=300 width=100%></emb></li>
-<li>Create an ssh key<code>ssh-keygen</code> (We assume that you use the default and have already used <code>pickFolder</code>).</li>
+<embed src="/img/posts/2022-01-02-obsidian-ios-sync.md/2022-01-02 18-03-48.mp4" autostart=false height=300 width=100%></emb>
+<ul>
+<li>WARNING: In the above video I use an iCloud folder. I do not recommend this. After a week of using this on my iPad and iPhone I started running into issues here.</li>
+</ul>
+</li>
+<li>Create an ssh key using <code>ssh-keygen</code>. At this time GitHub no longer supports SHA-1 so we will need to use an ED25519 key.
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>ssh-keygen -t ed25519 -C <span style=color:#e6db74>&#34;user@email.com&#34;</span>
+</code></pre></div></li>
 <li>Share the public key with your github or gitlab accounts you need to clone from.</li>
 <li>Clone your obsidian vault:
 <code>lg2 clone ssh://git@github.com:blah/blah.git folder-name</code>
 This will prompt you for which ssh key you want to use. We will fix that in the next step. You will be prompted to enter your ssh password, if there is none press return.</li>
 <li><code>cd folder-name</code></li>
 <li>Setup <code>user.identityFile</code> and user configurations. This will set the default identity file to use, as well as the name and email address to sign the commits with. These are setup per repository with lg2 as it does not seem to have <code>--global</code> configuration access.
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>lg2 config user.identityFile ~/Documents/.ssh/id_rsa.pub
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>lg2 config user.identityFile ~/Documents/.ssh/id_ed25519
+lg2 config user.password <span style=color:#e6db74>&#34;&#34;</span>
 lg2 config user.name <span style=color:#e6db74>&#34;Name&#34;</span>
 lg2 config user.email <span style=color:#e6db74>&#34;email@email.com&#34;</span>
 </code></pre></div></li>

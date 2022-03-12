@@ -1,111 +1,31 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<title>Making GIFs From Videos in Linux</title>
-<meta name=description content="Embedded Software Engineer">
-<meta name=author content="Chris Woodall">
-<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous>
-<link rel=stylesheet href=/sass/researcher.min.css>
-<style>img{max-width:100%}</style>
-<link rel=icon type=image/ico href=/favicon.ico>
-</head>
-<body><div class="container mt-5">
-<nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
-<a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a>
-<div class="navbar-nav flex-row flex-wrap justify-content-center">
-<a class="nav-item nav-link" href=/now>
-Now
-</a>
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Making GIFs From Videos in Linux</title><meta name=description content="Embedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.css><style>img{max-width:100%}</style><link rel=icon type=image/ico href=/favicon.ico></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/posts>
-Blog
-</a>
+<a class="nav-item nav-link" href=/posts>Blog</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/reading>
-Read
-</a>
+<a class="nav-item nav-link" href=/reading>Read</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/generative-art-studio>
-Art
-</a>
+<a class="nav-item nav-link" href=/generative-art-studio>Art</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/climbing>
-Climb
-</a>
+<a class="nav-item nav-link" href=/climbing>Climb</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/music>
-Music
-</a>
+<a class="nav-item nav-link" href=/music>Music</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/projects>
-Projects
-</a>
+<a class="nav-item nav-link" href=/projects>Projects</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/resume.pdf>
-Resume
-</a>
-</div>
-</nav>
-</div>
-<hr>
-<div id=content>
-<div class=container>
-<h1 align=center>Making GIFs From Videos in Linux</h1>
-<div align=center>Chris Woodall | 2016-12-23</div>
-<img src=/img/posts/test-rust-led-blink.gif>
-<br>
-<p>I started making some <code>.gif</code>s to embed in documentation and my notes as I
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Making GIFs From Videos in Linux</h1><div align=center>Chris Woodall | 2016-12-23</div><img src=/img/posts/test-rust-led-blink.gif><br><p>I started making some <code>.gif</code>s to embed in documentation and my notes as I
 develop <strong><a href=https://github.com/cwoodall/rusty-nail>Rusty Nail</a></strong>. I always have to lookup how to
 convert the images to <code>gif</code>s. Every time I am also concerned with how big the
 <code>.gif</code>s are so after doing some looking around I made a little script which
 uses <code>ffmpeg</code>, <code>convert</code>, and <code>gifsicle</code> (with <code>giflossy</code>) to take an input
-<code>mp4</code>, <code>webm</code>, or any video that ffmpeg can decode.</p>
-<p>The process is this:</p>
-<ol>
-<li><code>ffmpeg</code> splits the video into a directory of <code>gif</code>s</li>
-<li><code>convert</code> those images and stitches them together into one <code>gif</code>.</li>
-<li><code>gifsicle</code> optimizes the <code>gif</code> and allow a stage to resize it and also change
+<code>mp4</code>, <code>webm</code>, or any video that ffmpeg can decode.</p><p>The process is this:</p><ol><li><code>ffmpeg</code> splits the video into a directory of <code>gif</code>s</li><li><code>convert</code> those images and stitches them together into one <code>gif</code>.</li><li><code>gifsicle</code> optimizes the <code>gif</code> and allow a stage to resize it and also change
 the color. The <code>giflossy</code> plug-in also can apply lossy compression to the
-gif video during the optimization step.</li>
-</ol>
-<p>Read on for the script.</p>
-<h2 id=requirements>Requirements:</h2>
-<p>To use my <code>make_gif.sh</code> script you will need the following applications:</p>
-<ol>
-<li>ffmpeg (I used version 3.1.5)</li>
-<li>Imagemagick (ImageMagick 6.9.3-0 Q16 x86_64 2016-05-14)</li>
-<li><a href=https://www.lcdf.org/gifsicle/>gifsicle</a></li>
-<li><a href=https://github.com/pornel/giflossy>giflossy</a>: Which you will need to install from source.</li>
-</ol>
-<p>These should be installable from Ubuntu 16.04 or Fedora 25.</p>
-<h2 id=the-script>The Script</h2>
-<script src=https://gist.github.com/cwoodall/8db0acd49f059c58424f3d736b99b999.js></script>
-<h2 id=usage>Usage</h2>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell-session data-lang=shell-session>$ make_gif.sh -o my_new_image.gif input_file.mp4
-</code></pre></div><p>You can get help information with:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell-session data-lang=shell-session>$ make_gif.sh -h
-</code></pre></div><p>This was my first time using the <em>POSIX</em> <code>getopts</code> which made it pretty easy to
+gif video during the optimization step.</li></ol><p>Read on for the script.</p><h2 id=requirements>Requirements:</h2><p>To use my <code>make_gif.sh</code> script you will need the following applications:</p><ol><li>ffmpeg (I used version 3.1.5)</li><li>Imagemagick (ImageMagick 6.9.3-0 Q16 x86_64 2016-05-14)</li><li><a href=https://www.lcdf.org/gifsicle/>gifsicle</a></li><li><a href=https://github.com/pornel/giflossy>giflossy</a>: Which you will need to install from source.</li></ol><p>These should be installable from Ubuntu 16.04 or Fedora 25.</p><h2 id=the-script>The Script</h2><script src=https://gist.github.com/cwoodall/8db0acd49f059c58424f3d736b99b999.js></script><h2 id=usage>Usage</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell-session data-lang=shell-session><span style=display:flex><span>$ make_gif.sh -o my_new_image.gif input_file.mp4
+</span></span></code></pre></div><p>You can get help information with:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell-session data-lang=shell-session><span style=display:flex><span>$ make_gif.sh -h
+</span></span></code></pre></div><p>This was my first time using the <em>POSIX</em> <code>getopts</code> which made it pretty easy to
 add new options to the script. I far prefer the style of
 <a href=https://github.com/kbknapp/clap-rs>clap-rs</a> (for Rust), or
-<a href=http://click.pocoo.org/5/>click</a> for Python.</p>
-<h2 id=conclusion>Conclusion</h2>
-<p>While <code>gif</code>s are a pretty useful format for adding video content to
+<a href=http://click.pocoo.org/5/>click</a> for Python.</p><h2 id=conclusion>Conclusion</h2><p>While <code>gif</code>s are a pretty useful format for adding video content to
 documentation. I realize that the <code>.webm</code> format might be a better alternative,
 in the long run. With less effort, you can get higher compression rates and
 smaller file sizes, all with better quality and the option for integrating
-audio.</p>
-<h2 id=resources>Resources:</h2>
-<ul>
-<li><a href=http://askubuntu.com/questions/648603/create-gif-animated-image-from-mp4-video>This AskUbuntu Post</a></li>
-<li><a href=https://kornel.ski/lossygif>The giflossy website</a></li>
-</ul>
-</div>
-</div><div id=footer class=mb-5>
-<hr>
-<div class="container text-center">
-<a href=https://github.com/ojroques/hugo-researcher><small>Built with Hugo and the Hugo Researcher Theme</small></a>
-</div>
-</div>
-</body>
-</html>
+audio.</p><h2 id=resources>Resources:</h2><ul><li><a href=http://askubuntu.com/questions/648603/create-gif-animated-image-from-mp4-video>This AskUbuntu Post</a></li><li><a href=https://kornel.ski/lossygif>The giflossy website</a></li></ul></div></div><div id=footer class=mb-5><hr><div class="container text-center"><a href=https://github.com/ojroques/hugo-researcher><small>Built with Hugo and the Hugo Researcher Theme</small></a></div></div></body></html>

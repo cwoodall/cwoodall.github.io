@@ -1,76 +1,22 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<title>Automating Musescore 3.6 PDF and MP3 Generation Using Github Actions</title>
-<meta name=description content="Embedded Software Engineer">
-<meta name=author content="Chris Woodall">
-<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous>
-<link rel=stylesheet href=/sass/researcher.min.css>
-<style>img{max-width:100%}</style>
-<link rel=icon type=image/ico href=/favicon.ico>
-<script src=https://unpkg.com/mermaid@8.9.1/dist/mermaid.min.js></script>
-</head>
-<body><div class="container mt-5">
-<nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
-<a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a>
-<div class="navbar-nav flex-row flex-wrap justify-content-center">
-<a class="nav-item nav-link" href=/now>
-Now
-</a>
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Automating Musescore 3.6 PDF and MP3 Generation Using Github Actions</title><meta name=description content="Embedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.css><style>img{max-width:100%}</style><link rel=icon type=image/ico href=/favicon.ico><script src=https://unpkg.com/mermaid@8.9.1/dist/mermaid.min.js></script></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/posts>
-Blog
-</a>
+<a class="nav-item nav-link" href=/posts>Blog</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/reading>
-Read
-</a>
+<a class="nav-item nav-link" href=/reading>Read</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/generative-art-studio>
-Art
-</a>
+<a class="nav-item nav-link" href=/generative-art-studio>Art</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/climbing>
-Climb
-</a>
+<a class="nav-item nav-link" href=/climbing>Climb</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/music>
-Music
-</a>
+<a class="nav-item nav-link" href=/music>Music</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/projects>
-Projects
-</a>
+<a class="nav-item nav-link" href=/projects>Projects</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/resume.pdf>
-Resume
-</a>
-</div>
-</nav>
-</div>
-<hr>
-<div id=content>
-<div class=container>
-<h1 align=center>Automating Musescore 3.6 PDF and MP3 Generation Using Github Actions</h1>
-<div align=center>Chris Woodall | 2021-03-28</div>
-<img src=/img/posts/2021-03-28-musescore-3.6-github-action/banner.png>
-<br>
-<p>Back in the day, I used to use <a href=https://www.avid.com/sibelius>Sibelius</a> and <a href=https://www.finalemusic.com/>Finale</a> for music composition, and engraving. <a href=https://musescore.org>MuseScore 3.6</a> is an open-source, cross-platform music composition tool that fits right in there with the other two. Considering that it is free it punches above its weight class. I first found out about MuseScore when I watched a <a href="https://www.youtube.com/watch?v=4hZxo96x48A">review of its interface by Tantacrul</a> who ripped the UI to shreds. I thought that this would be the end of it for me, however, I later found out that after this video was made Tantacrul joined the MuseScore team as a project manager on the UI team, and with 3.6 it seems like they have already started to fix a lot of the underlying issues (and I found it to be a joy to work in).</p>
-<p>So when I wanted to write down some transcriptions and exercises for mandolin I decided to use MuseScore. Since I am a massive nerd I made this into a <a href=https://github.com/cwoodall/scores>git repository</a> using their <code>.xml</code> based <code>.mscx</code> (<code>.musicxml</code>) files to track changes over time. Continuing on the massive nerd path I thought it would be interesting to use the <a href=https://musescore.org/en/handbook/3/command-line-options#Convert_a_score_to_PDF_from_the_command_line>command-line arguments</a> and job files to create pdfs and mp3s on push, build-server style, then add the resulting files to the repository to share easily.</p>
-<p><strong>Why would you want to do this?</strong> If you are tracking versions and you want distributable files to be continuously updated and created for you. An alternative would be to tag releases and upload the results
-to those tags.</p>
-<p>To do this I used <a href=https://github.com/features/actions>Github Actions</a>, made a Makefile which I tested locally for scanning for all <code>.mscx</code> and <code>.mscz</code> files to make <code>.mp3</code> and <code>.pdf</code> files. After that, I decided to add basic support for using <code>.json</code> job files as input.</p>
-<h3 id=installing-musescore-36>Installing MuseScore 3.6</h3>
-<p>To install MuseScore 3.6 I used the flatpak release under Ubuntu 20.04:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo apt install flatpak
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-sudo flatpak install -y --noninteractive flathub org.musescore.MuseScore          
-</code></pre></div><p>This will keep you up to date and also match you with what is being used on the build server, otherwise, just make sure you are using MuseScore 3.6 and not an earlier version.</p>
-<h3 id=the-makefile>The Makefile</h3>
-<p>So we need to be able to take in 3 different types of files: <code>.mscx</code>, <code>.mscz</code> and <code>.json</code>. The <code>.mscx</code> and <code>.mscz</code> files we want to create <code>.pdf</code> and <code>.mp3</code> files. The <code>.json</code> files will create a bunch of intermediate files, so we will never know if it has been executed or when. As a result, we will create a <code>.job</code> file that will contain all of the files created by that job.</p>
-<div class=mermaid>
-graph LR
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Automating Musescore 3.6 PDF and MP3 Generation Using Github Actions</h1><div align=center>Chris Woodall | 2021-03-28</div><img src=/img/posts/2021-03-28-musescore-3.6-github-action/banner.png><br><p>Back in the day, I used to use <a href=https://www.avid.com/sibelius>Sibelius</a> and <a href=https://www.finalemusic.com/>Finale</a> for music composition, and engraving. <a href=https://musescore.org>MuseScore 3.6</a> is an open-source, cross-platform music composition tool that fits right in there with the other two. Considering that it is free it punches above its weight class. I first found out about MuseScore when I watched a <a href="https://www.youtube.com/watch?v=4hZxo96x48A">review of its interface by Tantacrul</a> who ripped the UI to shreds. I thought that this would be the end of it for me, however, I later found out that after this video was made Tantacrul joined the MuseScore team as a project manager on the UI team, and with 3.6 it seems like they have already started to fix a lot of the underlying issues (and I found it to be a joy to work in).</p><p>So when I wanted to write down some transcriptions and exercises for mandolin I decided to use MuseScore. Since I am a massive nerd I made this into a <a href=https://github.com/cwoodall/scores>git repository</a> using their <code>.xml</code> based <code>.mscx</code> (<code>.musicxml</code>) files to track changes over time. Continuing on the massive nerd path I thought it would be interesting to use the <a href=https://musescore.org/en/handbook/3/command-line-options#Convert_a_score_to_PDF_from_the_command_line>command-line arguments</a> and job files to create pdfs and mp3s on push, build-server style, then add the resulting files to the repository to share easily.</p><p><strong>Why would you want to do this?</strong> If you are tracking versions and you want distributable files to be continuously updated and created for you. An alternative would be to tag releases and upload the results
+to those tags.</p><p>To do this I used <a href=https://github.com/features/actions>Github Actions</a>, made a Makefile which I tested locally for scanning for all <code>.mscx</code> and <code>.mscz</code> files to make <code>.mp3</code> and <code>.pdf</code> files. After that, I decided to add basic support for using <code>.json</code> job files as input.</p><h3 id=installing-musescore-36>Installing MuseScore 3.6</h3><p>To install MuseScore 3.6 I used the flatpak release under Ubuntu 20.04:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>sudo apt install flatpak
+</span></span><span style=display:flex><span>sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+</span></span><span style=display:flex><span>sudo flatpak install -y --noninteractive flathub org.musescore.MuseScore          
+</span></span></code></pre></div><p>This will keep you up to date and also match you with what is being used on the build server, otherwise, just make sure you are using MuseScore 3.6 and not an earlier version.</p><h3 id=the-makefile>The Makefile</h3><p>So we need to be able to take in 3 different types of files: <code>.mscx</code>, <code>.mscz</code> and <code>.json</code>. The <code>.mscx</code> and <code>.mscz</code> files we want to create <code>.pdf</code> and <code>.mp3</code> files. The <code>.json</code> files will create a bunch of intermediate files, so we will never know if it has been executed or when. As a result, we will create a <code>.job</code> file that will contain all of the files created by that job.</p><div class=mermaid>graph LR
 MSC[".mscx or .mscz files"]
 JSON[".json job files"]
 JOB[".job files that mark a json job has been executed"]
@@ -79,133 +25,113 @@ MSC --> PDF
 MSC --> MP3
 JSON --> JOB
 JSON --> OUTPUTS
-OUTPUTS -->|appended to| JOB
-</div>
-<p>The resulting makefile is reasonably straight forward:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-makefile data-lang=makefile>MSCORE <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#34;mscore&#34;</span>
-
-MSCX_FILES <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>shell find . -name <span style=color:#e6db74>&#34;*.mscx&#34;</span><span style=color:#66d9ef>)</span>
-MSCZ_FILES <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>shell find . -name <span style=color:#e6db74>&#34;*.mscz&#34;</span><span style=color:#66d9ef>)</span>
-JOB_FILES <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>shell find . -name <span style=color:#e6db74>&#34;*.json&#34;</span><span style=color:#66d9ef>)</span>
-
-PDFS <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>MSCX_FILES:.mscx<span style=color:#f92672>=</span>.pdf<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>MSCZ_FILES:.mscz<span style=color:#f92672>=</span>.pdf<span style=color:#66d9ef>)</span>
-MP3S <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>MSCX_FILES:.mscx<span style=color:#f92672>=</span>.mp3<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>MSCZ_FILES:.mscz<span style=color:#f92672>=</span>.mp3<span style=color:#66d9ef>)</span>
-JOB_OUTS <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>JOB_FILES:.json<span style=color:#f92672>=</span>.job<span style=color:#66d9ef>)</span>
-
-<span style=color:#a6e22e>.PHONY</span><span style=color:#f92672>:</span> all
-<span style=color:#a6e22e>all</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>$(</span>PDFS<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>MP3S<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>JOB_OUTS<span style=color:#66d9ef>)</span>
-
-<span style=color:#a6e22e>%.pdf</span><span style=color:#f92672>:</span> %.mscx
-    <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -o $@ $&lt;
-
-<span style=color:#a6e22e>%.mp3</span><span style=color:#f92672>:</span> %.mscx
-    <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -o $@ $&lt;
-
-<span style=color:#a6e22e>%.pdf</span><span style=color:#f92672>:</span> %.mscz
-    <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -o $@ $&lt;
-
-<span style=color:#a6e22e>%.mp3</span><span style=color:#f92672>:</span> %.mscz
-    <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -o $@ $&lt;
-
-<span style=color:#75715e># mark the output of this job as secondary so make does not delete the intermediate files
-</span><span style=color:#75715e></span><span style=color:#a6e22e>.SECONDARY</span><span style=color:#f92672>:</span>%.job
-<span style=color:#a6e22e>%.job</span><span style=color:#f92672>:</span> %.json
-    <span style=color:#75715e># Create a file at the beginning of the job</span>
-    <span style=color:#75715e># Add to it a list of any files which were created in this</span>
-    <span style=color:#75715e># directory after the job is done running. This allows for</span>
-    <span style=color:#75715e># a full clean of the directory</span>
-    <span style=color:#75715e># </span>
-    <span style=color:#75715e># CAVEAT: This does not work well for parrallel builds using make</span>
-    touch $@.tmp
-    cd <span style=color:#66d9ef>$(</span>dir <span style=color:#66d9ef>$(</span>abspath $&lt;<span style=color:#66d9ef>))</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -j <span style=color:#66d9ef>$(</span>notdir $&lt;<span style=color:#66d9ef>)</span> 
-    find <span style=color:#e6db74>&#34;.&#34;</span> -type f -newer <span style=color:#e6db74>&#34;</span>$@<span style=color:#e6db74>.tmp&#34;</span> &gt;&gt; $@
-    rm $@.tmp
-
-<span style=color:#a6e22e>.PHONY</span><span style=color:#f92672>:</span> clean
-<span style=color:#a6e22e>clean</span><span style=color:#f92672>:</span>
-    <span style=color:#75715e># Remove all files referenced by job files</span>
-    -for job_file in <span style=color:#e6db74>${</span>JOB_OUTS<span style=color:#e6db74>}</span>; <span style=color:#66d9ef>do</span> cat $$job_file | xargs rm; <span style=color:#66d9ef>done</span>
-    -rm -r <span style=color:#66d9ef>$(</span>JOB_OUTS<span style=color:#66d9ef>)</span>
-    -rm -r <span style=color:#66d9ef>$(</span>PDFS<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>MP3S<span style=color:#66d9ef>)</span>
-
-</code></pre></div><p>The one interesting piece is in the <code>.json</code> job file handling:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-makefile data-lang=makefile><span style=color:#75715e># mark the output of this job as secondary so make does not delete the intermediate files
-</span><span style=color:#75715e></span><span style=color:#a6e22e>.SECONDARY</span><span style=color:#f92672>:</span>%.job
-<span style=color:#a6e22e>%.job</span><span style=color:#f92672>:</span> %.json
-    <span style=color:#75715e># Create a file at the beginning of the job</span>
-    <span style=color:#75715e># Add to it a list of any files which were created in this</span>
-    <span style=color:#75715e># directory after the job is done running. This allows for</span>
-    <span style=color:#75715e># a full clean of the directory</span>
-    <span style=color:#75715e># </span>
-    <span style=color:#75715e># CAVEAT: This does not work well for parrallel builds using make</span>
-    touch $@.tmp
-    <span style=color:#75715e># cd to the directory the json file is so that we can parse relative</span>
-    <span style=color:#75715e># paths properly in the json file.</span>
-    cd <span style=color:#66d9ef>$(</span>dir <span style=color:#66d9ef>$(</span>abspath $&lt;<span style=color:#66d9ef>))</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -j <span style=color:#66d9ef>$(</span>notdir $&lt;<span style=color:#66d9ef>)</span> 
-    <span style=color:#75715e># Find all files created since $@.tmp was created</span>
-    find <span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>dir <span style=color:#66d9ef>$(</span>abspath $&lt;<span style=color:#66d9ef>))</span><span style=color:#e6db74>&#34;</span> -type f -newer <span style=color:#e6db74>&#34;</span>$@<span style=color:#e6db74>.tmp&#34;</span> &gt;&gt; $@
-    <span style=color:#75715e># Remove the temporary file and just leave the job file.</span>
-    rm $@.tmp
-</code></pre></div><p>The strategy here is to create a file before starting the processing of the json job. Then we look for all new files created after the job has been run, this allows us to run <code>make clean</code> over all created files in this one-liner: <code>for job_file in ${JOB_OUTS}; do cat $$job_file | xargs rm; done</code>.</p>
-<h3 id=the-github-action>The Github Action</h3>
-<p>In <code>workflows/build.yml</code> I put the following content, which installs MuseScore 3.6 (you need to use the same major version of MuseScore on both your build server and locally). This file will install musescore,
-run the makefile within <a href=http://elementalselenium.com/tips/38-headless>xvfb</a> which creates a virtual frame buffer for running headless tests that would otherwise require a display. There is a <a href=https://github.com/marketplace/actions/gabrielbb-xvfb-action>Github Action already available</a> which made using this easy and xvfb is already setup on <code>ubuntu-latest</code>. The action actually handles creating virtual frame buffers across multiple platforms which is super useful.</p>
-<p>After that, the action just sets up a bot user, adds the created files, and pushes them back up. This means that your repository needs to be pulled down semi-frequently. I am not always a fan of these types of repos, which are shared between bot and normal uses. However, when used effectively and with some rules, in place they can be great for automating the creation of files that need to be in the repository, but whose creation is best automated.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#75715e># This is a basic workflow to help you get started with Actions</span>
-
-<span style=color:#f92672>name</span>: <span style=color:#ae81ff>CI</span>
-
-<span style=color:#75715e># Controls when the action will run. </span>
-<span style=color:#f92672>on</span>:
-  <span style=color:#75715e># Triggers the workflow on push or pull request events but only for the main branch</span>
-  <span style=color:#f92672>push</span>:
-    <span style=color:#f92672>branches</span>: [ <span style=color:#ae81ff>main ]</span>
-  <span style=color:#f92672>pull_request</span>:
-    <span style=color:#f92672>branches</span>: [ <span style=color:#ae81ff>main ]</span>
-
-  <span style=color:#75715e># Allows you to run this workflow manually from the Actions tab</span>
-  <span style=color:#f92672>workflow_dispatch</span>:
-
-<span style=color:#75715e># A workflow run is made up of one or more jobs that can run sequentially or in parallel</span>
-<span style=color:#f92672>jobs</span>:
-  <span style=color:#75715e># This workflow contains a single job called &#34;build&#34;</span>
-  <span style=color:#f92672>build</span>:
-    <span style=color:#75715e># The type of runner that the job will run on</span>
-    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>ubuntu-latest</span>
-
-    <span style=color:#75715e># Steps represent a sequence of tasks that will be executed as part of the job</span>
-    <span style=color:#f92672>steps</span>:
-      <span style=color:#75715e># Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it</span>
-      - <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v2</span>
-      <span style=color:#75715e># Install flatpak and the MuseScore 3.6 flatpak</span>
-      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Install musescore 3.6</span>
-        <span style=color:#f92672>run</span>: |<span style=color:#e6db74>
-</span><span style=color:#e6db74>          sudo apt install flatpak
-</span><span style=color:#e6db74>          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-</span><span style=color:#e6db74>          sudo flatpak install -y --noninteractive flathub org.musescore.MuseScore          </span>          
-      <span style=color:#75715e># Create a Virtual X Frame Buffer and run the makefile inside of it using the flatpak installation</span>
-      <span style=color:#75715e># of musescore</span>
-      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Run Makefile to make PDFs, MP3s, etc</span>
-        <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>GabrielBB/xvfb-action@v1</span>
-        <span style=color:#f92672>with</span>:
-          <span style=color:#f92672>working-directory</span>: <span style=color:#ae81ff>./</span> <span style=color:#75715e>#optional</span>
-          <span style=color:#f92672>run</span>: <span style=color:#ae81ff>make MSCORE=&#34;flatpak run org.musescore.MuseScore&#34;</span>
-      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Add Commit and Push</span>
-        <span style=color:#f92672>run</span>: |<span style=color:#e6db74>
-</span><span style=color:#e6db74>          git config --global user.email &#34;email@address&#34;
-</span><span style=color:#e6db74>          git config --global user.name &#34;MuseScore 3 Bot&#34;
-</span><span style=color:#e6db74>          git add .
-</span><span style=color:#e6db74>          git commit -am &#34;Updating pdfs and mp3s&#34;
-</span><span style=color:#e6db74>          git push</span>          
-</code></pre></div><h3 id=conclusion>Conclusion</h3>
-<p>I am happy with how this turned out! I got to scrub off some weird Makefile knowledge, and now my score generation should be automated for a good time to come. You can see the results <a href=https://github.com/cwoodall/scores>here</a>, and a few of the action runs <a href=https://github.com/cwoodall/scores/actions>here</a>.</p>
-<p>Feel free to add a PR, or rip off the automation for yourself.</p>
-</div>
-</div><div id=footer class=mb-5>
-<hr>
-<div class="container text-center">
-<a href=https://github.com/ojroques/hugo-researcher><small>Built with Hugo and the Hugo Researcher Theme</small></a>
-</div>
-</div>
-</body>
-</html>
+OUTPUTS -->|appended to| JOB</div><p>The resulting makefile is reasonably straight forward:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-makefile data-lang=makefile><span style=display:flex><span>MSCORE <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#34;mscore&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>MSCX_FILES <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>shell find . -name <span style=color:#e6db74>&#34;*.mscx&#34;</span><span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>MSCZ_FILES <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>shell find . -name <span style=color:#e6db74>&#34;*.mscz&#34;</span><span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>JOB_FILES <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>shell find . -name <span style=color:#e6db74>&#34;*.json&#34;</span><span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PDFS <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>MSCX_FILES:.mscx<span style=color:#f92672>=</span>.pdf<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>MSCZ_FILES:.mscz<span style=color:#f92672>=</span>.pdf<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>MP3S <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>MSCX_FILES:.mscx<span style=color:#f92672>=</span>.mp3<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>MSCZ_FILES:.mscz<span style=color:#f92672>=</span>.mp3<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>JOB_OUTS <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>JOB_FILES:.json<span style=color:#f92672>=</span>.job<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>.PHONY</span><span style=color:#f92672>:</span> all
+</span></span><span style=display:flex><span><span style=color:#a6e22e>all</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>$(</span>PDFS<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>MP3S<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>JOB_OUTS<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>%.pdf</span><span style=color:#f92672>:</span> %.mscx
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -o $@ $&lt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>%.mp3</span><span style=color:#f92672>:</span> %.mscx
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -o $@ $&lt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>%.pdf</span><span style=color:#f92672>:</span> %.mscz
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -o $@ $&lt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>%.mp3</span><span style=color:#f92672>:</span> %.mscz
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -o $@ $&lt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># mark the output of this job as secondary so make does not delete the intermediate files
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#a6e22e>.SECONDARY</span><span style=color:#f92672>:</span>%.job
+</span></span><span style=display:flex><span><span style=color:#a6e22e>%.job</span><span style=color:#f92672>:</span> %.json
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Create a file at the beginning of the job</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Add to it a list of any files which were created in this</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># directory after the job is done running. This allows for</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># a full clean of the directory</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># </span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># CAVEAT: This does not work well for parrallel builds using make</span>
+</span></span><span style=display:flex><span>    touch $@.tmp
+</span></span><span style=display:flex><span>    cd <span style=color:#66d9ef>$(</span>dir <span style=color:#66d9ef>$(</span>abspath $&lt;<span style=color:#66d9ef>))</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -j <span style=color:#66d9ef>$(</span>notdir $&lt;<span style=color:#66d9ef>)</span> 
+</span></span><span style=display:flex><span>    find <span style=color:#e6db74>&#34;.&#34;</span> -type f -newer <span style=color:#e6db74>&#34;</span>$@<span style=color:#e6db74>.tmp&#34;</span> &gt;&gt; $@
+</span></span><span style=display:flex><span>    rm $@.tmp
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>.PHONY</span><span style=color:#f92672>:</span> clean
+</span></span><span style=display:flex><span><span style=color:#a6e22e>clean</span><span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Remove all files referenced by job files</span>
+</span></span><span style=display:flex><span>    -for job_file in <span style=color:#e6db74>${</span>JOB_OUTS<span style=color:#e6db74>}</span>; <span style=color:#66d9ef>do</span> cat $$job_file | xargs rm; <span style=color:#66d9ef>done</span>
+</span></span><span style=display:flex><span>    -rm -r <span style=color:#66d9ef>$(</span>JOB_OUTS<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>    -rm -r <span style=color:#66d9ef>$(</span>PDFS<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>MP3S<span style=color:#66d9ef>)</span>
+</span></span></code></pre></div><p>The one interesting piece is in the <code>.json</code> job file handling:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-makefile data-lang=makefile><span style=display:flex><span><span style=color:#75715e># mark the output of this job as secondary so make does not delete the intermediate files
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#a6e22e>.SECONDARY</span><span style=color:#f92672>:</span>%.job
+</span></span><span style=display:flex><span><span style=color:#a6e22e>%.job</span><span style=color:#f92672>:</span> %.json
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Create a file at the beginning of the job</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Add to it a list of any files which were created in this</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># directory after the job is done running. This allows for</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># a full clean of the directory</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># </span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># CAVEAT: This does not work well for parrallel builds using make</span>
+</span></span><span style=display:flex><span>    touch $@.tmp
+</span></span><span style=display:flex><span>    <span style=color:#75715e># cd to the directory the json file is so that we can parse relative</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># paths properly in the json file.</span>
+</span></span><span style=display:flex><span>    cd <span style=color:#66d9ef>$(</span>dir <span style=color:#66d9ef>$(</span>abspath $&lt;<span style=color:#66d9ef>))</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#66d9ef>$(</span>MSCORE<span style=color:#66d9ef>)</span> -j <span style=color:#66d9ef>$(</span>notdir $&lt;<span style=color:#66d9ef>)</span> 
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Find all files created since $@.tmp was created</span>
+</span></span><span style=display:flex><span>    find <span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>dir <span style=color:#66d9ef>$(</span>abspath $&lt;<span style=color:#66d9ef>))</span><span style=color:#e6db74>&#34;</span> -type f -newer <span style=color:#e6db74>&#34;</span>$@<span style=color:#e6db74>.tmp&#34;</span> &gt;&gt; $@
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Remove the temporary file and just leave the job file.</span>
+</span></span><span style=display:flex><span>    rm $@.tmp
+</span></span></code></pre></div><p>The strategy here is to create a file before starting the processing of the json job. Then we look for all new files created after the job has been run, this allows us to run <code>make clean</code> over all created files in this one-liner: <code>for job_file in ${JOB_OUTS}; do cat $$job_file | xargs rm; done</code>.</p><h3 id=the-github-action>The Github Action</h3><p>In <code>workflows/build.yml</code> I put the following content, which installs MuseScore 3.6 (you need to use the same major version of MuseScore on both your build server and locally). This file will install musescore,
+run the makefile within <a href=http://elementalselenium.com/tips/38-headless>xvfb</a> which creates a virtual frame buffer for running headless tests that would otherwise require a display. There is a <a href=https://github.com/marketplace/actions/gabrielbb-xvfb-action>Github Action already available</a> which made using this easy and xvfb is already setup on <code>ubuntu-latest</code>. The action actually handles creating virtual frame buffers across multiple platforms which is super useful.</p><p>After that, the action just sets up a bot user, adds the created files, and pushes them back up. This means that your repository needs to be pulled down semi-frequently. I am not always a fan of these types of repos, which are shared between bot and normal uses. However, when used effectively and with some rules, in place they can be great for automating the creation of files that need to be in the repository, but whose creation is best automated.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=display:flex><span><span style=color:#75715e># This is a basic workflow to help you get started with Actions</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>name</span>: <span style=color:#ae81ff>CI</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Controls when the action will run. </span>
+</span></span><span style=display:flex><span><span style=color:#f92672>on</span>:
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Triggers the workflow on push or pull request events but only for the main branch</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>push</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>branches</span>: [ <span style=color:#ae81ff>main ]</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>pull_request</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>branches</span>: [ <span style=color:#ae81ff>main ]</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Allows you to run this workflow manually from the Actions tab</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>workflow_dispatch</span>:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># A workflow run is made up of one or more jobs that can run sequentially or in parallel</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>jobs</span>:
+</span></span><span style=display:flex><span>  <span style=color:#75715e># This workflow contains a single job called &#34;build&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>build</span>:
+</span></span><span style=display:flex><span>    <span style=color:#75715e># The type of runner that the job will run on</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>ubuntu-latest</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Steps represent a sequence of tasks that will be executed as part of the job</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>steps</span>:
+</span></span><span style=display:flex><span>      <span style=color:#75715e># Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v2</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># Install flatpak and the MuseScore 3.6 flatpak</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Install musescore 3.6</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: |<span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          sudo apt install flatpak
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          sudo flatpak install -y --noninteractive flathub org.musescore.MuseScore          </span>          
+</span></span><span style=display:flex><span>      <span style=color:#75715e># Create a Virtual X Frame Buffer and run the makefile inside of it using the flatpak installation</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># of musescore</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Run Makefile to make PDFs, MP3s, etc</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>GabrielBB/xvfb-action@v1</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>working-directory</span>: <span style=color:#ae81ff>./</span> <span style=color:#75715e>#optional</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>run</span>: <span style=color:#ae81ff>make MSCORE=&#34;flatpak run org.musescore.MuseScore&#34;</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Add Commit and Push</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: |<span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          git config --global user.email &#34;email@address&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          git config --global user.name &#34;MuseScore 3 Bot&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          git add .
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          git commit -am &#34;Updating pdfs and mp3s&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          git push</span>          
+</span></span></code></pre></div><h3 id=conclusion>Conclusion</h3><p>I am happy with how this turned out! I got to scrub off some weird Makefile knowledge, and now my score generation should be automated for a good time to come. You can see the results <a href=https://github.com/cwoodall/scores>here</a>, and a few of the action runs <a href=https://github.com/cwoodall/scores/actions>here</a>.</p><p>Feel free to add a PR, or rip off the automation for yourself.</p></div></div><div id=footer class=mb-5><hr><div class="container text-center"><a href=https://github.com/ojroques/hugo-researcher><small>Built with Hugo and the Hugo Researcher Theme</small></a></div></div></body></html>

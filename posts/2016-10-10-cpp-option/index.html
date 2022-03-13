@@ -12,7 +12,7 @@
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/projects>Projects</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Error Handling: Implementing an Option&lt;T> Type For Embedded C++</h1><div align=center>Chris Woodall | 2016-10-10</div><img src><br><p>I have been learning <a href=http://rust-lang.org>Rust</a> lately, which has been an awesome and
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><link rel=stylesheet href=/css/syntax.css><div class=container><h1 align=center>Error Handling: Implementing an Option&lt;T> Type For Embedded C++</h1><div align=center>Chris Woodall | 2016-10-10</div><img src><br><p>I have been learning <a href=http://rust-lang.org>Rust</a> lately, which has been an awesome and
 rewarding experience thus far. However, at work, and on many of my embedded side
 projects I use C/C++ quite extensively. But error handling ends up being
 a major pain point and can make an otherwise rather simple API into a disaster.
@@ -27,75 +27,75 @@ When returning a pointer you can modify that pointer to be a null pointer to
 represent a failure case. This is used heavily by the C standard library and is
 a brittle version of the <code>Option&lt;T></code> type, where checking is not enforced and
 carries a high penalty. For example, for a &ldquo;safe&rdquo; divide operator we might do
-the following:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>divide</span>(<span style=color:#66d9ef>int</span> a, <span style=color:#66d9ef>int</span> b) {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (b<span style=color:#f92672>==</span><span style=color:#ae81ff>0</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nullptr</span>;
-</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>buf <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#66d9ef>int</span>();
-</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>buf <span style=color:#f92672>=</span> a<span style=color:#f92672>/</span>b;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> buf;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>res <span style=color:#f92672>=</span> divide(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>0</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (res <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nullptr</span>) {
-</span></span><span style=display:flex><span>    printf(<span style=color:#e6db74>&#34;%d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#f92672>*</span>res); <span style=color:#75715e>// wont print
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>delete</span> res;
-</span></span><span style=display:flex><span>}
+the following:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=kt>int</span> <span class=o>*</span><span class=nf>divide</span><span class=p>(</span><span class=kt>int</span> <span class=n>a</span><span class=p>,</span> <span class=kt>int</span> <span class=n>b</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>b</span><span class=o>==</span><span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=k>nullptr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=o>*</span><span class=n>buf</span> <span class=o>=</span> <span class=k>new</span> <span class=kt>int</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>*</span><span class=n>buf</span> <span class=o>=</span> <span class=n>a</span><span class=o>/</span><span class=n>b</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>buf</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=o>*</span><span class=n>res</span> <span class=o>=</span> <span class=n>divide</span><span class=p>(</span><span class=mi>10</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>res</span> <span class=o>!=</span> <span class=k>nullptr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;%d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=o>*</span><span class=n>res</span><span class=p>);</span> <span class=c1>// wont print
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>delete</span> <span class=n>res</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></div><p>However, now we have some dynamically allocated memory to manage, as it turns
 out for cases where you need to return a pointer anyway (getting a pointer
 into some datatype) this is easy to express, but in the <code>divide()</code> case it is
 actually rather cumbersome. In this case it would be more natural to pass a
 pointer into the divide function, and return a success value (in this case
 we will use <code>bool</code>, with <code>true</code> representing a success, and <code>false</code> indicating
-failure). So the following implementation would be far safer:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>divide</span>(<span style=color:#66d9ef>int</span> a, <span style=color:#66d9ef>int</span> b, <span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>c) {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (b <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> false; <span style=color:#75715e>// oh no...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>c <span style=color:#f92672>=</span> a<span style=color:#f92672>/</span>b;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> true; <span style=color:#75715e>// success!
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  }
-</span></span><span style=display:flex><span>}  
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>(<span style=color:#66d9ef>void</span>) {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>int</span> c;
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>bool</span> ret <span style=color:#f92672>=</span> divide(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>0</span>, <span style=color:#f92672>&amp;</span>c);
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (ret) {
-</span></span><span style=display:flex><span>    printf(<span style=color:#e6db74>&#34;I got a %d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, c);
-</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>    printf(<span style=color:#e6db74>&#34;You divided by 0... the world blew up... Thanks&#34;</span>);
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
-</span></span><span style=display:flex><span>}
+failure). So the following implementation would be far safer:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=kt>bool</span> <span class=nf>divide</span><span class=p>(</span><span class=kt>int</span> <span class=n>a</span><span class=p>,</span> <span class=kt>int</span> <span class=n>b</span><span class=p>,</span> <span class=kt>int</span> <span class=o>*</span><span class=n>c</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>b</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nb>false</span><span class=p>;</span> <span class=c1>// oh no...
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=o>*</span><span class=n>c</span> <span class=o>=</span> <span class=n>a</span><span class=o>/</span><span class=n>b</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nb>true</span><span class=p>;</span> <span class=c1>// success!
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=n>c</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kt>bool</span> <span class=n>ret</span> <span class=o>=</span> <span class=n>divide</span><span class=p>(</span><span class=mi>10</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>c</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>ret</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;I got a %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>c</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;You divided by 0... the world blew up... Thanks&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></div><p>So what is wrong with the above solutions? The success and failure information
 and the data are not bound tightly. This means that it can be easy to ignore
 errors. Languages like Rust have an <code>Option&lt;T></code> type (<a href=https://en.wikipedia.org/wiki/Option_type>wiki</a>),
 also known as <code>Maybe</code> in Haskell and <code>Optional</code> in Swift. This type would
 allows one to return &ldquo;something&rdquo; or &ldquo;nothing&rdquo;. You check if you have
 something or nothing and then process the data accordingly. So the following
-semantics become possible with a <code>Option&lt;T></code> type:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span>Option<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;</span> divide(<span style=color:#66d9ef>int</span> a, <span style=color:#66d9ef>int</span> b) <span style=color:#66d9ef>noexcept</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (b <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>Nothing</span>();
-</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> a<span style=color:#f92672>/</span>b;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>(<span style=color:#66d9ef>void</span>) {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>auto</span> result <span style=color:#f92672>=</span> divide(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>0</span>);
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (result) { <span style=color:#75715e>// Check that result is not Nothing
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    printf(<span style=color:#e6db74>&#34;I got a %d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, result.unwrap());
-</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>    printf(<span style=color:#e6db74>&#34;You divided by 0... the world blew up... Thanks&#34;</span>);
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
-</span></span><span style=display:flex><span>}
+semantics become possible with a <code>Option&lt;T></code> type:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>divide</span><span class=p>(</span><span class=kt>int</span> <span class=n>a</span><span class=p>,</span> <span class=kt>int</span> <span class=n>b</span><span class=p>)</span> <span class=k>noexcept</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>b</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nf>Nothing</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>a</span><span class=o>/</span><span class=n>b</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>result</span> <span class=o>=</span> <span class=n>divide</span><span class=p>(</span><span class=mi>10</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>result</span><span class=p>)</span> <span class=p>{</span> <span class=c1>// Check that result is not Nothing
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;I got a %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>result</span><span class=p>.</span><span class=n>unwrap</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;You divided by 0... the world blew up... Thanks&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></div><p>So what are the benefits over the other divide-by-zero safe <code>divide()</code>
 implementations?</p><ol><li>No need to return a separate <code>success</code> or <code>error</code> type.</li><li>Natural calling semantics where the value being returned is the value you
 wanted to return.</li><li>Encourages checking, or when you don&rsquo;t you are explicitly bypassing the
@@ -117,89 +117,89 @@ resources and chose to develop my own implementation to help sharpen my
 understanding of C++.</p><h4 id=implementation>Implementation</h4><p>The full, and evolving, implementation can be found
 <a href=https://github.com/cwoodall/cpp-option>here</a> with examples, and unit
 tests. So lets see some code, the code below implements a basic <code>Option&lt;T></code>
-type with minimal functionality.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Nothing</span> {};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>template</span> <span style=color:#f92672>&lt;</span><span style=color:#66d9ef>typename</span> T<span style=color:#f92672>&gt;</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Option</span> {
-</span></span><span style=display:flex><span> <span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  Option() <span style=color:#f92672>:</span> isSomething_(false) {}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  Option(Nothing nothing) <span style=color:#f92672>:</span> isSomething_(false) {}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  Option(T something) <span style=color:#f92672>:</span> isSomething_(true), something_(something) {}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// The copy/move functions have been left out see the github link for details.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>/**
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   * An explicit conversion to bool, which makes boolean comparisons of the
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   * Option type possible
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   *
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   * @return isSomething_ (true if it is something, false otherwise)
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   */</span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>inline</span> <span style=color:#66d9ef>constexpr</span> <span style=color:#66d9ef>explicit</span> <span style=color:#66d9ef>operator</span> <span style=color:#a6e22e>bool</span>(<span style=color:#66d9ef>void</span>) <span style=color:#66d9ef>const</span> { <span style=color:#66d9ef>return</span> isSomething_; }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>/**
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   * Get the value stored inside of the Option&lt;T&gt; type
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   *
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   * @return something_;
-</span></span></span><span style=display:flex><span><span style=color:#75715e>   */</span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>inline</span> T <span style=color:#a6e22e>unwrap</span>(<span style=color:#66d9ef>void</span>) <span style=color:#66d9ef>const</span> { <span style=color:#66d9ef>return</span> something_; }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span> <span style=color:#66d9ef>private</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>bool</span> isSomething_;  <span style=color:#75715e>///&lt; @brief stores whether Some(T) or Nothing is stored
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  T something_;       <span style=color:#75715e>///&lt; @brief temporary storage for the something object
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>};
+type with minimal functionality.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>struct</span> <span class=nc>Nothing</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>Option</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl> <span class=k>public</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>  <span class=n>Option</span><span class=p>()</span> <span class=o>:</span> <span class=n>isSomething_</span><span class=p>(</span><span class=nb>false</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Option</span><span class=p>(</span><span class=n>Nothing</span> <span class=n>nothing</span><span class=p>)</span> <span class=o>:</span> <span class=n>isSomething_</span><span class=p>(</span><span class=nb>false</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Option</span><span class=p>(</span><span class=n>T</span> <span class=n>something</span><span class=p>)</span> <span class=o>:</span> <span class=n>isSomething_</span><span class=p>(</span><span class=nb>true</span><span class=p>),</span> <span class=n>something_</span><span class=p>(</span><span class=n>something</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// The copy/move functions have been left out see the github link for details.
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * An explicit conversion to bool, which makes boolean comparisons of the
+</span></span></span><span class=line><span class=cl><span class=cm>   * Option type possible
+</span></span></span><span class=line><span class=cl><span class=cm>   *
+</span></span></span><span class=line><span class=cl><span class=cm>   * @return isSomething_ (true if it is something, false otherwise)
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=kr>inline</span> <span class=k>constexpr</span> <span class=k>explicit</span> <span class=k>operator</span> <span class=nf>bool</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=k>const</span> <span class=p>{</span> <span class=k>return</span> <span class=n>isSomething_</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * Get the value stored inside of the Option&lt;T&gt; type
+</span></span></span><span class=line><span class=cl><span class=cm>   *
+</span></span></span><span class=line><span class=cl><span class=cm>   * @return something_;
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=kr>inline</span> <span class=n>T</span> <span class=nf>unwrap</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=k>const</span> <span class=p>{</span> <span class=k>return</span> <span class=n>something_</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=k>private</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>  <span class=kt>bool</span> <span class=n>isSomething_</span><span class=p>;</span>  <span class=c1>///&lt; @brief stores whether Some(T) or Nothing is stored
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>T</span> <span class=n>something_</span><span class=p>;</span>       <span class=c1>///&lt; @brief temporary storage for the something object
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>};</span>
 </span></span></code></pre></div><p>The class is basically just a container for a <code>bool</code> and a <code>T</code>. With semantics
 for checking and getting the value if it exists. This uses C++11&rsquo;s <code>explicit</code>
 type casting operators to create a <a href=https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Safe_bool>type-safe bool comparison</a> which
 used to be a hassle. Now you can overload <code>explicit operator bool()</code> and allow
 a custom type to be used in boolean operations, without it being able to be
 compared against non-boolean types in this way (since by default almost all
-types can be compared as <code>bool</code> types in C/C++). For example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span>Option<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>float</span><span style=color:#f92672>&gt;</span> foo <span style=color:#f92672>=</span> Nothing();
-</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span>foo) {
-</span></span><span style=display:flex><span>  puts(<span style=color:#e6db74>&#34;Nothing</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>); <span style=color:#75715e>// This will run
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (foo) {
-</span></span><span style=display:flex><span>  puts(<span style=color:#e6db74>&#34;Nothing</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>); <span style=color:#75715e>// This wont
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Option<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>float</span><span style=color:#f92672>&gt;</span> bar <span style=color:#f92672>=</span> <span style=color:#ae81ff>3.14159</span>;
-</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (bar) {
-</span></span><span style=display:flex><span>  printf(<span style=color:#e6db74>&#34;%f</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, bar.unwrap()); <span style=color:#75715e>// This will run
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span>bar) {
-</span></span><span style=display:flex><span>  printf(<span style=color:#e6db74>&#34;This wont print&#34;</span>);
-</span></span><span style=display:flex><span>}
+types can be compared as <code>bool</code> types in C/C++). For example:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>float</span><span class=o>&gt;</span> <span class=n>foo</span> <span class=o>=</span> <span class=n>Nothing</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>foo</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>puts</span><span class=p>(</span><span class=s>&#34;Nothing</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span> <span class=c1>// This will run
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=n>foo</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>puts</span><span class=p>(</span><span class=s>&#34;Nothing</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span> <span class=c1>// This wont
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>float</span><span class=o>&gt;</span> <span class=n>bar</span> <span class=o>=</span> <span class=mf>3.14159</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=n>bar</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>printf</span><span class=p>(</span><span class=s>&#34;%f</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>bar</span><span class=p>.</span><span class=n>unwrap</span><span class=p>());</span> <span class=c1>// This will run
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>bar</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>printf</span><span class=p>(</span><span class=s>&#34;This wont print&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></div><p>Because it is explicit you can&rsquo;t just cast an Option<int> to some non-boolean type.
-In fact the compiler will error and return a somewhat helpful warning.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span>Option<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>float</span><span style=color:#f92672>&gt;</span> foo <span style=color:#f92672>=</span> Nothing();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (foo <span style=color:#f92672>==</span> <span style=color:#ae81ff>20</span>) {} <span style=color:#75715e>// wont compile
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#75715e>/*
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * The compiler will return the following message
-</span></span></span><span style=display:flex><span><span style=color:#75715e> *
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * test.cc: In function ‘int main()’:
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * test.cc:7:12: error: ISO C++ forbids comparison between pointer and integer [-fpermissive]
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * if (foo == 20) {} // wont compile
-</span></span></span><span style=display:flex><span><span style=color:#75715e> */</span>
+In fact the compiler will error and return a somewhat helpful warning.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>float</span><span class=o>&gt;</span> <span class=n>foo</span> <span class=o>=</span> <span class=n>Nothing</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=n>foo</span> <span class=o>==</span> <span class=mi>20</span><span class=p>)</span> <span class=p>{}</span> <span class=c1>// wont compile
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm> * The compiler will return the following message
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * test.cc: In function ‘int main()’:
+</span></span></span><span class=line><span class=cl><span class=cm> * test.cc:7:12: error: ISO C++ forbids comparison between pointer and integer [-fpermissive]
+</span></span></span><span class=line><span class=cl><span class=cm> * if (foo == 20) {} // wont compile
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
 </span></span></code></pre></div><p>It can be convenient to be able to implicitly create an <code>Option&lt;T></code> without
 having to specialize the template yourself. Thus, the <code>Some()</code> factory
-function which can be used:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>int</span> foo
-</span></span><span style=display:flex><span><span style=color:#66d9ef>auto</span> bar <span style=color:#f92672>=</span> Some(foo); <span style=color:#75715e>// Creates an Option&lt;int&gt; wrapping the value of foo.
-</span></span></span></code></pre></div><p>Implemented very simply as:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>template</span> <span style=color:#f92672>&lt;</span><span style=color:#66d9ef>typename</span> T<span style=color:#f92672>&gt;</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>constexpr</span> Option<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span> Some(T something) {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> Option<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span>(something);
-</span></span><span style=display:flex><span>}
+function which can be used:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=kt>int</span> <span class=n>foo</span>
+</span></span><span class=line><span class=cl><span class=k>auto</span> <span class=n>bar</span> <span class=o>=</span> <span class=n>Some</span><span class=p>(</span><span class=n>foo</span><span class=p>);</span> <span class=c1>// Creates an Option&lt;int&gt; wrapping the value of foo.
+</span></span></span></code></pre></div><p>Implemented very simply as:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl><span class=k>constexpr</span> <span class=n>Option</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>Some</span><span class=p>(</span><span class=n>T</span> <span class=n>something</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>Option</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span><span class=p>(</span><span class=n>something</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></div><p>Another interesting discovery is that when you return from a C++ function it will
-pass off the return values to the constructor of the type you are returning. This makes the following syntax possible.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span>Option<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;</span> returnNothing(<span style=color:#66d9ef>void</span>) {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>Nothing</span>();
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Option<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;</span> returnSomething(<span style=color:#66d9ef>void</span>) {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span>;
-</span></span><span style=display:flex><span>}
+pass off the return values to the constructor of the type you are returning. This makes the following syntax possible.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>returnNothing</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nf>Nothing</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>returnSomething</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></div><p>This is rather concise, and also a rather efficient way of returning <code>Option&lt;T></code>&rsquo;s.</p><p>So far we have one function for getting the value of a <code>Option&lt;T></code> with
 something in it: <code>unwrap()</code>. However, the function listed above is unsafe, if
 you call it on an invalid <code>Option&lt;T></code> it will not stop you.</p><p>I spent a while trying to figure out how to get the compiler to do what I
@@ -218,60 +218,60 @@ determine the policy they want to follow, rather than the creator of the
 <code>Option&lt;T></code> object. This is a little more effective for use cases where a class
 might want to install its own checking policy, or an application might want to
 say use a different type of assert/fault logging interface based on which
-target it is being compiled for. I am still not convinced on this decision.</p><p>So lets re-write <code>unwrap()</code> to take a <code>CheckingPolicy</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>template</span><span style=color:#f92672>&lt;</span><span style=color:#66d9ef>typename</span> T<span style=color:#f92672>&gt;</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Option</span> {
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>...
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>/**
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * Get the value stored inside of the Option&lt;T&gt; type
-</span></span></span><span style=display:flex><span><span style=color:#75715e> *
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * @return something_;
-</span></span></span><span style=display:flex><span><span style=color:#75715e> */</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>template</span> <span style=color:#f92672>&lt;</span><span style=color:#66d9ef>typename</span> C <span style=color:#f92672>=</span> AssertCheckingPolicy<span style=color:#f92672>&gt;</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>inline</span> <span style=color:#66d9ef>constexpr</span> T unwrap(<span style=color:#66d9ef>void</span>) <span style=color:#66d9ef>const</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>static_assert</span>(std<span style=color:#f92672>::</span>is_base_of<span style=color:#f92672>&lt;</span>CheckingPolicy, C<span style=color:#f92672>&gt;::</span>value,
-</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#34;The checking policy must be derived from CheckingPolicy&#34;</span>);
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> C<span style=color:#f92672>::</span>check(isSomething()), something_;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>...
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>};
+target it is being compiled for. I am still not convinced on this decision.</p><p>So lets re-write <code>unwrap()</code> to take a <code>CheckingPolicy</code>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>template</span><span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>Option</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * Get the value stored inside of the Option&lt;T&gt; type
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @return something_;
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>C</span> <span class=o>=</span> <span class=n>AssertCheckingPolicy</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=k>constexpr</span> <span class=n>T</span> <span class=n>unwrap</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=k>const</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>static_assert</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>is_base_of</span><span class=o>&lt;</span><span class=n>CheckingPolicy</span><span class=p>,</span> <span class=n>C</span><span class=o>&gt;::</span><span class=n>value</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s>&#34;The checking policy must be derived from CheckingPolicy&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>C</span><span class=o>::</span><span class=n>check</span><span class=p>(</span><span class=n>isSomething</span><span class=p>()),</span> <span class=n>something_</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>};</span>
 </span></span></code></pre></div><p>We make the compiler enforce the <code>CheckingPolicy</code> base class, mostly so
 we can give a slightly more informative error message than if the compiler
 fails on <code>C::check()</code>. Below are some example policies and the
-base class:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>CheckingPolicy</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>constexpr</span> <span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>check</span>(<span style=color:#66d9ef>bool</span> value) { <span style=color:#66d9ef>return</span> false; };
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>LaxCheckingPolicy</span> <span style=color:#f92672>:</span> CheckingPolicy {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>constexpr</span> <span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>check</span>(<span style=color:#66d9ef>bool</span> value) { <span style=color:#66d9ef>return</span> true; }
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>AssertCheckingPolicy</span> <span style=color:#f92672>:</span> CheckingPolicy {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>check</span>(<span style=color:#66d9ef>bool</span> value) {
-</span></span><span style=display:flex><span>    assert(value);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> true;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// And you can even make it throw exceptions! This is used heavily in the unit test.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>OptionInvalidAccessException</span> <span style=color:#f92672>:</span> std<span style=color:#f92672>::</span>exception {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>const</span> <span style=color:#66d9ef>char</span><span style=color:#f92672>*</span> <span style=color:#a6e22e>what</span>() <span style=color:#66d9ef>const</span> <span style=color:#66d9ef>throw</span>() {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;Invalid access to Option with Nothing in it&#34;</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>ThrowCheckingPolicy</span> <span style=color:#f92672>:</span> CheckingPolicy {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>check</span>(<span style=color:#66d9ef>bool</span> value) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span>value) {
-</span></span><span style=display:flex><span>      OptionInvalidAccessException ex;
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>throw</span> ex;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> value;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>};
+base class:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>struct</span> <span class=nc>CheckingPolicy</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>constexpr</span> <span class=kt>bool</span> <span class=nf>check</span><span class=p>(</span><span class=kt>bool</span> <span class=n>value</span><span class=p>)</span> <span class=p>{</span> <span class=k>return</span> <span class=nb>false</span><span class=p>;</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>LaxCheckingPolicy</span> <span class=o>:</span> <span class=n>CheckingPolicy</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=k>constexpr</span> <span class=kt>bool</span> <span class=nf>check</span><span class=p>(</span><span class=kt>bool</span> <span class=n>value</span><span class=p>)</span> <span class=p>{</span> <span class=k>return</span> <span class=nb>true</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>AssertCheckingPolicy</span> <span class=o>:</span> <span class=n>CheckingPolicy</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=kt>bool</span> <span class=nf>check</span><span class=p>(</span><span class=kt>bool</span> <span class=n>value</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>assert</span><span class=p>(</span><span class=n>value</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nb>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// And you can even make it throw exceptions! This is used heavily in the unit test.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>class</span> <span class=nc>OptionInvalidAccessException</span> <span class=o>:</span> <span class=n>std</span><span class=o>::</span><span class=n>exception</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>virtual</span> <span class=k>const</span> <span class=kt>char</span><span class=o>*</span> <span class=nf>what</span><span class=p>()</span> <span class=k>const</span> <span class=k>throw</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=s>&#34;Invalid access to Option with Nothing in it&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>ThrowCheckingPolicy</span> <span class=o>:</span> <span class=n>CheckingPolicy</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=kt>bool</span> <span class=nf>check</span><span class=p>(</span><span class=kt>bool</span> <span class=n>value</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>value</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>OptionInvalidAccessException</span> <span class=n>ex</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>throw</span> <span class=n>ex</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
 </span></span></code></pre></div><p>So in the deeply embedded world I work it this allows for an assert, or logger,
 based approach to unwrapping. This is useful since unchecked unwraps should
 NOT be a normal thing, so <code>panic</code>ing is acceptable because they should be
@@ -281,63 +281,63 @@ invalid <code>unwrap()</code> is exceptional while something not returning a val
 might just be normal operation. However, what if you know that your function
 might fail, but you have a default value you want to use. That is where
 <code>unwrap_or()</code> comes in. It allows you to unwrap on success, or return some
-default value if the <code>Option&lt;T></code> is nothing.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#75715e>/**
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * Get the value stored inside of the Option&lt;T&gt; type or if it is Nothing()
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * then return
-</span></span></span><span style=display:flex><span><span style=color:#75715e> *
-</span></span></span><span style=display:flex><span><span style=color:#75715e> * @return something_;
-</span></span></span><span style=display:flex><span><span style=color:#75715e> */</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>inline</span> <span style=color:#66d9ef>constexpr</span> T <span style=color:#a6e22e>unwrap_or</span>(T or_val) <span style=color:#66d9ef>const</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (isSomething_) <span style=color:#f92672>?</span> something_ : or_val;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// Which allows the use of the following:
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> a <span style=color:#f92672>=</span> divide(<span style=color:#ae81ff>100</span>, <span style=color:#ae81ff>0</span>).unwrap_or(<span style=color:#ae81ff>0</span>); <span style=color:#75715e>// If we get a divide by 0 error, just return 0;
+default value if the <code>Option&lt;T></code> is nothing.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * Get the value stored inside of the Option&lt;T&gt; type or if it is Nothing()
+</span></span></span><span class=line><span class=cl><span class=cm> * then return
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @return something_;
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=k>constexpr</span> <span class=n>T</span> <span class=nf>unwrap_or</span><span class=p>(</span><span class=n>T</span> <span class=n>or_val</span><span class=p>)</span> <span class=k>const</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span><span class=n>isSomething_</span><span class=p>)</span> <span class=o>?</span> <span class=nl>something_</span> <span class=p>:</span> <span class=n>or_val</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// Which allows the use of the following:
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=n>a</span> <span class=o>=</span> <span class=n>divide</span><span class=p>(</span><span class=mi>100</span><span class=p>,</span> <span class=mi>0</span><span class=p>).</span><span class=n>unwrap_or</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span> <span class=c1>// If we get a divide by 0 error, just return 0;
 </span></span></span></code></pre></div><p>Lets look at one more use-case.</p><h4 id=use-case-study-read-only-indexing-into-an-aggregate-data-type>Use Case Study: Read-only indexing into an aggregate data type</h4><p>So let&rsquo;s look at a use case I have been excited about. Returning an Option type
 from an aggregate datastructure which has read-only indexing. Let&rsquo;s say we
 have an array class <code>Array</code> which implements <code>Option&lt;T> operator[](size_t i)</code>
 for indexing into the array. If you have exceptions you can throw an exception
 to indicate an out of bounds index, but if you don&rsquo;t you are left with unsafe
-code, or clunkier semantics. So what can we express with option?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>template</span> <span style=color:#f92672>&lt;</span><span style=color:#66d9ef>typename</span> T, size_t S<span style=color:#f92672>&gt;</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Array</span> {
-</span></span><span style=display:flex><span>  T buf[S];
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  Option<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span> <span style=color:#66d9ef>operator</span>[](size_t i) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (i <span style=color:#f92672>&lt;</span> S) {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> buf[i];
-</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>Nothing</span>();
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
-</span></span><span style=display:flex><span>  Array<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>4</span><span style=color:#f92672>&gt;</span> foo <span style=color:#f92672>=</span> {<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>4</span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>10</span>; i<span style=color:#f92672>++</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>auto</span> bar <span style=color:#f92672>=</span> foo[i];
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (bar) {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>auto</span> baz <span style=color:#f92672>=</span> bar.unwrap();
-</span></span><span style=display:flex><span>      printf(<span style=color:#e6db74>&#34;%d: %d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, i, baz);
-</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>      printf(<span style=color:#e6db74>&#34;%d: out of range</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, i);
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// Prints out:
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 0: 1
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 1: 2
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 2: 3
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 3: 4
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 4: out of range
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 5: out of range
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 6: out of range
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 7: out of range
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 8: out of range
-</span></span></span><span style=display:flex><span><span style=color:#75715e>// 9: out of range
+code, or clunkier semantics. So what can we express with option?</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>S</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>Array</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>T</span> <span class=n>buf</span><span class=p>[</span><span class=n>S</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Option</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=k>operator</span><span class=p>[](</span><span class=n>size_t</span> <span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>i</span> <span class=o>&lt;</span> <span class=n>S</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=n>buf</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=nf>Nothing</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>Array</span><span class=o>&lt;</span><span class=kt>int</span><span class=p>,</span> <span class=mi>4</span><span class=o>&gt;</span> <span class=n>foo</span> <span class=o>=</span> <span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>auto</span> <span class=n>bar</span> <span class=o>=</span> <span class=n>foo</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>bar</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>auto</span> <span class=n>baz</span> <span class=o>=</span> <span class=n>bar</span><span class=p>.</span><span class=n>unwrap</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;%d: %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>i</span><span class=p>,</span> <span class=n>baz</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;%d: out of range</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// Prints out:
+</span></span></span><span class=line><span class=cl><span class=c1>// 0: 1
+</span></span></span><span class=line><span class=cl><span class=c1>// 1: 2
+</span></span></span><span class=line><span class=cl><span class=c1>// 2: 3
+</span></span></span><span class=line><span class=cl><span class=c1>// 3: 4
+</span></span></span><span class=line><span class=cl><span class=c1>// 4: out of range
+</span></span></span><span class=line><span class=cl><span class=c1>// 5: out of range
+</span></span></span><span class=line><span class=cl><span class=c1>// 6: out of range
+</span></span></span><span class=line><span class=cl><span class=c1>// 7: out of range
+</span></span></span><span class=line><span class=cl><span class=c1>// 8: out of range
+</span></span></span><span class=line><span class=cl><span class=c1>// 9: out of range
 </span></span></span></code></pre></div><p>For an array this might seem a little silly; don&rsquo;t we want a reference or a
 pointer? Probably, but there are similar data-structures where a copy might
 be preferred. For example, peaking into a ring buffer for signal processing

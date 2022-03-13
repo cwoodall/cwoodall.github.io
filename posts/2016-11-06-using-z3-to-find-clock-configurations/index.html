@@ -14,7 +14,7 @@
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/projects>Projects</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Using Z3 to Find Clock Configurations Values for ARM Cortex Microcontrollers</h1><div align=center>Chris Woodall | 2016-11-06</div><img src><br><p>A few weeks ago I was setting up multiple embedded systems using the <a href=http://nxp.com>NXP</a>
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><link rel=stylesheet href=/css/syntax.css><div class=container><h1 align=center>Using Z3 to Find Clock Configurations Values for ARM Cortex Microcontrollers</h1><div align=center>Chris Woodall | 2016-11-06</div><img src><br><p>A few weeks ago I was setting up multiple embedded systems using the <a href=http://nxp.com>NXP</a>
 <a href=https://cache.nxp.com/files/microcontrollers/doc/data_sheet/K64P144M120SF5.pdf>Kinetis K64F12</a> family of microcontrollers. Do to an oversight
 a few of the different systems had different input clock frequencies, but all
 were intended to work at the same output clock frequency. This is not a major
@@ -41,15 +41,15 @@ tool and a web API for solving this problem. This is most certainly overkill, bu
 considering how easily it all went together I would do it again to solve similar
 problems.</p><p>You can see the code on <a href=https://github.com/cwoodall/k64-pll-calculator>GitHub</a> and also play with see the resulting
 <a href=http://k64-pll-calculator.herokuapp.com/>website and API demo</a>. But read on for more details!</p><h2 id=constraining-the-problem>Constraining The Problem</h2><p>Z3 is a constraint solver, so the constraints needs to be specified in a way that Z3 can understand and used. For those who want to follow along at home I created an <a href=https://github.com/cwoodall/k64-pll-calculator/blob/master/extras/notebook.ipynb>ipython notebook</a>. To get started with it you will need to install the <a href=https://github.com/Z3Prover/z3>Z3</a> python package:</p><pre tabindex=0><code>$ sudo pip install z3-solver
-</code></pre><p>The first step is to specify the parameters we will be dealing with. Looking at the equation above and the <a href=http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf>datasheet</a> the parameters can be determined to be <code>f_in</code>, <code>f_out</code>, <code>d</code> ($PRDIV$) and <code>m</code> ($VDIV$) which can all be constrained to the set of Integers. The <code>z3.Int()</code> type will handle this.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> z3 <span style=color:#f92672>import</span> <span style=color:#f92672>*</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Lets create a dictionary of all of our parameters.</span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Where:</span>
-</span></span><span style=display:flex><span><span style=color:#75715e>#    - f_in: Input Frequency</span>
-</span></span><span style=display:flex><span><span style=color:#75715e>#    - f_out: Output Frequency</span>
-</span></span><span style=display:flex><span><span style=color:#75715e>#    - d: PRDIV from datasheet. This is the division term</span>
-</span></span><span style=display:flex><span><span style=color:#75715e>#    - m: VDIV from datasheet. This is the multiply term</span>
-</span></span><span style=display:flex><span>params <span style=color:#f92672>=</span> {k: Int(k) <span style=color:#66d9ef>for</span> k <span style=color:#f92672>in</span> [<span style=color:#e6db74>&#39;f_in&#39;</span>, <span style=color:#e6db74>&#39;f_out&#39;</span>, <span style=color:#e6db74>&#39;d&#39;</span>, <span style=color:#e6db74>&#39;m&#39;</span>]}
+</code></pre><p>The first step is to specify the parameters we will be dealing with. Looking at the equation above and the <a href=http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf>datasheet</a> the parameters can be determined to be <code>f_in</code>, <code>f_out</code>, <code>d</code> ($PRDIV$) and <code>m</code> ($VDIV$) which can all be constrained to the set of Integers. The <code>z3.Int()</code> type will handle this.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>z3</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Lets create a dictionary of all of our parameters.</span>
+</span></span><span class=line><span class=cl><span class=c1># Where:</span>
+</span></span><span class=line><span class=cl><span class=c1>#    - f_in: Input Frequency</span>
+</span></span><span class=line><span class=cl><span class=c1>#    - f_out: Output Frequency</span>
+</span></span><span class=line><span class=cl><span class=c1>#    - d: PRDIV from datasheet. This is the division term</span>
+</span></span><span class=line><span class=cl><span class=c1>#    - m: VDIV from datasheet. This is the multiply term</span>
+</span></span><span class=line><span class=cl><span class=n>params</span> <span class=o>=</span> <span class=p>{</span><span class=n>k</span><span class=p>:</span> <span class=n>Int</span><span class=p>(</span><span class=n>k</span><span class=p>)</span> <span class=k>for</span> <span class=n>k</span> <span class=ow>in</span> <span class=p>[</span><span class=s1>&#39;f_in&#39;</span><span class=p>,</span> <span class=s1>&#39;f_out&#39;</span><span class=p>,</span> <span class=s1>&#39;d&#39;</span><span class=p>,</span> <span class=s1>&#39;m&#39;</span><span class=p>]}</span>
 </span></span></code></pre></div><p>Now that the model parameters have been determined and appropriately constrained
 to the Integer space, the remaining constraints need to be set. To do this an
 array of &ldquo;facts&rdquo; will be created which will tell Z3 about our solution space.
@@ -59,44 +59,44 @@ there are also other constraints to make the values valid. These are found in th
 form of ranges for <code>d</code> and <code>m</code>. The most important performance based constraint is
 formed around <code>f_in / d</code> which determines the frequency of the input to the phase-locked
 loops (PLL) multiplier stage. The facts are easy to write now. It is important to note
-that the parameters are used to specify the constraints:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># Lets look at the datasheet and define some constraints on value ranges</span>
-</span></span><span style=display:flex><span><span style=color:#75715e># The range tuples are in the format (lower_bound, upper_bound)</span>
-</span></span><span style=display:flex><span>divide_range <span style=color:#f92672>=</span> (<span style=color:#ae81ff>2e6</span>, <span style=color:#ae81ff>4e6</span>) <span style=color:#75715e># From K64F12 datasheet page 589</span>
-</span></span><span style=display:flex><span>d_range <span style=color:#f92672>=</span> (<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>25</span>)         <span style=color:#75715e># From K64F12 datasheet page 589</span>
-</span></span><span style=display:flex><span>m_range <span style=color:#f92672>=</span> (<span style=color:#ae81ff>24</span>, <span style=color:#ae81ff>55</span>)        <span style=color:#75715e># From K64F12 datasheet page 590</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Get the input and output frequency as user inputs.</span>
-</span></span><span style=display:flex><span><span style=color:#75715e># This is a quick and dirty handling of the inputs.</span>
-</span></span><span style=display:flex><span>freq_in <span style=color:#f92672>=</span> <span style=color:#ae81ff>25e6</span>
-</span></span><span style=display:flex><span>freq_out <span style=color:#f92672>=</span> <span style=color:#ae81ff>120e6</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Now we can constrain the equation with the &#34;facts&#34; we know</span>
-</span></span><span style=display:flex><span>facts <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>    <span style=color:#75715e># define</span>
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;f_in&#39;</span>] <span style=color:#f92672>==</span> freq_in,
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;f_out&#39;</span>] <span style=color:#f92672>==</span> freq_out,
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Setup the equation which uses PRDIV (d) and VDIV (m)</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># This equation is set up from the K64 datasheet</span>
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;f_out&#39;</span>] <span style=color:#f92672>==</span> (params[<span style=color:#e6db74>&#39;f_in&#39;</span>] <span style=color:#f92672>/</span> params[<span style=color:#e6db74>&#39;d&#39;</span>]) <span style=color:#f92672>*</span> params[<span style=color:#e6db74>&#39;m&#39;</span>],
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># From K64 datasheet page 589</span>
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;f_in&#39;</span>] <span style=color:#f92672>/</span> params[<span style=color:#e6db74>&#39;d&#39;</span>] <span style=color:#f92672>&gt;=</span> divide_range[<span style=color:#ae81ff>0</span>],
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;f_in&#39;</span>] <span style=color:#f92672>/</span> params[<span style=color:#e6db74>&#39;d&#39;</span>] <span style=color:#f92672>&lt;=</span> divide_range[<span style=color:#ae81ff>1</span>],
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># From K64 datasheet page 589</span>
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;d&#39;</span>] <span style=color:#f92672>&gt;=</span> d_range[<span style=color:#ae81ff>0</span>],  
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;d&#39;</span>] <span style=color:#f92672>&lt;=</span> d_range[<span style=color:#ae81ff>1</span>],
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># From K64 datasheet page 590</span>
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;m&#39;</span>] <span style=color:#f92672>&gt;=</span> m_range[<span style=color:#ae81ff>0</span>],  
-</span></span><span style=display:flex><span>    params[<span style=color:#e6db74>&#39;m&#39;</span>] <span style=color:#f92672>&lt;=</span> m_range[<span style=color:#ae81ff>1</span>]]
-</span></span></code></pre></div><p>Now the <code>z3.solve()</code> function can be used to solve the model:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># To print out the results</span>
-</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> solve(facts)
+that the parameters are used to specify the constraints:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># Lets look at the datasheet and define some constraints on value ranges</span>
+</span></span><span class=line><span class=cl><span class=c1># The range tuples are in the format (lower_bound, upper_bound)</span>
+</span></span><span class=line><span class=cl><span class=n>divide_range</span> <span class=o>=</span> <span class=p>(</span><span class=mf>2e6</span><span class=p>,</span> <span class=mf>4e6</span><span class=p>)</span> <span class=c1># From K64F12 datasheet page 589</span>
+</span></span><span class=line><span class=cl><span class=n>d_range</span> <span class=o>=</span> <span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>25</span><span class=p>)</span>         <span class=c1># From K64F12 datasheet page 589</span>
+</span></span><span class=line><span class=cl><span class=n>m_range</span> <span class=o>=</span> <span class=p>(</span><span class=mi>24</span><span class=p>,</span> <span class=mi>55</span><span class=p>)</span>        <span class=c1># From K64F12 datasheet page 590</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Get the input and output frequency as user inputs.</span>
+</span></span><span class=line><span class=cl><span class=c1># This is a quick and dirty handling of the inputs.</span>
+</span></span><span class=line><span class=cl><span class=n>freq_in</span> <span class=o>=</span> <span class=mf>25e6</span>
+</span></span><span class=line><span class=cl><span class=n>freq_out</span> <span class=o>=</span> <span class=mf>120e6</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Now we can constrain the equation with the &#34;facts&#34; we know</span>
+</span></span><span class=line><span class=cl><span class=n>facts</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=c1># define</span>
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;f_in&#39;</span><span class=p>]</span> <span class=o>==</span> <span class=n>freq_in</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;f_out&#39;</span><span class=p>]</span> <span class=o>==</span> <span class=n>freq_out</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Setup the equation which uses PRDIV (d) and VDIV (m)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># This equation is set up from the K64 datasheet</span>
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;f_out&#39;</span><span class=p>]</span> <span class=o>==</span> <span class=p>(</span><span class=n>params</span><span class=p>[</span><span class=s1>&#39;f_in&#39;</span><span class=p>]</span> <span class=o>/</span> <span class=n>params</span><span class=p>[</span><span class=s1>&#39;d&#39;</span><span class=p>])</span> <span class=o>*</span> <span class=n>params</span><span class=p>[</span><span class=s1>&#39;m&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># From K64 datasheet page 589</span>
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;f_in&#39;</span><span class=p>]</span> <span class=o>/</span> <span class=n>params</span><span class=p>[</span><span class=s1>&#39;d&#39;</span><span class=p>]</span> <span class=o>&gt;=</span> <span class=n>divide_range</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;f_in&#39;</span><span class=p>]</span> <span class=o>/</span> <span class=n>params</span><span class=p>[</span><span class=s1>&#39;d&#39;</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>divide_range</span><span class=p>[</span><span class=mi>1</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># From K64 datasheet page 589</span>
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;d&#39;</span><span class=p>]</span> <span class=o>&gt;=</span> <span class=n>d_range</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span>  
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;d&#39;</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>d_range</span><span class=p>[</span><span class=mi>1</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># From K64 datasheet page 590</span>
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;m&#39;</span><span class=p>]</span> <span class=o>&gt;=</span> <span class=n>m_range</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span>  
+</span></span><span class=line><span class=cl>    <span class=n>params</span><span class=p>[</span><span class=s1>&#39;m&#39;</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>m_range</span><span class=p>[</span><span class=mi>1</span><span class=p>]]</span>
+</span></span></code></pre></div><p>Now the <code>z3.solve()</code> function can be used to solve the model:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># To print out the results</span>
+</span></span><span class=line><span class=cl><span class=n>model</span> <span class=o>=</span> <span class=n>solve</span><span class=p>(</span><span class=n>facts</span><span class=p>)</span>
 </span></span></code></pre></div><p>Which results in:</p><pre tabindex=0><code>[d = 10, m = 48, f_out = 120000000, f_in = 25000000]
 </code></pre><p>Now it would be great to be able to take the newly found model parameter values and use them.
-So let&rsquo;s print out the model directly to see what we have:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># But the model returns none</span>
-</span></span><span style=display:flex><span>print model
+So let&rsquo;s print out the model directly to see what we have:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># But the model returns none</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span> <span class=n>model</span>
 </span></span></code></pre></div><p>Yielding a resounding:</p><pre tabindex=0><code>None
 </code></pre><p>Oh no&mldr; It turns out that convenient <code>solve()</code> function does not return the model,
 it just prints out the results to <em>STDIO</em>. To me this was not obvious at all.
@@ -104,83 +104,83 @@ What do we do instead? We use the <a href=https://github.com/Z3Prover/z3>Z3</a> 
 which is much more versatile. However, for this particular case I wrote a
 function <code>solve_return_model()</code>, which acts like the <code>solve()</code> function but
 returns the solved model instead of printing it, or an <code>Z3Exception</code> if there is
-no constrained solution:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e>#This method is defined in k64_pll_calculator/util.py</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>solve_return_model</span>(fact_list):
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    The default z3.solve() method prints to the screen. This uses the basis of
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    that function to take a list of facts, add it to a solver and then return
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    a z3 model with a solution.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Relies on exceptions raised by calling s.mode() on an invalid model.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    @param a list of z3 facts and constraints
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    @return A valid z3 model
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    @raises Z3Exception
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>    s <span style=color:#f92672>=</span> Solver()
-</span></span><span style=display:flex><span>    s<span style=color:#f92672>.</span>add(<span style=color:#f92672>*</span>fact_list)
-</span></span><span style=display:flex><span>    r <span style=color:#f92672>=</span> s<span style=color:#f92672>.</span>check()
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> r <span style=color:#f92672>==</span> unsat:
-</span></span><span style=display:flex><span>        print(<span style=color:#e6db74>&#34;no solution&#34;</span>)
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>elif</span> r <span style=color:#f92672>==</span> unknown:
-</span></span><span style=display:flex><span>        print(<span style=color:#e6db74>&#34;failed to solve&#34;</span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> s<span style=color:#f92672>.</span>model()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> solve_return_model(facts)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>print(model)
-</span></span></code></pre></div><p>So now we can print the model out:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>[d <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>, m <span style=color:#f92672>=</span> <span style=color:#ae81ff>48</span>, f_out <span style=color:#f92672>=</span> <span style=color:#ae81ff>120000000</span>, f_in <span style=color:#f92672>=</span> <span style=color:#ae81ff>25000000</span>]
-</span></span></code></pre></div><p>And we can access our individual parameters:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Now we can play with the model: f_in == </span><span style=color:#e6db74>{}</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>format(model[params[<span style=color:#e6db74>&#39;f_in&#39;</span>]]))
-</span></span></code></pre></div><p>Outputting:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>Now we can play with the model: f_in <span style=color:#f92672>==</span> <span style=color:#ae81ff>25000000</span>
+no constrained solution:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1>#This method is defined in k64_pll_calculator/util.py</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>solve_return_model</span><span class=p>(</span><span class=n>fact_list</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>    The default z3.solve() method prints to the screen. This uses the basis of
+</span></span></span><span class=line><span class=cl><span class=s2>    that function to take a list of facts, add it to a solver and then return
+</span></span></span><span class=line><span class=cl><span class=s2>    a z3 model with a solution.
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    Relies on exceptions raised by calling s.mode() on an invalid model.
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    @param a list of z3 facts and constraints
+</span></span></span><span class=line><span class=cl><span class=s2>    @return A valid z3 model
+</span></span></span><span class=line><span class=cl><span class=s2>    @raises Z3Exception
+</span></span></span><span class=line><span class=cl><span class=s2>    &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>s</span> <span class=o>=</span> <span class=n>Solver</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>s</span><span class=o>.</span><span class=n>add</span><span class=p>(</span><span class=o>*</span><span class=n>fact_list</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span> <span class=o>=</span> <span class=n>s</span><span class=o>.</span><span class=n>check</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>r</span> <span class=o>==</span> <span class=n>unsat</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;no solution&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>elif</span> <span class=n>r</span> <span class=o>==</span> <span class=n>unknown</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;failed to solve&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>s</span><span class=o>.</span><span class=n>model</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>model</span> <span class=o>=</span> <span class=n>solve_return_model</span><span class=p>(</span><span class=n>facts</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>model</span><span class=p>)</span>
+</span></span></code></pre></div><p>So now we can print the model out:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=p>[</span><span class=n>d</span> <span class=o>=</span> <span class=mi>10</span><span class=p>,</span> <span class=n>m</span> <span class=o>=</span> <span class=mi>48</span><span class=p>,</span> <span class=n>f_out</span> <span class=o>=</span> <span class=mi>120000000</span><span class=p>,</span> <span class=n>f_in</span> <span class=o>=</span> <span class=mi>25000000</span><span class=p>]</span>
+</span></span></code></pre></div><p>And we can access our individual parameters:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Now we can play with the model: f_in == </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>model</span><span class=p>[</span><span class=n>params</span><span class=p>[</span><span class=s1>&#39;f_in&#39;</span><span class=p>]]))</span>
+</span></span></code></pre></div><p>Outputting:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>Now we can play with the model: <span class=nv>f_in</span> <span class=o>==</span> <span class=m>25000000</span>
 </span></span></code></pre></div><p>Once a solution for $PRDIV$ and $VDIV$ has been found those values can be reported
 and modified as needed. In this particular case they still need to be modified
 to be in the actually bit-wise representation from the <a href=http://cache.nxp.com/files/microcontrollers/doc/ref_manual/K64P144M120SF5RM.pdf>datasheet</a> (p 589).
 One idea I had was to feed these values into a clock configuration struct so I could
 generate my clock configuration header files directly.</p><h2 id=dressing-up-the-solution>Dressing Up The Solution</h2><p>Once I finished learning about <a href=https://github.com/Z3Prover/z3>Z3</a> I decided to wrap the results up into two
 applications. The first was a CLI application which uses a library called
-<a href=http://click.pocoo.org/>click</a> which is a:</p><blockquote><p>Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.</p></blockquote><p>Usage is simple:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ k64_pll_calculator --help
-</span></span><span style=display:flex><span>Usage: k64_pll_calculator <span style=color:#f92672>[</span>OPTIONS<span style=color:#f92672>]</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  Simple program which takes an input frequency and an output frequency and
-</span></span><span style=display:flex><span>  returns the PRDIV and vdiv necessary <span style=color:#66d9ef>for</span> the pll in the freescale k64
-</span></span><span style=display:flex><span>  processors
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Options:
-</span></span><span style=display:flex><span>  -i, --freq_in FLOAT   Input frequency value in Hz
-</span></span><span style=display:flex><span>  -o, --freq_out FLOAT  Output frequency value in Hz
-</span></span><span style=display:flex><span>  -v, --verbosity       Verbosity of output
-</span></span><span style=display:flex><span>  --version             Show the version and exit.
-</span></span><span style=display:flex><span>  --help                Show this message and exit.
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$ k64_pll_calculator -i 25e6 -o 120e6
-</span></span><span style=display:flex><span><span style=color:#f92672>[</span>d <span style=color:#f92672>=</span> 10, m <span style=color:#f92672>=</span> 48, f_out <span style=color:#f92672>=</span> 120000000, f_in <span style=color:#f92672>=</span> 25000000<span style=color:#f92672>]</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$ k64_pll_calculator -i 1e6 -o 120e6
-</span></span><span style=display:flex><span>No results found.
+<a href=http://click.pocoo.org/>click</a> which is a:</p><blockquote><p>Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.</p></blockquote><p>Usage is simple:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ k64_pll_calculator --help
+</span></span><span class=line><span class=cl>Usage: k64_pll_calculator <span class=o>[</span>OPTIONS<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  Simple program which takes an input frequency and an output frequency and
+</span></span><span class=line><span class=cl>  returns the PRDIV and vdiv necessary <span class=k>for</span> the pll in the freescale k64
+</span></span><span class=line><span class=cl>  processors
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Options:
+</span></span><span class=line><span class=cl>  -i, --freq_in FLOAT   Input frequency value in Hz
+</span></span><span class=line><span class=cl>  -o, --freq_out FLOAT  Output frequency value in Hz
+</span></span><span class=line><span class=cl>  -v, --verbosity       Verbosity of output
+</span></span><span class=line><span class=cl>  --version             Show the version and exit.
+</span></span><span class=line><span class=cl>  --help                Show this message and exit.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>$ k64_pll_calculator -i 25e6 -o 120e6
+</span></span><span class=line><span class=cl><span class=o>[</span><span class=nv>d</span> <span class=o>=</span> 10, <span class=nv>m</span> <span class=o>=</span> 48, <span class=nv>f_out</span> <span class=o>=</span> 120000000, <span class=nv>f_in</span> <span class=o>=</span> 25000000<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>$ k64_pll_calculator -i 1e6 -o 120e6
+</span></span><span class=line><span class=cl>No results found.
 </span></span></code></pre></div><p>And more importantly it was very easy to throw together. I have found
 <a href=http://click.pocoo.org/>click</a> to be very easy to use and have been using it for more complicated
 command line applications.</p><p>The other interface I made was for the <a href=http://k64-pll-calculator.herokuapp.com/>web demo</a> which uses <a href=http://flask.pocoo.org/>flask</a>
 to create an API endpoint at <code>/solve</code>. I then used <a href=http://heroku.com>heroku</a> to
 host it and a little bit of old school <a href=https://jquery.com>jQuery</a> to make the
 form asynchronous. You can use the end point with HTTP <code>GET</code> requests and query
-strings as follows, returning JSON:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ curl <span style=color:#e6db74>&#34;http://k64-pll-calculator.herokuapp.com/solve?fin=20e6&amp;fout=80e6&#34;</span>
-</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;payload&#34;</span>: {
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;d&#34;</span>: <span style=color:#e6db74>&#34;8&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;f_in&#34;</span>: <span style=color:#e6db74>&#34;20000000&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;f_out&#34;</span>: <span style=color:#e6db74>&#34;80000000&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;m&#34;</span>: <span style=color:#e6db74>&#34;32&#34;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;success&#34;</span>
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>In the case where the model has no solution:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ curl <span style=color:#e6db74>&#34;http://k64-pll-calculator.herokuapp.com/solve?fin=1e6&amp;fout=80e6&#34;</span>
-</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;payload&#34;</span>: {
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;error&#34;</span>: <span style=color:#e6db74>&#34;model is not available&#34;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;error&#34;</span>
-</span></span><span style=display:flex><span>}
+strings as follows, returning JSON:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ curl <span class=s2>&#34;http://k64-pll-calculator.herokuapp.com/solve?fin=20e6&amp;fout=80e6&#34;</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;payload&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;d&#34;</span><span class=p>:</span> <span class=s2>&#34;8&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;f_in&#34;</span><span class=p>:</span> <span class=s2>&#34;20000000&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;f_out&#34;</span><span class=p>:</span> <span class=s2>&#34;80000000&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;m&#34;</span><span class=p>:</span> <span class=s2>&#34;32&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;status&#34;</span><span class=p>:</span> <span class=s2>&#34;success&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>In the case where the model has no solution:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ curl <span class=s2>&#34;http://k64-pll-calculator.herokuapp.com/solve?fin=1e6&amp;fout=80e6&#34;</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;payload&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;error&#34;</span><span class=p>:</span> <span class=s2>&#34;model is not available&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;status&#34;</span><span class=p>:</span> <span class=s2>&#34;error&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></div><p>And here is a little <em>.gif</em> example of the <a href=http://k64-pll-calculator.herokuapp.com/>demo</a> in action.</p><p><a href=http://k64-pll-calculator.herokuapp.com/><img src=/img/posts/k64-pll-calculator-web-example.gif alt="K64 PLL Calculator Demo"></a></p><h2 id=conclusion>Conclusion</h2><p>This was a fun distraction of a project. I got acquainted with a powerful tool
 <a href=https://github.com/Z3Prover/z3>Z3</a> and also spent some time with python unit testing, <a href=http://click.pocoo.org/>click</a>, <a href=http://flask.pocoo.org/>flask</a>
 and dusting off some of my JavaScript skills (which made me want to update my

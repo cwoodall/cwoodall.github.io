@@ -12,7 +12,7 @@
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/projects>Projects</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><h1 align=center>Reflection in C++ to Generate Serializable Structs Using libclang and Python</h1><div align=center>Chris Woodall | 2018-02-24</div><img src><br><p>I have recently found myself writing a bunch of serialization (and
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><link rel=stylesheet href=/css/syntax.css><div class=container><h1 align=center>Reflection in C++ to Generate Serializable Structs Using libclang and Python</h1><div align=center>Chris Woodall | 2018-02-24</div><img src><br><p>I have recently found myself writing a bunch of serialization (and
 deserialization) functions in C++ for some very basic structs, and
 classes. Each of these serialization functions has the same basic
 form which is basically a series of function calls to convert
@@ -35,25 +35,25 @@ own right in the future. Additionally, I used a python library called
 cog, which makes it pretty easy to inline some python into C++ comments
 and execute those actions it is actually pretty slick.</p><p>So with my toolchain in hand I ventured off into the world of AST
 parsing with libclang. So first, I have a very simple problem to
-deal with. All of my structs basically look like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#75715e>//+serde(MySerializer)
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Foo</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>uint8_t</span> bar1;
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>float</span>   bar2;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>And generate functions looking like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>my_serialization</span>(serialization_writer <span style=color:#f92672>*</span>writer, Foo <span style=color:#66d9ef>const</span> <span style=color:#f92672>&amp;</span>data) {
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Add a map of length 2 to the serialization
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  writer<span style=color:#f92672>-&gt;</span>add_map(<span style=color:#ae81ff>2</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  writer<span style=color:#f92672>-&gt;</span>add_cstr(<span style=color:#e6db74>&#34;bar1&#34;</span>);
-</span></span><span style=display:flex><span>  my_serialization(writer, data.bar1);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  writer<span style=color:#f92672>-&gt;</span>add_cstr(<span style=color:#e6db74>&#34;bar2&#34;</span>);
-</span></span><span style=display:flex><span>  my_serialization(writer, data.bar2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  writer<span style=color:#f92672>-&gt;</span>end_map();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> writer<span style=color:#f92672>-&gt;</span>is_errors();
-</span></span><span style=display:flex><span>}
+deal with. All of my structs basically look like this:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=c1>//+serde(MySerializer)
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>struct</span> <span class=nc>Foo</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kt>uint8_t</span> <span class=n>bar1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kt>float</span>   <span class=n>bar2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>And generate functions looking like this:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=kt>bool</span> <span class=nf>my_serialization</span><span class=p>(</span><span class=n>serialization_writer</span> <span class=o>*</span><span class=n>writer</span><span class=p>,</span> <span class=n>Foo</span> <span class=k>const</span> <span class=o>&amp;</span><span class=n>data</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// Add a map of length 2 to the serialization
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>writer</span><span class=o>-&gt;</span><span class=n>add_map</span><span class=p>(</span><span class=mi>2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>writer</span><span class=o>-&gt;</span><span class=n>add_cstr</span><span class=p>(</span><span class=s>&#34;bar1&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>my_serialization</span><span class=p>(</span><span class=n>writer</span><span class=p>,</span> <span class=n>data</span><span class=p>.</span><span class=n>bar1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>writer</span><span class=o>-&gt;</span><span class=n>add_cstr</span><span class=p>(</span><span class=s>&#34;bar2&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>my_serialization</span><span class=p>(</span><span class=n>writer</span><span class=p>,</span> <span class=n>data</span><span class=p>.</span><span class=n>bar2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>writer</span><span class=o>-&gt;</span><span class=n>end_map</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>writer</span><span class=o>-&gt;</span><span class=n>is_errors</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></div><p>Note, the recursive use of overloaded <code>my_serialization()</code> functions, this
 little design choice makes our code generation very easy, by making C++ do
 some of the heavy lifting for us, we don&rsquo;t even need to worry about types.
@@ -91,124 +91,124 @@ PUNCTUATION: }
     - VISIBILITY: public
 </code></pre><p>So to find all of the <code>//+serde()</code> tags and get all of the information we need the
 process is:</p><ol><li>Get a <code>TranslationalUnit</code> from <code>libclang</code> for the entire file being parsed.</li><li>Iterate through all of the tokens in the file, looking for <code>COMMENTS</code> which match the decorator string.</li><li>Continue iterating through the tokens until a token with a matching cursor which specifies a STRUCT or CLASS declaration is found.
-(The first struct or class after the <code>//+serde()</code> will be parsed).</li><li>Walk through the AST for that struct or class to extract the types, names and access specifiers.</li><li>Walk up from the struct declaration to the root node to find all of the namespaces the struct may be inside of.</li><li>Repeat steps 2 to 4 until there are no more tokens left in the file.</li></ol><p>So for some basic code:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> serde_type <span style=color:#f92672>import</span> <span style=color:#f92672>*</span>
-</span></span><span style=display:flex><span><span style=color:#f92672>import</span> clang.cindex <span style=color:#66d9ef>as</span> cl
-</span></span><span style=display:flex><span><span style=color:#f92672>from</span> ctypes.util <span style=color:#f92672>import</span> find_library
-</span></span><span style=display:flex><span><span style=color:#f92672>import</span> ccsyspath
-</span></span><span style=display:flex><span><span style=color:#f92672>import</span> re
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_current_scope</span>(cursor):
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Get the current scope of the current cursor.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    For example:
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    namespace A {
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    namespace B {
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    class C {
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &lt;CURSOR IS IN HERE&gt;
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    };
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    }
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    }
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    will return: [&#34;A&#34;, &#34;B&#34;, &#34;C&#34;] and can be joined to be &#34;A::B::C&#34;
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Parameters ::
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>      - cursor: A clang.cindex.Cursor to loop for declaration parents of.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Returns ::
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>      - A list of names of the scopes.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Get the parent of the current cursor</span>
-</span></span><span style=display:flex><span>    parent <span style=color:#f92672>=</span> cursor<span style=color:#f92672>.</span>lexical_parent
-</span></span><span style=display:flex><span>    <span style=color:#75715e># If the parent is a declartaion type then add it to the end of our scope</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># list otherwise return an empty list</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (parent<span style=color:#f92672>.</span>kind<span style=color:#f92672>.</span>is_declaration()):
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> get_current_scope(parent) <span style=color:#f92672>+</span> [parent<span style=color:#f92672>.</span>spelling]
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span>:
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> []
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>find_serializable_types</span>(tu, match_str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;//\+serde\(([A-Za-z\s,_]*)\)&#34;</span>):
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Iterate through all tokens in the current TranslationalUnit looking for comments
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    which match the match_str. If the comment match look for the next struct or
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    class declaration, start extracting the scope by looking at the lexical parents
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    of the declaration. This will let you extract the name, then extract all of the
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    fields.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Parameters ::
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        - tu: The TranslationalUnit to search over
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        - match_str: The comment string to match.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Returns ::
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        - A List of SerdeRecords.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>    match_types <span style=color:#f92672>=</span> [cl<span style=color:#f92672>.</span>CursorKind<span style=color:#f92672>.</span>STRUCT_DECL, cl<span style=color:#f92672>.</span>CursorKind<span style=color:#f92672>.</span>CLASS_DECL]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    tokens <span style=color:#f92672>=</span> tu<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>get_tokens()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    found <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
-</span></span><span style=display:flex><span>    serializables <span style=color:#f92672>=</span> []
-</span></span><span style=display:flex><span>    serdes <span style=color:#f92672>=</span> []
-</span></span><span style=display:flex><span>    <span style=color:#75715e># iterate through all tokens, looking for the match_str in a comment. If</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># found the name, and fields are extracted from the next struct or class</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># definition. After extracting these declaration the parser continues to</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># look for more Comment otkens matching match_str.</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> token <span style=color:#f92672>in</span> tokens:
-</span></span><span style=display:flex><span>        match <span style=color:#f92672>=</span> re<span style=color:#f92672>.</span>match(match_str, token<span style=color:#f92672>.</span>spelling)
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> found:
-</span></span><span style=display:flex><span>            cursor <span style=color:#f92672>=</span> cl<span style=color:#f92672>.</span>Cursor()<span style=color:#f92672>.</span>from_location(tu, token<span style=color:#f92672>.</span>location)
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> cursor<span style=color:#f92672>.</span>kind <span style=color:#f92672>in</span> match_types:
-</span></span><span style=display:flex><span>                <span style=color:#75715e># Extract the name, and the scope of the cursor and join them</span>
-</span></span><span style=display:flex><span>                <span style=color:#75715e># to for the full C++ name.</span>
-</span></span><span style=display:flex><span>                name <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;::&#34;</span><span style=color:#f92672>.</span>join(get_current_scope(cursor) <span style=color:#f92672>+</span> [cursor<span style=color:#f92672>.</span>spelling])
-</span></span><span style=display:flex><span>                <span style=color:#75715e># Extract all of the fields (including access_specifiers)</span>
-</span></span><span style=display:flex><span>                fields <span style=color:#f92672>=</span> [SerdeField(field<span style=color:#f92672>.</span>spelling, field<span style=color:#f92672>.</span>type<span style=color:#f92672>.</span>spelling,
-</span></span><span style=display:flex><span>                                     field<span style=color:#f92672>.</span>access_specifier<span style=color:#f92672>.</span>name) <span style=color:#66d9ef>for</span> field <span style=color:#f92672>in</span> cursor<span style=color:#f92672>.</span>type<span style=color:#f92672>.</span>get_fields()]
-</span></span><span style=display:flex><span>                serializables<span style=color:#f92672>.</span>append(SerdeRecord(name, fields, serdes))
-</span></span><span style=display:flex><span>                <span style=color:#75715e># Start searching for more comments.</span>
-</span></span><span style=display:flex><span>                found <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
-</span></span><span style=display:flex><span>                <span style=color:#75715e># Clear the list of registered serdes for this Record.</span>
-</span></span><span style=display:flex><span>                serdes <span style=color:#f92672>=</span> []
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> (token<span style=color:#f92672>.</span>kind <span style=color:#f92672>==</span> cl<span style=color:#f92672>.</span>TokenKind<span style=color:#f92672>.</span>COMMENT) <span style=color:#f92672>and</span> match:
-</span></span><span style=display:flex><span>            serdes <span style=color:#f92672>=</span> [x<span style=color:#f92672>.</span>strip() <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> match<span style=color:#f92672>.</span>groups()[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34;,&#34;</span>)]
-</span></span><span style=display:flex><span>            found <span style=color:#f92672>=</span> <span style=color:#66d9ef>True</span>  <span style=color:#75715e># Start looking for the struct/class declaration</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> serializables
+(The first struct or class after the <code>//+serde()</code> will be parsed).</li><li>Walk through the AST for that struct or class to extract the types, names and access specifiers.</li><li>Walk up from the struct declaration to the root node to find all of the namespaces the struct may be inside of.</li><li>Repeat steps 2 to 4 until there are no more tokens left in the file.</li></ol><p>So for some basic code:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>serde_type</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>clang.cindex</span> <span class=k>as</span> <span class=nn>cl</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>ctypes.util</span> <span class=kn>import</span> <span class=n>find_library</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>ccsyspath</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>re</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>get_current_scope</span><span class=p>(</span><span class=n>cursor</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>    Get the current scope of the current cursor.
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    For example:
+</span></span></span><span class=line><span class=cl><span class=s2>    
+</span></span></span><span class=line><span class=cl><span class=s2>    namespace A {
+</span></span></span><span class=line><span class=cl><span class=s2>    namespace B {
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    class C {
+</span></span></span><span class=line><span class=cl><span class=s2>        &lt;CURSOR IS IN HERE&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>    };
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    }
+</span></span></span><span class=line><span class=cl><span class=s2>    }
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    will return: [&#34;A&#34;, &#34;B&#34;, &#34;C&#34;] and can be joined to be &#34;A::B::C&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    Parameters ::
+</span></span></span><span class=line><span class=cl><span class=s2>      - cursor: A clang.cindex.Cursor to loop for declaration parents of.
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    Returns ::
+</span></span></span><span class=line><span class=cl><span class=s2>      - A list of names of the scopes.
+</span></span></span><span class=line><span class=cl><span class=s2>    &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Get the parent of the current cursor</span>
+</span></span><span class=line><span class=cl>    <span class=n>parent</span> <span class=o>=</span> <span class=n>cursor</span><span class=o>.</span><span class=n>lexical_parent</span>
+</span></span><span class=line><span class=cl>    <span class=c1># If the parent is a declartaion type then add it to the end of our scope</span>
+</span></span><span class=line><span class=cl>    <span class=c1># list otherwise return an empty list</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>parent</span><span class=o>.</span><span class=n>kind</span><span class=o>.</span><span class=n>is_declaration</span><span class=p>()):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>get_current_scope</span><span class=p>(</span><span class=n>parent</span><span class=p>)</span> <span class=o>+</span> <span class=p>[</span><span class=n>parent</span><span class=o>.</span><span class=n>spelling</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>find_serializable_types</span><span class=p>(</span><span class=n>tu</span><span class=p>,</span> <span class=n>match_str</span><span class=o>=</span><span class=s2>&#34;//\+serde\(([A-Za-z\s,_]*)\)&#34;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>    Iterate through all tokens in the current TranslationalUnit looking for comments
+</span></span></span><span class=line><span class=cl><span class=s2>    which match the match_str. If the comment match look for the next struct or
+</span></span></span><span class=line><span class=cl><span class=s2>    class declaration, start extracting the scope by looking at the lexical parents
+</span></span></span><span class=line><span class=cl><span class=s2>    of the declaration. This will let you extract the name, then extract all of the
+</span></span></span><span class=line><span class=cl><span class=s2>    fields.
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    Parameters ::
+</span></span></span><span class=line><span class=cl><span class=s2>        - tu: The TranslationalUnit to search over
+</span></span></span><span class=line><span class=cl><span class=s2>        - match_str: The comment string to match.
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    Returns ::
+</span></span></span><span class=line><span class=cl><span class=s2>        - A List of SerdeRecords.
+</span></span></span><span class=line><span class=cl><span class=s2>    &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>match_types</span> <span class=o>=</span> <span class=p>[</span><span class=n>cl</span><span class=o>.</span><span class=n>CursorKind</span><span class=o>.</span><span class=n>STRUCT_DECL</span><span class=p>,</span> <span class=n>cl</span><span class=o>.</span><span class=n>CursorKind</span><span class=o>.</span><span class=n>CLASS_DECL</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>tokens</span> <span class=o>=</span> <span class=n>tu</span><span class=o>.</span><span class=n>cursor</span><span class=o>.</span><span class=n>get_tokens</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>found</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>    <span class=n>serializables</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=n>serdes</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=c1># iterate through all tokens, looking for the match_str in a comment. If</span>
+</span></span><span class=line><span class=cl>    <span class=c1># found the name, and fields are extracted from the next struct or class</span>
+</span></span><span class=line><span class=cl>    <span class=c1># definition. After extracting these declaration the parser continues to</span>
+</span></span><span class=line><span class=cl>    <span class=c1># look for more Comment otkens matching match_str.</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>token</span> <span class=ow>in</span> <span class=n>tokens</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>match</span> <span class=o>=</span> <span class=n>re</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>match_str</span><span class=p>,</span> <span class=n>token</span><span class=o>.</span><span class=n>spelling</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>found</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>cursor</span> <span class=o>=</span> <span class=n>cl</span><span class=o>.</span><span class=n>Cursor</span><span class=p>()</span><span class=o>.</span><span class=n>from_location</span><span class=p>(</span><span class=n>tu</span><span class=p>,</span> <span class=n>token</span><span class=o>.</span><span class=n>location</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>cursor</span><span class=o>.</span><span class=n>kind</span> <span class=ow>in</span> <span class=n>match_types</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=c1># Extract the name, and the scope of the cursor and join them</span>
+</span></span><span class=line><span class=cl>                <span class=c1># to for the full C++ name.</span>
+</span></span><span class=line><span class=cl>                <span class=n>name</span> <span class=o>=</span> <span class=s2>&#34;::&#34;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>get_current_scope</span><span class=p>(</span><span class=n>cursor</span><span class=p>)</span> <span class=o>+</span> <span class=p>[</span><span class=n>cursor</span><span class=o>.</span><span class=n>spelling</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>                <span class=c1># Extract all of the fields (including access_specifiers)</span>
+</span></span><span class=line><span class=cl>                <span class=n>fields</span> <span class=o>=</span> <span class=p>[</span><span class=n>SerdeField</span><span class=p>(</span><span class=n>field</span><span class=o>.</span><span class=n>spelling</span><span class=p>,</span> <span class=n>field</span><span class=o>.</span><span class=n>type</span><span class=o>.</span><span class=n>spelling</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                                     <span class=n>field</span><span class=o>.</span><span class=n>access_specifier</span><span class=o>.</span><span class=n>name</span><span class=p>)</span> <span class=k>for</span> <span class=n>field</span> <span class=ow>in</span> <span class=n>cursor</span><span class=o>.</span><span class=n>type</span><span class=o>.</span><span class=n>get_fields</span><span class=p>()]</span>
+</span></span><span class=line><span class=cl>                <span class=n>serializables</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>SerdeRecord</span><span class=p>(</span><span class=n>name</span><span class=p>,</span> <span class=n>fields</span><span class=p>,</span> <span class=n>serdes</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>                <span class=c1># Start searching for more comments.</span>
+</span></span><span class=line><span class=cl>                <span class=n>found</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>                <span class=c1># Clear the list of registered serdes for this Record.</span>
+</span></span><span class=line><span class=cl>                <span class=n>serdes</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>        <span class=k>elif</span> <span class=p>(</span><span class=n>token</span><span class=o>.</span><span class=n>kind</span> <span class=o>==</span> <span class=n>cl</span><span class=o>.</span><span class=n>TokenKind</span><span class=o>.</span><span class=n>COMMENT</span><span class=p>)</span> <span class=ow>and</span> <span class=n>match</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>serdes</span> <span class=o>=</span> <span class=p>[</span><span class=n>x</span><span class=o>.</span><span class=n>strip</span><span class=p>()</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>match</span><span class=o>.</span><span class=n>groups</span><span class=p>()[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>split</span><span class=p>(</span><span class=s2>&#34;,&#34;</span><span class=p>)]</span>
+</span></span><span class=line><span class=cl>            <span class=n>found</span> <span class=o>=</span> <span class=kc>True</span>  <span class=c1># Start looking for the struct/class declaration</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>serializables</span>
 </span></span></code></pre></div><h3 id=getting-libclang-to-recognize-std-library-types>Getting libclang to recognize std library types</h3><p>There are a couple of tricks to actually get <code>libclang</code> to find the standard library (and your own library files) so that it will recognize non primitive types. Basically this is just making sure you invoke clang, with the proper paths to import your types. Otherwise,
-the cursors will get all messed up and a bunch of errors will be thrown.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_clang_TranslationUnit</span>(path<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;t.cpp&#34;</span>, in_args<span style=color:#f92672>=</span>[], in_str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&#34;</span>, options<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>):
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Get the TranslationalUnit for the input fule listed:
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Parameters ::
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        - path: The path of the file to parse (not read if in_str is set)
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        - in_args: additional arguments to pass to clang
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        - in_str: input string to parse instead of the file path.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        - options: clang.cindex.Options
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    Returns ::
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        - A TranslationalUnits
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Make sure we are parsing as std c++11</span>
-</span></span><span style=display:flex><span>    args <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;-x c++ --std=c++11&#39;</span><span style=color:#f92672>.</span>split()
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Add the include files for the standard library.</span>
-</span></span><span style=display:flex><span>    syspath <span style=color:#f92672>=</span> ccsyspath<span style=color:#f92672>.</span>system_include_paths(<span style=color:#e6db74>&#39;clang++&#39;</span>)
-</span></span><span style=display:flex><span>    incargs <span style=color:#f92672>=</span> [<span style=color:#e6db74>b</span><span style=color:#e6db74>&#39;-I&#39;</span> <span style=color:#f92672>+</span> inc <span style=color:#66d9ef>for</span> inc <span style=color:#f92672>in</span> syspath]
-</span></span><span style=display:flex><span>    <span style=color:#75715e># turn args into a list of args (in_args may contain more includes)</span>
-</span></span><span style=display:flex><span>    args <span style=color:#f92672>=</span> args <span style=color:#f92672>+</span> incargs <span style=color:#f92672>+</span> in_args
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Create a clang index to parse into</span>
-</span></span><span style=display:flex><span>    index <span style=color:#f92672>=</span> cl<span style=color:#f92672>.</span>Index<span style=color:#f92672>.</span>create()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    unsaved_files <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># If we are parsing from a string instead</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> in_str:
-</span></span><span style=display:flex><span>        unsaved_files <span style=color:#f92672>=</span> [(path, in_str)]
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> index<span style=color:#f92672>.</span>parse(path, args<span style=color:#f92672>=</span>args, options<span style=color:#f92672>=</span>options,
-</span></span><span style=display:flex><span>                       unsaved_files<span style=color:#f92672>=</span>unsaved_files)
+the cursors will get all messed up and a bunch of errors will be thrown.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>get_clang_TranslationUnit</span><span class=p>(</span><span class=n>path</span><span class=o>=</span><span class=s2>&#34;t.cpp&#34;</span><span class=p>,</span> <span class=n>in_args</span><span class=o>=</span><span class=p>[],</span> <span class=n>in_str</span><span class=o>=</span><span class=s2>&#34;&#34;</span><span class=p>,</span> <span class=n>options</span><span class=o>=</span><span class=mi>0</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>    Get the TranslationalUnit for the input fule listed:
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    Parameters ::
+</span></span></span><span class=line><span class=cl><span class=s2>        - path: The path of the file to parse (not read if in_str is set)
+</span></span></span><span class=line><span class=cl><span class=s2>        - in_args: additional arguments to pass to clang
+</span></span></span><span class=line><span class=cl><span class=s2>        - in_str: input string to parse instead of the file path.
+</span></span></span><span class=line><span class=cl><span class=s2>        - options: clang.cindex.Options
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    Returns ::
+</span></span></span><span class=line><span class=cl><span class=s2>        - A TranslationalUnits
+</span></span></span><span class=line><span class=cl><span class=s2>    &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Make sure we are parsing as std c++11</span>
+</span></span><span class=line><span class=cl>    <span class=n>args</span> <span class=o>=</span> <span class=s1>&#39;-x c++ --std=c++11&#39;</span><span class=o>.</span><span class=n>split</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Add the include files for the standard library.</span>
+</span></span><span class=line><span class=cl>    <span class=n>syspath</span> <span class=o>=</span> <span class=n>ccsyspath</span><span class=o>.</span><span class=n>system_include_paths</span><span class=p>(</span><span class=s1>&#39;clang++&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>incargs</span> <span class=o>=</span> <span class=p>[</span><span class=sa>b</span><span class=s1>&#39;-I&#39;</span> <span class=o>+</span> <span class=n>inc</span> <span class=k>for</span> <span class=n>inc</span> <span class=ow>in</span> <span class=n>syspath</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=c1># turn args into a list of args (in_args may contain more includes)</span>
+</span></span><span class=line><span class=cl>    <span class=n>args</span> <span class=o>=</span> <span class=n>args</span> <span class=o>+</span> <span class=n>incargs</span> <span class=o>+</span> <span class=n>in_args</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Create a clang index to parse into</span>
+</span></span><span class=line><span class=cl>    <span class=n>index</span> <span class=o>=</span> <span class=n>cl</span><span class=o>.</span><span class=n>Index</span><span class=o>.</span><span class=n>create</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>unsaved_files</span> <span class=o>=</span> <span class=kc>None</span>
+</span></span><span class=line><span class=cl>    <span class=c1># If we are parsing from a string instead</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>in_str</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>unsaved_files</span> <span class=o>=</span> <span class=p>[(</span><span class=n>path</span><span class=p>,</span> <span class=n>in_str</span><span class=p>)]</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>index</span><span class=o>.</span><span class=n>parse</span><span class=p>(</span><span class=n>path</span><span class=p>,</span> <span class=n>args</span><span class=o>=</span><span class=n>args</span><span class=p>,</span> <span class=n>options</span><span class=o>=</span><span class=n>options</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                       <span class=n>unsaved_files</span><span class=o>=</span><span class=n>unsaved_files</span><span class=p>)</span>
 </span></span></code></pre></div><h2 id=the-serde-engine>The Serde Engine</h2><p>At this point we have all of the data we need and all we need to do is hand
 it to something to generate our serializers for us. For this I created a
 registry of classes which implement functions for creating serializers and

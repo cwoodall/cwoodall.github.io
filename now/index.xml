@@ -1,5 +1,77 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nows on Chris Woodall</title><link>/now/</link><description>Recent content in Nows on Chris Woodall</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 02 Jan 2022 12:05:42 -0500</lastBuildDate><atom:link href="/now/index.xml" rel="self" type="application/rss+xml"/><item><title>January 2022</title><link>/now/2022-01-02/</link><pubDate>Sun, 02 Jan 2022 12:05:42 -0500</pubDate><guid>/now/2022-01-02/</guid><description>What am I doing now? Preparing for a new year with a concentration on my mental and physical health, building community, and improving my communication skills. Working on chord melodies for Autumn Leaves, All of Me, and whatever else strikes my fancy on Mandolin. Playing around with embedded test automation using my Rigol Scope Getting back into skiing, ice climbing, and rock climbing in the gym. More motors! My priorities are: Cultivating a meditation, fitness and journaling practice.</description></item><item><title>July 2021</title><link>/now/2021-07-18/</link><pubDate>Sun, 18 Jul 2021 12:05:42 -0500</pubDate><guid>/now/2021-07-18/</guid><description>What am I doing now? Working on electric aircraft at BETA Technologies Continuing to love Obsidian.md Working on generative art Taking notes using Obsidian, generating art using Kotlin and OpenRNDR, and publishing using neuron Getting more into mountain biking Preparing to run a 8k in August and a half-marathon in October Preparing for 2 weeks in the PNW in September Motor Controls! My priorities are: Building strong habits around going getting enough sleep, improved health and improved sleep Getting a personal task management solution that works for me in place Quotes On My Mind The Buddha told his disciples, “Believe nothing, no matter where you read it, or who said it, no matter if I have said it, unless it agrees with your own reason and your own common sense.</description></item><item><title>January 2021</title><link>/now/2021-01-01/</link><pubDate>Sat, 23 Jan 2021 12:05:42 -0500</pubDate><guid>/now/2021-01-01/</guid><description>What am I doing now? Working on electric aircraft at BETA Technologies Skiing! Playing around with note taking in Obsidian.md Learning a little Rust each day. My priorities are: Building strong habits around going to sleep, waking up, doing deep work, and building new skills Quotes On My Mind Only ideas won by walking have any value
-&amp;ndash; Friedrich Nietzsche
-Forty hour workweeks are a relic of the Industrial Age. Knowledge workers function like athletes — train and sprint, then rest and reassess.</description></item><item><title>November 2020</title><link>/now/2020-11-28/</link><pubDate>Sat, 28 Nov 2020 12:05:42 -0500</pubDate><guid>/now/2020-11-28/</guid><description>What am I doing now? Working at BETA Technologies on electric aviation, still working on electric propulsion. I have been playing mandolin regularly, and making improvements slowly Getting ready for ski and ice season, by climbing at the gym more. My priorities are: Deepening and continuing my practice of Buddhism Treating my body well by exercising and eating nourishing foods Continuing to develop expertise in motor controls. Quotes On My Mind Simply begin again</description></item><item><title>February 2020</title><link>/now/2020-02-01/</link><pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate><guid>/now/2020-02-01/</guid><description>What am I doing now? Reflecting on 2019, it was a crazy year with a lot to learn on a personal level.
-I am now in Burlington, VT working at BETA Technologies on the future of electric aviation! My main focus is on inverters for controlling motors. This is taking up most of my time.
-I have been meditating daily (using a combination of Unified Mindfulness and Sam Harris&amp;rsquo; Waking Up app), trying to do daily creative acts (water colors, music, programming, etc), and when I can going to yoga.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nows on Chris Woodall</title><link>/now/</link><description>Recent content in Nows on Chris Woodall</description><generator>Hugo</generator><language>en</language><lastBuildDate>Sun, 02 Jan 2022 12:05:42 -0500</lastBuildDate><atom:link href="/now/index.xml" rel="self" type="application/rss+xml"/><item><title>January 2022</title><link>/now/2022-01-02/</link><pubDate>Sun, 02 Jan 2022 12:05:42 -0500</pubDate><guid>/now/2022-01-02/</guid><description>&lt;h2 id="what-am-i-doing-now">What am I doing &lt;em>now&lt;/em>?&lt;/h2>
+&lt;ul>
+&lt;li>Preparing for a new year with a concentration on my mental and physical health, building community, and improving my communication skills.&lt;/li>
+&lt;li>Working on chord melodies for Autumn Leaves, All of Me, and whatever else strikes my fancy on Mandolin.&lt;/li>
+&lt;li>Playing around with embedded test automation using my Rigol Scope&lt;/li>
+&lt;li>Getting back into skiing, ice climbing, and rock climbing in the gym.&lt;/li>
+&lt;li>More motors!&lt;/li>
+&lt;/ul>
+&lt;h3 id="my-priorities-are">My priorities are:&lt;/h3>
+&lt;ul>
+&lt;li>Cultivating a meditation, fitness and journaling practice.&lt;/li>
+&lt;li>Making music, and art.
+&lt;ul>
+&lt;li>&lt;a href="https://soundcloud.com/temporalshift/knight-of-infinite-resignation?si=9264a4b9843f4857aa3779a46c7ec55f&amp;amp;utm_source=clipboard&amp;amp;utm_medium=text&amp;amp;utm_campaign=social_sharing">Knight of Inifinite Resignation&lt;/a> is one of my first new pieces in a while.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="quotes-on-my-mind">Quotes On My Mind&lt;/h3>
+&lt;blockquote>
+&lt;p>Life before Death
+Strength before Weakness
+Journey before Destination&lt;/p></description></item><item><title>July 2021</title><link>/now/2021-07-18/</link><pubDate>Sun, 18 Jul 2021 12:05:42 -0500</pubDate><guid>/now/2021-07-18/</guid><description>&lt;h2 id="what-am-i-doing-now">What am I doing &lt;em>now&lt;/em>?&lt;/h2>
+&lt;ul>
+&lt;li>Working on electric aircraft at &lt;a href="beta.team">BETA Technologies&lt;/a>&lt;/li>
+&lt;li>Continuing to love &lt;a href="https://obsidian.md/">Obsidian.md&lt;/a>&lt;/li>
+&lt;li>Working on &lt;a href="https://cwoodall.com/generative-art-studio">generative art&lt;/a>
+&lt;ul>
+&lt;li>Taking notes using &lt;a href="https://obsidian.md/">Obsidian&lt;/a>, generating art using &lt;a href="https://kotlinlang.org/">Kotlin&lt;/a> and &lt;a href="https://guide.openrndr.org/#/">OpenRNDR&lt;/a>, and publishing using &lt;a href="https://neuron.zettel.page/">neuron&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Getting more into mountain biking&lt;/li>
+&lt;li>Preparing to run a 8k in August and a half-marathon in October&lt;/li>
+&lt;li>Preparing for 2 weeks in the PNW in September&lt;/li>
+&lt;li>Motor Controls!&lt;/li>
+&lt;/ul>
+&lt;h3 id="my-priorities-are">My priorities are:&lt;/h3>
+&lt;ul>
+&lt;li>Building strong habits around going getting enough sleep, improved health and improved sleep&lt;/li>
+&lt;li>Getting a personal task management solution that works for me in place&lt;/li>
+&lt;/ul>
+&lt;h3 id="quotes-on-my-mind">Quotes On My Mind&lt;/h3>
+&lt;blockquote>
+&lt;p>The Buddha told his disciples, “Believe nothing, no matter where you read it, or who said it, no matter if I have said it, unless it agrees with your own reason and your own common sense.” I say the same to you—you must assume the responsibility for what you believe.&lt;/p></description></item><item><title>January 2021</title><link>/now/2021-01-01/</link><pubDate>Sat, 23 Jan 2021 12:05:42 -0500</pubDate><guid>/now/2021-01-01/</guid><description>&lt;h2 id="what-am-i-doing-now">What am I doing &lt;em>now&lt;/em>?&lt;/h2>
+&lt;ul>
+&lt;li>Working on electric aircraft at &lt;a href="beta.team">BETA Technologies&lt;/a>&lt;/li>
+&lt;li>Skiing!&lt;/li>
+&lt;li>Playing around with note taking in &lt;a href="https://obsidian.md/">Obsidian.md&lt;/a>&lt;/li>
+&lt;li>Learning a little &lt;a href="https://www.rust-lang.org/">Rust&lt;/a> each day.&lt;/li>
+&lt;/ul>
+&lt;h3 id="my-priorities-are">My priorities are:&lt;/h3>
+&lt;ul>
+&lt;li>Building strong habits around going to sleep, waking up, doing deep work, and building new skills&lt;/li>
+&lt;/ul>
+&lt;h3 id="quotes-on-my-mind">Quotes On My Mind&lt;/h3>
+&lt;blockquote>
+&lt;p>Only ideas won by walking have any value&lt;/p>
+&lt;p>&amp;ndash; &lt;a href="https://fs.blog/2014/05/a-philosophy-of-walking/">Friedrich Nietzsche&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;blockquote>
+&lt;p>Forty hour workweeks are a relic of the Industrial Age. Knowledge workers function like athletes — train and sprint, then rest and reassess.
+&amp;ndash; &lt;a href="https://twitter.com/naval/status/873624849230385152?lang=en">Naval Ravikant&lt;/a>&lt;/p></description></item><item><title>November 2020</title><link>/now/2020-11-28/</link><pubDate>Sat, 28 Nov 2020 12:05:42 -0500</pubDate><guid>/now/2020-11-28/</guid><description>&lt;h2 id="what-am-i-doing-now">What am I doing &lt;em>now&lt;/em>?&lt;/h2>
+&lt;ul>
+&lt;li>Working at &lt;a href="beta.team">BETA Technologies&lt;/a> on electric aviation, still working on electric propulsion.&lt;/li>
+&lt;li>I have been playing mandolin regularly, and making improvements slowly&lt;/li>
+&lt;li>Getting ready for ski and ice season, by climbing at the gym more.&lt;/li>
+&lt;/ul>
+&lt;h3 id="my-priorities-are">My priorities are:&lt;/h3>
+&lt;ul>
+&lt;li>Deepening and continuing my practice of Buddhism&lt;/li>
+&lt;li>Treating my body well by exercising and eating nourishing foods&lt;/li>
+&lt;li>Continuing to develop expertise in motor controls.&lt;/li>
+&lt;/ul>
+&lt;h3 id="quotes-on-my-mind">Quotes On My Mind&lt;/h3>
+&lt;blockquote>
+&lt;p>Simply begin again&lt;/p></description></item><item><title>February 2020</title><link>/now/2020-02-01/</link><pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate><guid>/now/2020-02-01/</guid><description>&lt;h2 id="what-am-i-doing-now">What am I doing &lt;em>now&lt;/em>?&lt;/h2>
+&lt;p>Reflecting on 2019, it was a crazy year with a lot to learn on a personal level.&lt;/p>
+&lt;p>I am now in Burlington, VT working at BETA Technologies on the future of electric aviation! My main focus is on inverters for controlling motors. This is taking up most of my time.&lt;/p>
+&lt;p>I have been meditating daily (using a combination of Unified Mindfulness and Sam Harris&amp;rsquo; Waking Up app), trying to do daily creative acts (water colors, music, programming, etc), and when I can going to yoga. Climbing has taken a little bit of a back seat at the moment, but I want to set some good goals to drive forward my climbing performance. I have realized how deep and meaningful climbing is to me. One of my biggest goals right now is preparing for a 10 day mediation retreat.&lt;/p></description></item></channel></rss>

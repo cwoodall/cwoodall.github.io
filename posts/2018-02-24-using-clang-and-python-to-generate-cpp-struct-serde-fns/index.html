@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Reflection in C++ to Generate Serializable Structs Using libclang and Python</title><meta name=description content="Embedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.css><style>img{max-width:100%}</style><link rel=icon type=image/ico href=/favicon.ico></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Reflection in C++ to Generate Serializable Structs Using libclang and Python</title><meta name=description content="Embedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.209c9e9038b67adb41a415bcc0fbf296e2872f9dc51f38a90b4b36c14b6afd3c.css integrity="sha256-IJyekDi2ettBpBW8wPvyluKHL53FHzipC0s2wUtq/Tw="><link rel=icon type=image/ico href=https://cwoodall.com/favicon.ico></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=https://cwoodall.com/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/posts>Blog</a>
 <span class="nav-item navbar-text mx-1">/</span>
@@ -12,7 +12,7 @@
 <span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/projects>Projects</a>
 <span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><link rel=stylesheet href=/css/syntax.css><div class=container><h1 align=center>Reflection in C++ to Generate Serializable Structs Using libclang and Python</h1><div align=center>Chris Woodall | 2018-02-24</div><img src><br><p>I have recently found myself writing a bunch of serialization (and
+<a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><header class=article-header><h1>Reflection in C++ to Generate Serializable Structs Using libclang and Python</h1><div class=article-meta>Chris Woodall | 2018-02-24</div></header><p>I have recently found myself writing a bunch of serialization (and
 deserialization) functions in C++ for some very basic structs, and
 classes. Each of these serialization functions has the same basic
 form which is basically a series of function calls to convert
@@ -64,16 +64,16 @@ over and over again.</li></ol><p>Also, you can&rsquo;t just generating functions
 are ways to get close, but since you would need a recursive macro, it is
 practically impossible. You could probably do something involving run time
 reflection, or cleverness; however I wanted these to be generated at compile
-time for my needs.</p><p>We will add a comment <code>//+serde(&lt;names of serde generators>)</code> infront of
+time for my needs.</p><p>We will add a comment <code>//+serde(&lt;names of serde generators>)</code> in front of
 each <code>struct</code> or <code>class</code> we want serialized. This will act as a flag for
 our AST parser to extract the <code>struct</code> and its fields. The arguments to
 <code>serde()</code> will provide different serialization templates to apply to
 the <code>struct</code>.</p><h2 id=finding-the-decorators>Finding the decorators</h2><p>Searching for comments using <code>libclang</code> requires us to parse through all of the tokens, rather than the cursors which relate to nodes in the AST. This is because comments are striped out from the AST. At first I thought this was going to be problematic; however with some constraints a token can be associated to a cursor. The token just contains information of the individual pieces of the program, while the
 cursors are actually in the syntax tree. The tokens might be:</p><pre tabindex=0><code>COMMENT: //+serde(MySerializer)
-KEYWORD: struct 
-IDENTIFIER: Foo 
+KEYWORD: struct
+IDENTIFIER: Foo
 PUNCTUATION: {
-IDENTIFIER: uint8_t 
+IDENTIFIER: uint8_t
 IDENTIFIER: bar1
 PUNCTUATION: ;
 KEYWORD: float
@@ -81,11 +81,11 @@ IDENTIFIER: bar2
 PUNCTUATION: ;
 PUNCTUATION: }
 </code></pre><p>While the cursors is tree oriented and more useful for actual reflection:</p><pre tabindex=0><code>STRUCTDECL: Foo
-  - FIELD: 
+  - FIELD:
     - TYPE: uint8_t
     - NAME: bar1
-    - VISIBILITY: public 
-  - FIELD: 
+    - VISIBILITY: public
+  - FIELD:
     - TYPE: float
     - NAME: bar2
     - VISIBILITY: public
@@ -102,7 +102,7 @@ process is:</p><ol><li>Get a <code>TranslationalUnit</code> from <code>libclang<
 </span></span></span><span class=line><span class=cl><span class=s2>    Get the current scope of the current cursor.
 </span></span></span><span class=line><span class=cl><span class=s2>
 </span></span></span><span class=line><span class=cl><span class=s2>    For example:
-</span></span></span><span class=line><span class=cl><span class=s2>    
+</span></span></span><span class=line><span class=cl><span class=s2>
 </span></span></span><span class=line><span class=cl><span class=s2>    namespace A {
 </span></span></span><span class=line><span class=cl><span class=s2>    namespace B {
 </span></span></span><span class=line><span class=cl><span class=s2>

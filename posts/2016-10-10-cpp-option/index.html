@@ -1,26 +1,26 @@
-<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Error Handling: Implementing an Option&lt;T> Type For Embedded C++</title><meta name=description content="Embedded Software Engineer"><meta name=author content="Chris Woodall"><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.209c9e9038b67adb41a415bcc0fbf296e2872f9dc51f38a90b4b36c14b6afd3c.css integrity="sha256-IJyekDi2ettBpBW8wPvyluKHL53FHzipC0s2wUtq/Tw="><link rel=icon type=image/ico href=https://cwoodall.com/favicon.ico></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=https://cwoodall.com/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now</a>
-<span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/posts>Blog</a>
-<span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/reading>Read</a>
-<span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/generative-art-studio>Art</a>
-<span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/climbing>Climb</a>
-<span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/music>Music</a>
-<span class="nav-item navbar-text mx-1">/</span>
-<a class="nav-item nav-link" href=/projects>Projects</a>
-<span class="nav-item navbar-text mx-1">/</span>
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Error Handling: Implementing an Option&lt;T> Type For Embedded C++</title><meta name=description content="Embedded Software Engineer"><meta name=author content='Chris Woodall'><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css integrity=sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2 crossorigin=anonymous><link rel=stylesheet href=/sass/researcher.min.209c9e9038b67adb41a415bcc0fbf296e2872f9dc51f38a90b4b36c14b6afd3c.css integrity="sha256-IJyekDi2ettBpBW8wPvyluKHL53FHzipC0s2wUtq/Tw="><link rel=icon type=image/ico href=https://cwoodall.com/favicon.ico></head><body><div class="container mt-5"><nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0"><a class="navbar-brand mx-0 mr-sm-auto" href=https://cwoodall.com/>Chris Woodall</a><div class="navbar-nav flex-row flex-wrap justify-content-center"><a class="nav-item nav-link" href=/now>Now
+</a><span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/posts>Blog
+</a><span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/reading>Read
+</a><span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/generative-art-studio>Art
+</a><span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/climbing>Climb
+</a><span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/music>Music
+</a><span class="nav-item navbar-text mx-1">/</span>
+<a class="nav-item nav-link" href=/projects>Projects
+</a><span class="nav-item navbar-text mx-1">/</span>
 <a class="nav-item nav-link" href=/resume.pdf>Resume</a></div></nav></div><hr><div id=content><div class=container><header class=article-header><h1>Error Handling: Implementing an Option&lt;T> Type For Embedded C++</h1><div class=article-meta>Chris Woodall | 2016-10-10</div></header><p>I have been learning <a href=http://rust-lang.org>Rust</a> lately, which has been an awesome and
 rewarding experience thus far. However, at work, and on many of my embedded side
 projects I use C/C++ quite extensively. But error handling ends up being
 a major pain point and can make an otherwise rather simple API into a disaster.
 This can be especially true if you are committed to avoiding throwing exceptions for various
 performance and real-time reliability reasons. This is where Rust&rsquo;s model comes
-in as a possibly solution (or at the very least an interesting one): the use of
+in as a possibly solution (or at least an interesting one): the use of
 the <code>Result&lt;T, E></code> types and the <code>Option&lt;T></code> type. For the time being I am going to concentrate on the <code>Option&lt;T></code> type and write about the <code>Result&lt;T, E></code> type in a future post.</p><p>The code for this blog post can be found on github as <a href=https://github.com/cwoodall/cpp-option>cpp-option</a>!</p><h3 id=so-what-is-this-optiont-thing-any-way>So what is this <code>Option&lt;T></code> thing any way?</h3><p><code>Option&lt;T></code> represents a value which is either a type <code>T</code> (like an <code>int</code>, <code>float</code>, or <code>MyFancyClass</code>) or <code>Nothing</code>. It is a pretty simple concept.
-This makes and <code>Option&lt;T></code> type very good at representing the class of errors
+This makes and <code>Option&lt;T></code> type well suited to representing the class of errors
 where either you returned the correct result, <em>or</em> you just couldn&rsquo;t finish the
 computation for some reason. To some degree this is already represented at C.
 When returning a pointer you can modify that pointer to be a null pointer to
@@ -42,7 +42,7 @@ the following:</p><div class=highlight><pre tabindex=0 class=chroma><code class=
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>res</span> <span class=o>!=</span> <span class=k>nullptr</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;%d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=o>*</span><span class=n>res</span><span class=p>);</span> <span class=c1>// wont print
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>  <span class=k>delete</span> <span class=n>res</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
@@ -55,10 +55,10 @@ we will use <code>bool</code>, with <code>true</code> representing a success, an
 failure). So the following implementation would be far safer:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=kt>bool</span> <span class=nf>divide</span><span class=p>(</span><span class=kt>int</span> <span class=n>a</span><span class=p>,</span> <span class=kt>int</span> <span class=n>b</span><span class=p>,</span> <span class=kt>int</span> <span class=o>*</span><span class=n>c</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>b</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nb>false</span><span class=p>;</span> <span class=c1>// oh no...
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=o>*</span><span class=n>c</span> <span class=o>=</span> <span class=n>a</span><span class=o>/</span><span class=n>b</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nb>true</span><span class=p>;</span> <span class=c1>// success!
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>  
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=p>{</span>
@@ -89,7 +89,7 @@ semantics become possible with a <code>Option&lt;T></code> type:</p><div class=h
 </span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>result</span> <span class=o>=</span> <span class=n>divide</span><span class=p>(</span><span class=mi>10</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>result</span><span class=p>)</span> <span class=p>{</span> <span class=c1>// Check that result is not Nothing
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;I got a %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>result</span><span class=p>.</span><span class=n>unwrap</span><span class=p>());</span>
+</span></span></span><span class=line><span class=cl>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;I got a %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>result</span><span class=p>.</span><span class=n>unwrap</span><span class=p>());</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;You divided by 0... the world blew up... Thanks&#34;</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
@@ -129,7 +129,7 @@ type with minimal functionality.</p><div class=highlight><pre tabindex=0 class=c
 </span></span><span class=line><span class=cl>  <span class=n>Option</span><span class=p>(</span><span class=n>T</span> <span class=n>something</span><span class=p>)</span> <span class=o>:</span> <span class=n>isSomething_</span><span class=p>(</span><span class=nb>true</span><span class=p>),</span> <span class=n>something_</span><span class=p>(</span><span class=n>something</span><span class=p>)</span> <span class=p>{}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>  <span class=c1>// The copy/move functions have been left out see the github link for details.
-</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>  <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>   * An explicit conversion to bool, which makes boolean comparisons of the
 </span></span></span><span class=line><span class=cl><span class=cm>   * Option type possible
@@ -147,8 +147,8 @@ type with minimal functionality.</p><div class=highlight><pre tabindex=0 class=c
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl> <span class=k>private</span><span class=o>:</span>
 </span></span><span class=line><span class=cl>  <span class=kt>bool</span> <span class=n>isSomething_</span><span class=p>;</span>  <span class=c1>///&lt; @brief stores whether Some(T) or Nothing is stored
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>T</span> <span class=n>something_</span><span class=p>;</span>       <span class=c1>///&lt; @brief temporary storage for the something object
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>};</span>
+</span></span></span><span class=line><span class=cl>  <span class=n>T</span> <span class=n>something_</span><span class=p>;</span>       <span class=c1>///&lt; @brief temporary storage for the something object
+</span></span></span><span class=line><span class=cl><span class=p>};</span>
 </span></span></code></pre></div><p>The class is basically just a container for a <code>bool</code> and a <code>T</code>. With semantics
 for checking and getting the value if it exists. This uses C++11&rsquo;s <code>explicit</code>
 type casting operators to create a <a href=https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Safe_bool>type-safe bool comparison</a> which
@@ -158,16 +158,16 @@ compared against non-boolean types in this way (since by default almost all
 types can be compared as <code>bool</code> types in C/C++). For example:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>float</span><span class=o>&gt;</span> <span class=n>foo</span> <span class=o>=</span> <span class=n>Nothing</span><span class=p>();</span>
 </span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>foo</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=n>puts</span><span class=p>(</span><span class=s>&#34;Nothing</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span> <span class=c1>// This will run
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=n>foo</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=n>puts</span><span class=p>(</span><span class=s>&#34;Nothing</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span> <span class=c1>// This wont
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>float</span><span class=o>&gt;</span> <span class=n>bar</span> <span class=o>=</span> <span class=mf>3.14159</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=n>bar</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=n>printf</span><span class=p>(</span><span class=s>&#34;%f</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>bar</span><span class=p>.</span><span class=n>unwrap</span><span class=p>());</span> <span class=c1>// This will run
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>bar</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=n>printf</span><span class=p>(</span><span class=s>&#34;This wont print&#34;</span><span class=p>);</span>
@@ -176,7 +176,7 @@ types can be compared as <code>bool</code> types in C/C++). For example:</p><div
 In fact the compiler will error and return a somewhat helpful warning.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=n>Option</span><span class=o>&lt;</span><span class=kt>float</span><span class=o>&gt;</span> <span class=n>foo</span> <span class=o>=</span> <span class=n>Nothing</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=n>foo</span> <span class=o>==</span> <span class=mi>20</span><span class=p>)</span> <span class=p>{}</span> <span class=c1>// wont compile
-</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=cm>/*
 </span></span></span><span class=line><span class=cl><span class=cm> * The compiler will return the following message
 </span></span></span><span class=line><span class=cl><span class=cm> *
@@ -188,7 +188,7 @@ In fact the compiler will error and return a somewhat helpful warning.</p><div c
 having to specialize the template yourself. Thus, the <code>Some()</code> factory
 function which can be used:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=kt>int</span> <span class=n>foo</span>
 </span></span><span class=line><span class=cl><span class=k>auto</span> <span class=n>bar</span> <span class=o>=</span> <span class=n>Some</span><span class=p>(</span><span class=n>foo</span><span class=p>);</span> <span class=c1>// Creates an Option&lt;int&gt; wrapping the value of foo.
-</span></span></span></code></pre></div><p>Implemented very simply as:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
+</span></span></span></code></pre></div><p>Implemented simply as:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
 </span></span><span class=line><span class=cl><span class=k>constexpr</span> <span class=n>Option</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>Some</span><span class=p>(</span><span class=n>T</span> <span class=n>something</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>Option</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span><span class=p>(</span><span class=n>something</span><span class=p>);</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
@@ -257,7 +257,7 @@ base class:</p><div class=highlight><pre tabindex=0 class=chroma><code class=lan
 </span></span><span class=line><span class=cl><span class=p>};</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1>// And you can even make it throw exceptions! This is used heavily in the unit test.
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>class</span> <span class=nc>OptionInvalidAccessException</span> <span class=o>:</span> <span class=n>std</span><span class=o>::</span><span class=n>exception</span> <span class=p>{</span>
+</span></span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>OptionInvalidAccessException</span> <span class=o>:</span> <span class=n>std</span><span class=o>::</span><span class=n>exception</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=k>virtual</span> <span class=k>const</span> <span class=kt>char</span><span class=o>*</span> <span class=nf>what</span><span class=p>()</span> <span class=k>const</span> <span class=k>throw</span><span class=p>()</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=s>&#34;Invalid access to Option with Nothing in it&#34;</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
@@ -292,7 +292,7 @@ default value if the <code>Option&lt;T></code> is nothing.</p><div class=highlig
 </span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1>// Which allows the use of the following:
-</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=kt>int</span> <span class=n>a</span> <span class=o>=</span> <span class=n>divide</span><span class=p>(</span><span class=mi>100</span><span class=p>,</span> <span class=mi>0</span><span class=p>).</span><span class=n>unwrap_or</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span> <span class=c1>// If we get a divide by 0 error, just return 0;
 </span></span></span></code></pre></div><p>Lets look at one more use-case.</p><h4 id=use-case-study-read-only-indexing-into-an-aggregate-data-type>Use Case Study: Read-only indexing into an aggregate data type</h4><p>So let&rsquo;s look at a use case I have been excited about. Returning an Option type
 from an aggregate datastructure which has read-only indexing. Let&rsquo;s say we
@@ -341,7 +341,7 @@ code, or clunkier semantics. So what can we express with option?</p><div class=h
 </span></span></span></code></pre></div><p>For an array this might seem a little silly; don&rsquo;t we want a reference or a
 pointer? Probably, but there are similar data-structures where a copy might
 be preferred. For example, peaking into a ring buffer for signal processing
-where we can leverage <code>unwrap_or</code> very effectively, or any other datatype where
+where we can leverage <code>unwrap_or</code> effectively, or any other datatype where
 you might return something, or maybe there is nothing there&mldr; yet.</p><h3 id=conclusion>Conclusion</h3><p>This gives a nice base of functionality for an <code>Option&lt;T></code> class which has
 clean semantics, is relatively safe and customizable, and has relatively low
 overhead. This implementation of an <code>Option&lt;T></code> class has some flaws, and there
